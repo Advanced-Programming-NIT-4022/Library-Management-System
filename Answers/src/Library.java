@@ -1,15 +1,12 @@
 import java.io.FileNotFoundException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Formatter;
 
 public class Library {
     private String name;
     private int capacity;
     private String operatingHours;
-    User user; // user that log in now
+    private User user; // user that log in now
 
     private static final String DB_URL = "jdbc:mysql://localhost/library";
     private static final String DB_USERNAME = "LMSjava";
@@ -31,6 +28,14 @@ public class Library {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setOperatingHours(String operatingHours) throws IllegalArgumentException {
@@ -115,5 +120,45 @@ public class Library {
             return false;
         }
         return true;
+    }
+
+    // login to library
+    public User login(String userID) {
+        User user = null;
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+             PreparedStatement loginUser = connection.prepareStatement(
+                     "SELECT * FROM Users WHERE UserID = ?")) {
+
+            loginUser.setString(1, userID);
+
+            ResultSet resultSet = loginUser.executeQuery();
+
+            // If there is no such user
+            if (!resultSet.isBeforeFirst())
+                return null;
+
+            resultSet.next();
+
+            // get name and phone number of the user
+            String name = resultSet.getString("Name");
+            String phoneNumber = resultSet.getString("PhoneNumber");
+
+            if (resultSet.getString("UserType").equals("admin")) {
+                String password = resultSet.getString("Password");
+                user = new Admin(name, phoneNumber, password);
+                user.setUniqueID(userID);
+            } else {
+                Date registerDate = resultSet.getDate("RegisterDate");
+                Time registerTime = resultSet.getTime("RegisterTime");
+                user = new NormalUser(name, phoneNumber, registerDate, registerTime);
+                user.setUniqueID(userID);
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            System.err.print("Connection to database failed! Terminating...");
+            System.exit(1);
+        }
+        return user;
     }
 }
