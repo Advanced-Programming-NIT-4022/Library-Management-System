@@ -14,7 +14,7 @@ class Rent {
         this.reserved_book = new Book(book_id, availability_status);
         this.reserver_user = new NormalUser();
         this.rental_id = rental_id.toString();
-        this.rental_date = java.time.LocalDate.now();
+        this.rental_date = LocalDate.ofEpochDay(LocalDate.now().toEpochDay());
     }
 
 }
