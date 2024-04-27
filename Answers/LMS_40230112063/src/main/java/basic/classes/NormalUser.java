@@ -1,5 +1,23 @@
 package basic.classes;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Objects;
+
 class NormalUser extends User{
-    protected int registration_day,registration_month,registration_year;
+    protected LocalDate registration_date;
+
+    NormalUser(String name, Integer id, Integer phone_number) {
+        super(name, id, phone_number);
+        registration_date = LocalDate.ofEpochDay(LocalDate.now().toEpochDay());
+    }
+
+    static Integer idFinder(String name, Integer phone_number, ArrayList<NormalUser> normalUsers ){
+        for(NormalUser iterator : normalUsers){
+            if(Objects.equals(iterator.name, name) && Objects.equals(iterator.phone_number, phone_number)){
+                return iterator.id;
+            }
+        }
+        return -1;
+    }
 }
