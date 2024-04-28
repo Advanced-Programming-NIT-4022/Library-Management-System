@@ -12,9 +12,8 @@ public class Book {
 
     private HashSet<Integer> UsedID = new HashSet<>();
 
-    public Book(int Unique_bookID, String Title, String Author, boolean Availability_status, String Deccription) {
-
-        this.Unique_bookID = generateUniqueId();
+    public Book( String Title, String Author, String Deccription) {
+        Unique_bookID = generateUniqueId();
         this.Title = Title;
         this.Author = Author;
         this.Availability_status = Availability_status;
@@ -35,6 +34,10 @@ public class Book {
     public String toString(){
         return this.Unique_bookID + " " + this.Title + " " +  this.Author + " " + "\n" +this.Description + "\n" +
                 this.Availability_status;
+    }
+
+    public void setAvailability_status(boolean Status){
+        Availability_status = Status;
     }
 }
 
