@@ -1,35 +1,24 @@
-import java.util.HashSet;
-import java.util.Random;
 
-public class Book implements IDgenerator {
+public class Book{
 
-    private Integer Unique_bookID;
+    private static Integer Unique_bookID = 0;
 
     private String Title;
     private String Author;
     private boolean Availability_status = true;
     private String Description;
 
-    private HashSet<Integer> UsedID = new HashSet<>();
-
     public Book( String Title, String Author, String Deccription) {
-        Unique_bookID = Unique_ID_Generator();
+        this.Unique_bookID = generateUniqueBookID();
         this.Title = Title;
         this.Author = Author;
         this.Availability_status = Availability_status;
         this.Description = Deccription;
     }
-
-
-    public Integer Unique_ID_Generator() {
-        Random rand = new Random();
-        Integer newID;
-        do {
-            newID = rand.nextInt(100, 9999);
-        } while (UsedID.contains(newID));
-        UsedID.add(newID);
-        return newID;
+    private static int generateUniqueBookID() {
+        return ++Unique_bookID;
     }
+
 
     public String toString(){
         return this.Unique_bookID + " " + this.Title + " " +  this.Author + " " + "\n" +this.Description + "\n" +
@@ -39,5 +28,6 @@ public class Book implements IDgenerator {
     public void setAvailability_status(boolean Status){
         Availability_status = Status;
     }
+
 }
 

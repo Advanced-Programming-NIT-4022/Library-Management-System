@@ -7,9 +7,9 @@ public class NormalUser extends User {
     private int Unique_NormalUserID;
 
     public NormalUser(String name , String Phone_Number) {
-        super(name , Phone_Number);
+        super(name ,Phone_Number);
         this.regDate = String.valueOf(CurrentDateTime());
-        this.Unique_NormalUserID = super.Unique_ID_Generator();
+        this.Unique_NormalUserID = getUnique_UserID();
     }
 
 
