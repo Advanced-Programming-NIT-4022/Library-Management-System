@@ -4,7 +4,8 @@ import java.util.Date;
 public class NormalUser extends User  {
     private String regDate;
 
-    public NormalUser(String regDate) {
+    public NormalUser(String name , int Unique_UserID , String Phone_Number) {
+        super(name , Unique_UserID , Phone_Number);
         this.regDate = CurrentDateTime();
     }
 

@@ -7,16 +7,17 @@ public class Book {
 
     private String Title;
     private String Author;
-    private boolean Availability_status;
+    private boolean Availability_status = true;
     private String Description;
 
     private HashSet<Integer> UsedID = new HashSet<>();
 
-    public Book(int Unique_bookID , String Title , String Author , boolean Availability_status ,String Deccription ){
+    public Book(int Unique_bookID, String Title, String Author, boolean Availability_status, String Deccription) {
 
         this.Unique_bookID = generateUniqueId();
+        this.Title = Title;
         this.Author = Author;
-        this.Availability_status = true;
+        this.Availability_status = Availability_status;
         this.Description = Deccription;
     }
 
@@ -29,6 +30,11 @@ public class Book {
         } while (UsedID.contains(newID));
         UsedID.add(newID);
         return newID;
+    }
+
+    public String toString(){
+        return this.Unique_bookID + " " + this.Title + " " +  this.Author + " " + "\n" +this.Description + "\n" +
+                this.Availability_status;
     }
 }
 
