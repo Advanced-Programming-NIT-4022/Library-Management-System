@@ -7,15 +7,28 @@ public class Book {
 
     private String Title;
     private String Author;
-    private boolean Availability_status = true;
+    private boolean Availability_status;
     private String Description;
 
     private HashSet<Integer> UsedID = new HashSet<>();
 
     public Book(int Unique_bookID , String Title , String Author , boolean Availability_status ,String Deccription ){
 
-        this.Unique_bookID = Unique_bookID;
+        this.Unique_bookID = generateUniqueId();
         this.Author = Author;
-        this.Availability_status = Availability_status;
+        this.Availability_status = true;
         this.Description = Deccription;
     }
+
+
+    public int generateUniqueId() {
+        Random rand = new Random();
+        Integer newID;
+        do {
+            newID = rand.nextInt(100, 9999);
+        } while (UsedID.contains(newID));
+        UsedID.add(newID);
+        return newID;
+    }
+}
+
