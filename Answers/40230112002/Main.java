@@ -1,13 +1,10 @@
 public class Main {
     public static void main(String[] args) {
-        Book book = new Book("Death" , "Sadra"  , "Death is a great book about the meaning of life");
-        book.generateUniqueId();
-        System.out.println(book.toString());
-        System.out.println("___________________________");
-        Book book1 = new Book("heelp" , "sipr" , "Nothing to say");
-        book1.setAvailability_status(false);
-        System.out.println(book1.toString());
-
-//        NormalUser user = new NormalUser("Sadra" , )
+        User user = new User("Sadra" , "3984579235");
+        System.out.println(user.toString());
+        NormalUser user1 = new NormalUser("solda" , "83479475");
+        System.out.println(user1.toString());
+        Admin user2 = new Admin("Gar" , "r37478df");
+        System.out.println(user2.toString());
     }
 }

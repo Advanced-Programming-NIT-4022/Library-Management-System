@@ -1,9 +1,9 @@
 import java.util.HashSet;
 import java.util.Random;
 
-public class Book {
+public class Book implements IDgenerator {
 
-    private int Unique_bookID;
+    private Integer Unique_bookID;
 
     private String Title;
     private String Author;
@@ -13,7 +13,7 @@ public class Book {
     private HashSet<Integer> UsedID = new HashSet<>();
 
     public Book( String Title, String Author, String Deccription) {
-        Unique_bookID = generateUniqueId();
+        Unique_bookID = Unique_ID_Generator();
         this.Title = Title;
         this.Author = Author;
         this.Availability_status = Availability_status;
@@ -21,7 +21,7 @@ public class Book {
     }
 
 
-    public int generateUniqueId() {
+    public Integer Unique_ID_Generator() {
         Random rand = new Random();
         Integer newID;
         do {
