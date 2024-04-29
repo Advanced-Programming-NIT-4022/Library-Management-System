@@ -2,7 +2,7 @@ package basic.classes;
 
 import java.util.*;
 
-class Library {
+public class Library {
 
     Random random = new Random();
 
@@ -17,7 +17,7 @@ class Library {
         return capacity;
     }
 
-    Library(String library_name, int capacity) {
+    public Library(String library_name, int capacity) {
         this.library_name = library_name;
         this.capacity = capacity;
     }
