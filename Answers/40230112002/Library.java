@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Library {
@@ -8,6 +9,10 @@ public class Library {
     int Operating_Hours;
     ArrayList<Book> bookRepository;
     ArrayList<User> users;
+    ArrayList<Object> RentalDetails;
+
+
+
 
 
     public Library(ArrayList<Book> bookRepository , ArrayList<User> users){
@@ -55,6 +60,20 @@ public class Library {
             for (Book i : bookRepository) {
                 if(i.getUnique_BookID() == BookID ){
                     bookRepository.remove(i);
+                }
+            }
+        }
+    }
+
+    public void bookRental(String booktitle){
+        for(Book i : bookRepository){
+            if(i.getTitle().equals(booktitle)){
+                if(i.getAvailabiliy_Status()){
+                    i.setAvailability_status(false);
+                    Rent.RentBookLOG();
+                }
+                else{
+                    System.out.println("Book Not Found . Rental Failed");
                 }
             }
         }

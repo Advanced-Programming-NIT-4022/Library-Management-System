@@ -31,5 +31,13 @@ public class Book{
     public int getUnique_BookID(){
         return Unique_bookID;
     }
+
+    public String getTitle(){
+        return Title;
+    }
+
+    public boolean getAvailabiliy_Status(){
+        return Availability_status;
+    }
 }
 
