@@ -28,6 +28,8 @@ public class Book{
     public void setAvailability_status(boolean Status){
         Availability_status = Status;
     }
-
+    public int getUnique_BookID(){
+        return Unique_bookID;
+    }
 }
 

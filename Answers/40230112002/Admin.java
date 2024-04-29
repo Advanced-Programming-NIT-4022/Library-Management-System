@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Admin extends NormalUser{
 
     Scanner sc = new Scanner(System.in);
-    private String Password;
+    private static String Password;
     private String regDate;
 
     public Admin(String name ,String Phone_Number) {
@@ -12,7 +12,7 @@ public class Admin extends NormalUser{
         this.Password = setPassword(sc.nextLine());
         this.regDate = String.valueOf(super.CurrentDateTime());
     }
-    public String getPassword(){
+    public static String getPassword(){
         return Password;
     }
     public String setPassword(String newPassword) {
