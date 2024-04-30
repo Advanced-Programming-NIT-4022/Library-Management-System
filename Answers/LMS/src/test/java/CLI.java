@@ -6,6 +6,22 @@ public class CLI {
     public CLI(Library Library){
         this.Library = Library;
     }
+    public void processCommand(String[] args) {
+        if (args.length < 2) {
+            System.out.println("Invalid command. Please provide a valid command.");
+            return;
+        }
+
+        String command = args[0];
+
+        switch (command) {
+            case "lib":
+                LibraryCommand(args);
+                break;
+            default:
+                System.out.println("Invalid command.");
+        }
+    }
     public void LibraryCommand(String[] args){
         String Command = args[1];
 
@@ -51,16 +67,15 @@ public class CLI {
                     return;
                 }
                 String bookName = args[2];
-                String memberName = args[3];
-                int memberID = Integer.parseInt(args[4]);
-                Library.rentBookForUser(bookName, memberName, memberID);
+                String userName = args[3];
+                Library.rentbook(bookName, userName);
                 break;
             case "return" :
                 if(args.length < 3){
                     System.out.println("Invalid Command Please Provide Detail of Book. ");
                     return;
                 }
-                String ReturnBook = args[3];
+                String ReturnBook = args[2];
                 Library.returnBook(ReturnBook);
                 System.out.println(ReturnBook + " Successfully Returned. ");
                 break;

@@ -48,7 +48,7 @@ public class Library {
                 if(user != null){
                     book.setAvailable(false);
                     rents.add(new Rent(book , user , nextrentid++ , new Date()));
-                    System.out.println(user.getName() + "has Returned: " + book.getTitle());
+                    System.out.println(user.getName() + "has Rented: " + book.getTitle());
                     return;
                 }else{
                     System.out.println("User not found.");
