@@ -33,11 +33,11 @@ public class Library {
         Book newbook = new Book(Title , Author , Description , nextbookid++);
         books.add(newbook);
     }
-    public void adduser(String Name , int PhoneNumber ){
+    public void adduser(String Name , String PhoneNumber ){
         NormalUser newuser = new NormalUser(Name , PhoneNumber , nextuserid++ , new Date());
         users.add(newuser);
     }
-    public void addadmin(String Name , int PhoneNumber , int PassWord){
+    public void addadmin(String Name , String PhoneNumber , String PassWord){
         Admin newadmin = new  Admin(Name , PhoneNumber , PassWord , nextuserid++);
         users.add(newadmin);
     }
@@ -87,5 +87,33 @@ public class Library {
         }
         System.out.println("User not found or can't remove it!!");
     }
+    public void rentBookForUser(String bookName, String memberName, int memberID) {
+        Book bookToRent = null;
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(bookName) && book.isAvailable()) {
+                bookToRent = book;
+                break;
+            }
+        }
+        if (bookToRent == null) {
+            System.out.println("Book not available for rent.");
+            return;
+        }
 
+        User user = null;
+        for (User u : users) {
+            if (u.getName().equalsIgnoreCase(memberName) && u.getUserID() == memberID) {
+                user = u;
+                break;
+            }
+        }
+        if (user == null) {
+            System.out.println("Member not found.");
+            return;
+        }
+
+        bookToRent.setAvailable(false);
+        rents.add(new Rent(bookToRent, user, nextrentid++, new Date()));
+        System.out.println(user.getName() + " has rented: " + bookToRent.getTitle());
+    }
 }

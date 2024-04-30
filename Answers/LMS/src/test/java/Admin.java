@@ -1,10 +1,10 @@
 class Admin extends User{
-    private int Password;
-    public Admin(String Name , int PhoneNumber , int Password , int UserID){
+    private String Password;
+    public Admin(String Name , String PhoneNumber , String Password , int UserID){
         super(Name , PhoneNumber , UserID);
         this.Password = Password;
     }
-    public int getPassword(){
+    public String getPassword(){
 
         return Password;
     }
