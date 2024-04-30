@@ -1,18 +1,20 @@
-// this class simulate books in the library
+""// this class simulates books in the library
 import java.util.UUID; // to generate the unique ID for books
 
 public class Book {
     private String title;
     private String author;
     private String description;
-    // unique id is based on the title of the book
-    private String uniqueBookID = UUID.nameUUIDFromBytes(title.getBytes()).toString();
+    // unique id is based on the title and auther of the book
+    private String uniqueBookID;
     public boolean availabilityStatus = true;
 
     // two arguments constructor
     public Book(String title, String author) {
         this.title = title;
         this.author = author;
+        this.uniqueBookID = UUID.nameUUIDFromBytes(
+                String.format(title + author).getBytes()).toString();
     }
 
     // three arguments constructor
@@ -30,7 +32,8 @@ public class Book {
         this.title = title;
 
         // the unique id should change
-        uniqueBookID = UUID.nameUUIDFromBytes(this.title.getBytes()).toString();
+        uniqueBookID = UUID.nameUUIDFromBytes(
+                String.format(title + author).getBytes()).toString();
     }
 
     public String getAuthor() {
