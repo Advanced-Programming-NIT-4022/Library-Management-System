@@ -1,8 +1,9 @@
 package org.example;
 
-public class MyApp extends UniqueID {
+public class MyApp {
     public static void main(String[] args) {
-        System.out.println(getID());
+        Book book = new Book();
+        book.AddBook();
     }
 
 }
