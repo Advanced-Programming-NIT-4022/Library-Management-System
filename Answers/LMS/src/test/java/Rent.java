@@ -5,7 +5,7 @@ public class Rent {
     private User UserObject;
     private int RentalID;
     private Date RentalDate;
-    public Rent (Book BookObject , User UserObject){
+    public Rent (Book BookObject , User UserObject , int RentalID , Date RentalDate){
         this.BookObject = BookObject;
         this.UserObject = UserObject;
         this.RentalDate = new Date();
@@ -15,15 +15,15 @@ public class Rent {
 
         return RentalID;
     }
-    public Book BookObject(){
+    public Book getBookObject(){
 
         return BookObject;
     }
-    public User UserObject(){
+    public User getUserObject(){
 
         return UserObject;
     }
-    public Date RentelDate(){
+    public Date getRentelDate(){
 
         return RentalDate;
     }
