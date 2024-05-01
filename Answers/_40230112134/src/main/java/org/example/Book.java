@@ -52,9 +52,9 @@ public class Book extends UniqueID {
             }
         }
     }
-    public boolean SearchBook(String sentence)
+    public String SearchBook(String sentence)
     {
-        boolean flag = false;
+        String flag = "0";
         try{
             BufferedReader bufferedReader = new BufferedReader(new FileReader("Book.txt"));
             String line;
@@ -70,7 +70,7 @@ public class Book extends UniqueID {
                         System.out.println("Your Author: " + list[2]);
                         System.out.println("Your Description: " + list[3]);
                         System.out.println("Your Availability Status: " + list[4]);
-                        flag = true;
+                        flag = list[0];
                     }
                     else
                     {
@@ -83,4 +83,5 @@ public class Book extends UniqueID {
         }
         return flag;
     }
+
 }

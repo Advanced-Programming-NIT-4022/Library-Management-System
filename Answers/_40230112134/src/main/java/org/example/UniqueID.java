@@ -6,6 +6,6 @@ public abstract class UniqueID {
     public static String getID()
     {
         Random randomnumber = new Random();
-        return String.valueOf(randomnumber.nextInt(100) + 1);
+        return String.valueOf(randomnumber.nextInt(1000) + 1);
     }
 }
