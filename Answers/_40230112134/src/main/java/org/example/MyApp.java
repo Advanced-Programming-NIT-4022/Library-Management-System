@@ -6,7 +6,10 @@ public class MyApp {
 //        book.AddBook();
         String mesal = book.SearchBook("1");
         System.out.println(mesal);
-        book.Delete("1");
+        book.Rent("525");
+        String mesal1 = book.SearchBook("1");
+        System.out.println(mesal1);
+//        book.Delete("1");
     }
 
 }

@@ -134,4 +134,40 @@ public class Book extends UniqueID {
             e.printStackTrace();
         }
     }
+    public void Rent(String number)
+    {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("Book.txt"));
+            String line;
+            Total.clear();
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                Total.add(line);
+            }
+            for (int i = 0; i < Total.size(); i++)
+            {
+                String line1 = Total.get(i);
+                String[] list = line1.split("/");
+                if (Objects.equals(list[0], number))
+                {
+                    System.out.println("please read");
+                    Total.remove(i);
+                    String temp = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + "false" ;
+                    Total.add(temp);
+                }
+            }
+            bufferedReader.close();
+            FileWriter writer = new FileWriter("Book.txt");
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            for (String temp : Total)
+            {
+                bufferedWriter.write(temp);
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+        }catch (IOException e){
+            System.out.println("Wrong");
+            e.printStackTrace();
+        }
+    }
 }
