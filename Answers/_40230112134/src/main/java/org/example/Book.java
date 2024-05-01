@@ -5,14 +5,15 @@ import java.io.*;
 
 public class Book extends UniqueID {
     String ID = getID();
-    String Title , Author , Description ;
+    String Title , Author , Description;
     ArrayList<String> Total = new ArrayList<>();
-    boolean AvailabilityStatus ;
+    boolean AvailabilityStatus;
     public void AddBook()
     {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("Book.txt"));
             String line;
+            Total.clear();
             while ((line = bufferedReader.readLine()) != null)
             {
                 Total.add(line);
@@ -50,5 +51,36 @@ public class Book extends UniqueID {
                 e.printStackTrace();
             }
         }
+    }
+    public boolean SearchBook(String sentence)
+    {
+        boolean flag = false;
+        try{
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("Book.txt"));
+            String line;
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                String[] list = line.split("/");
+                for (int i = 0; i < list.length; i++)
+                {
+                    if (Objects.equals(list[i], sentence))
+                    {
+                        System.out.println("Your ID book: " + list[0]);
+                        System.out.println("Your Title: " + list[1]);
+                        System.out.println("Your Author: " + list[2]);
+                        System.out.println("Your Description: " + list[3]);
+                        System.out.println("Your Availability Status: " + list[4]);
+                        flag = true;
+                    }
+                    else
+                    {
+                    }
+                }
+            }
+        }catch (IOException e){
+            System.out.println("Wrong");
+            e.printStackTrace();
+        }
+        return flag;
     }
 }
