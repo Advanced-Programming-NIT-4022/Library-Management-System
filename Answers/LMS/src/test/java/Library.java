@@ -77,9 +77,9 @@ public class Library {
         }
         return availablebook;
     }
-    public void removeuser(int UserID){
+    public void removeuser(String PhoneNumber){
         for(User user : users){
-            if(user.getUserID() == UserID){
+            if(user.getPhoneNumber().equalsIgnoreCase(PhoneNumber)){
                 users.remove(user);
                 System.out.println("User Successfully Removed");
                 return;

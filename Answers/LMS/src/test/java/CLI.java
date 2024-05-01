@@ -96,11 +96,11 @@ public class CLI {
                 break;
             case "remove" :
                 if(args.length < 3){
-                    System.out.println("Invalid Command Please Provide Detail of User. ");
+                    System.out.println("Invalid Command Please Provide Detail of UserID. ");
                     return;
                 }
-                int userID = Integer.parseInt(args[2]);
-                Library.removeuser(userID);
+                String PhoneNumber = args[2];
+                Library.removeuser(PhoneNumber);
                 break;
             default:
                 System.out.println("Invalid Command");

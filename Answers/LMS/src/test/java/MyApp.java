@@ -1,3 +1,5 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.Scanner;
 
 public class MyApp {
@@ -21,9 +23,9 @@ public class MyApp {
             cli.processCommand(command);
         }
 
-        System.out.println("Thank you for choosing our Library Management System." +
-                " We're excited to provide you with an efficient and user-friendly platform for all your library needs. " +
-                "Happy reading!");
+        System.out.println("Thank you for choosing our Library Management System.");
+        System.out.println("We're excited to provide you with an efficient and user-friendly platform for all your library needs. ");
+        System.out.println("Happy reading!");
 
         scninput.close();
     }
