@@ -2,7 +2,6 @@
 91/wer/ewr/we/true
 616/w/erw/Wr/true
 662/wer/ewre/wr/true
-1/werwe'rw/erew/rew/true
 174/rw/erew/rwe/true
 413/we/rwer/we/true
 902/w/er/wer/true
