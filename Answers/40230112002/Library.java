@@ -3,13 +3,22 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Library {
-    Scanner sc = new Scanner(System.in);
-    final String LIBRARY_NAME = "The Jedi Temple library";
-    int capacity;
-    int Operating_Hours;
-    ArrayList<Book> bookRepository;
-    ArrayList<User> users;
-    ArrayList<Object> RentalDetails;
+    private String Library_Name;
+    private int capacity;
+    private ArrayList<Book> bookRepository;
+    private  ArrayList<User> users;
+    private ArrayList<Object> RentalDetails;
+
+    public Library(String Library_Name , Integer capacity){
+
+        this.Library_Name = Library_Name;
+        this.capacity = capacity;
+
+        this.users = new ArrayList<>();
+        this.bookRepository = new ArrayList<>();
+        this.RentalDetails = new ArrayList<>();
+
+    }
 
 
 
@@ -20,62 +29,32 @@ public class Library {
         this.bookRepository = bookRepository;
         this.users = users;
     }
-    public void addMember(Integer MemberID , String Password){
-        if(Password.equals(Admin.getPassword())){
-            System.out.println("Enter User Name: ");
-            String userName = sc.nextLine();
-            System.out.println("Enter User Phone number: ");
-            String userPhone = sc.nextLine();
-            User newUser = new User(userName , userPhone);
+    public void addUser(String userName, String userPhone){
+            User newUser = new NormalUser(userName , userPhone);
             users.add(newUser);
         }
-    }
 
-    public void removeMember(Integer MemberID , String Password){
-        if(Password.equals(Admin.getPassword())){
-        for (User i : users) {
-            if(i.getUnique_UserID() == MemberID ){
-                users.remove(i);
-                }
-            }
-        }
-    }
+public void RemoveUser(Integer UserID){
+    users.forEach(user -> {
+        if (UserID == users.indexOf(user))
+            users.remove(user);
+    });}
 
-
-    public void addBook(Integer BookID , String Password){
-        if(Password.equals(Admin.getPassword())){
-            System.out.println("Enter Book title: ");
-            String BookTitle = sc.nextLine();
-            System.out.println("Enter Book Author: ");
-            String BookAuthor = sc.nextLine();
-            System.out.println("Enter Book Description: (Optional)");
-            String BookDescription = sc.nextLine();
+public void addBook(String BookTitle , String BookAuthor , String BookDescription){
             Book newBook = new Book(BookTitle , BookAuthor , BookDescription );
             bookRepository.add(newBook);
         }
-    }
 
-    public void removeBook(Integer BookID , String Password){
-        if(Password.equals(Admin.getPassword())){
-            for (Book i : bookRepository) {
-                if(i.getUnique_BookID() == BookID ){
-                    bookRepository.remove(i);
-                }
+    public void removeBook(Integer BookID){
+        bookRepository.forEach(book -> {
+            if(BookID == bookRepository.indexOf(book)){
+                bookRepository.remove(book);
             }
+        });
         }
-    }
 
-    public void bookRental(String booktitle){
-        for(Book i : bookRepository){
-            if(i.getTitle().equals(booktitle)){
-                if(i.getAvailabiliy_Status()){
-                    i.setAvailability_status(false);
-                    Rent.RentBookLOG();
-                }
-                else{
-                    System.out.println("Book Not Found . Rental Failed");
-                }
-            }
-        }
+    public void addAdmin(String name , String phoneNumber , String Password){
+        Admin admin = new Admin(name , phoneNumber , Password);
+        users.add(admin);
     }
 }

@@ -7,10 +7,11 @@ public class Admin extends User{
     private String RegisterDate;
 
 
-    public Admin(String name, String phoneNumber) {
+    public Admin(String name, String phoneNumber , String Password) {
         super(name, phoneNumber);
         AdminPassword = setAdminPassword();
         RegisterDate = NormalUser.CurrentDateTime();
+        this.AdminPassword = Password;
     }
 
 
