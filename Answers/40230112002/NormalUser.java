@@ -1,25 +1,24 @@
+
 import java.util.Date;
 
-
 public class NormalUser extends User {
-    private String regDate;
 
-    private int Unique_NormalUserID;
+    private static final String RegisterDate = CurrentDateTime();
+    private int userID;
 
-    public NormalUser(String name , String Phone_Number) {
-        super(name ,Phone_Number);
-        this.regDate = String.valueOf(CurrentDateTime());
-        this.Unique_NormalUserID = getUnique_UserID();
+    public NormalUser(String name , String phoneNumber){
+        super(name , phoneNumber);
+        this.userID = getUserID();
     }
 
 
-    public Date CurrentDateTime(){
-        java.util.Date date = new java.util.Date();
-        return date;
+    public static String CurrentDateTime(){
+        Date date = new Date();
+        return String.valueOf(date);
     }
+
 
     public String toString(){
-        return super.toString() +" " + regDate;
+        return super.toString() +" " + RegisterDate;
     }
-
 }

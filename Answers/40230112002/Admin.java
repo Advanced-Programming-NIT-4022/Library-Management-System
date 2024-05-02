@@ -1,28 +1,34 @@
 import java.util.Scanner;
 
-public class Admin extends NormalUser{
+public class Admin extends User{
 
-    Scanner sc = new Scanner(System.in);
-    private static String Password;
-    private String regDate;
 
-    public Admin(String name ,String Phone_Number) {
-        super(name ,Phone_Number);
-        System.out.println("Please Enter your Password: ");
-        this.Password = setPassword(sc.nextLine());
-        this.regDate = String.valueOf(super.CurrentDateTime());
+    private String AdminPassword;
+    private String RegisterDate;
+
+
+    public Admin(String name, String phoneNumber) {
+        super(name, phoneNumber);
+        AdminPassword = setAdminPassword();
+        RegisterDate = NormalUser.CurrentDateTime();
     }
-    public static String getPassword(){
-        return Password;
+
+
+    public String getAdminPassword() {
+        return AdminPassword;
     }
-    public String setPassword(String newPassword) {
-        this.Password = newPassword;
-        System.out.println("Password updated successfully for Admin: " );
-        return newPassword;
+
+    public String setAdminPassword() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your Password: ");
+        AdminPassword = sc.nextLine();
+        ///can be conditioned to 8 char length
+        System.out.println("Password Successfully updated !!!");
+        return AdminPassword;
     }
 
     public String toString(){
-        return super.toString() + " " + this.Password;
+        return super.toString() + " " + RegisterDate + " " + getAdminPassword();
     }
 
 }

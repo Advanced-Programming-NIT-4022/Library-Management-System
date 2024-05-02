@@ -1,27 +1,32 @@
-import java.util.Random;
-
-public class User{
+abstract public class User {
 
     private String name;
-    private static int Unique_UserID = 0;
-    private String Phone_Number;
-    public User(String name , String Phone_Number){
+    private static Integer userID = 0;
+    private String phoneNumber;
 
+    public User(String name, String phoneNumber) {
         this.name = name;
-        this.Unique_UserID = generateUniqueUserID();
-        this.Phone_Number = Phone_Number;
+        this.phoneNumber = phoneNumber;
+        userID++;
+    }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public Integer getUserID() {
+        return userID;
+    }
+    public static int generateUserID() {
+        return ++userID;
     }
 
     public String toString(){
-        return this.name + " " + this.Phone_Number + " " + this.Unique_UserID;
-    }
-
-    public static int generateUniqueUserID() {
-        return ++Unique_UserID;
-    }
-
-    public int getUnique_UserID(){
-        return Unique_UserID;
+        return this.name + " " + this.phoneNumber + " " + userID;
     }
 }
