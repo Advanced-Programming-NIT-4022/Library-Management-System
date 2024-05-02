@@ -38,10 +38,12 @@ public class UserInterface {
 
 
     public void libraryLobby() {
-        //welcome
-        System.out.println("Welcome to library PortalPass");
 
-        //sign in : logging in with existing account, sign up : creating new account
+        // PortalPass
+        // Sign in : logging in with existing account, Sign up : creating new account
+
+        System.out.println("Welcome to library PortalPass");
+        
         String normal_user_name, admin_name, admin_password;
         Integer normal_user_phone_number, admin_phone_number;
 
@@ -49,7 +51,6 @@ public class UserInterface {
         String regex2 = "sign in as admin ([a-zA-Z]+(?:\\s[a-zA-Z]+)*) ((9[0-9]{9})|(09[0-9]{9})) ([^ ]{8,})";
         String regex3 = "creating new normal-user account ([a-zA-Z]+(?:\\s[a-zA-Z]+)*) ((9[0-9]{9})|(09[0-9]{9}))";
         String regex4 = "add new super doer ( admin ) ([a-zA-Z]+(?:\\s[a-zA-Z]+)*) ((9[0-9]{9})|(09[0-9]{9})) ([^ ]{8,})";
-
 
         while (true) {
             System.out.print("Enter your desired command : (command line is case sensitive) ");
@@ -94,7 +95,7 @@ public class UserInterface {
             }
         }
 
-        
+
 
 
     }
