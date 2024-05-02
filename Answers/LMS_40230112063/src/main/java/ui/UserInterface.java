@@ -4,10 +4,13 @@ import basic.classes.Library;
 
 import java.util.Scanner;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserInterface {
     String command;
     String operation;
+    private final String super_admin_password = "AmirHosseinZg1383";
 
     Scanner input = new Scanner(System.in);
 
@@ -29,57 +32,69 @@ public class UserInterface {
         System.out.println("sign in as normal user <name> <phone-number>");
         System.out.println("sign in as admin <name> <phone-number> <password>");
         System.out.println("creating new normal-user account <name> <phone-number>");
-        System.out.println("add new super doer ( admin ) <name> <phone-number> <password>"); //admin access required
+        System.out.println("add new super doer ( admin ) <name> <phone-number> <password> " +
+                "(attention :the password must have at least 8 characters)"); //admin access required
     }
 
 
     public void libraryLobby() {
         //welcome
-        System.out.println("welcome to " + library.getLibraryName());
+        System.out.println("Welcome to library PortalPass");
 
         //sign in : logging in with existing account, sign up : creating new account
         String normal_user_name, admin_name, admin_password;
         Integer normal_user_phone_number, admin_phone_number;
 
-        String[] operation_segment;
-        boolean flag;
+        String regex1 = "sign in as normal user ([a-zA-Z]+(?:\\s[a-zA-Z]+)*) ((9[0-9]{9})|(09[0-9]{9}))";
+        String regex2 = "sign in as admin ([a-zA-Z]+(?:\\s[a-zA-Z]+)*) ((9[0-9]{9})|(09[0-9]{9})) ([^ ]{8,})";
+        String regex3 = "creating new normal-user account ([a-zA-Z]+(?:\\s[a-zA-Z]+)*) ((9[0-9]{9})|(09[0-9]{9}))";
+        String regex4 = "add new super doer ( admin ) ([a-zA-Z]+(?:\\s[a-zA-Z]+)*) ((9[0-9]{9})|(09[0-9]{9})) ([^ ]{8,})";
+
 
         while (true) {
-            flag = false;
-            System.out.print("enter your desired command : (command line is case sensitive) ");
+            System.out.print("Enter your desired command : (command line is case sensitive) ");
             System.out.println("notice : for see list of supported command use the following instruction :");
             System.out.println("lobby --help");
             System.out.print(">>");
             operation = input.nextLine();
-            operation_segment = operation.split(" ");
 
-            if (Objects.equals(operation, "lobby --help")) {
-                printLobbySupportedCommand();
-            } else if (Objects.equals(operation_segment[0], "sign")) {
-                if (Objects.equals(operation_segment[1], "in")) {
-                    if (Objects.equals(operation_segment[2], "as")) {
-                        if (Objects.equals(operation_segment[3], "normal")) {
-                            if (Objects.equals(operation_segment[4], "user")) {
-
-                            }
-                        } else {
-                            flag = true;
-                        }
-                    } else {
-                        flag = true;
-                    }
-                } else {
-                    flag = true;
+            if(Pattern.compile(regex1).matcher(operation).find()){
+                normal_user_name = Pattern.compile(regex1).matcher(operation).group(1);
+                normal_user_phone_number = Integer.parseInt(Pattern.compile(regex1).matcher(operation).group(2));
+                break;
+            }
+            else if(Pattern.compile(regex2).matcher(operation).find()){
+                admin_name = Pattern.compile(regex2).matcher(operation).group(1);
+                admin_phone_number = Integer.parseInt(Pattern.compile(regex2).matcher(operation).group(2));
+                admin_password = Pattern.compile(regex2).matcher(operation).group(3);
+                break;
+            }
+            else if(Pattern.compile(regex3).matcher(operation).find()){
+                normal_user_name = Pattern.compile(regex1).matcher(operation).group(1);
+                normal_user_phone_number = Integer.parseInt(Pattern.compile(regex1).matcher(operation).group(2));
+                break;
+            }
+            else if(Pattern.compile(regex4).matcher(operation).find()){
+                System.out.println("adding new admin for library management require super admin password , enter password : \n>>");
+                if(Objects.equals(input.nextLine(), super_admin_password)){
+                    admin_name = Pattern.compile(regex2).matcher(operation).group(1);
+                    admin_phone_number = Integer.parseInt(Pattern.compile(regex2).matcher(operation).group(2));
+                    admin_password = Pattern.compile(regex2).matcher(operation).group(3);
+                    break;
+                }
+                else{
+                    System.out.println("Access denied , Wrong admin password");
                 }
 
-            } else {
-                flag = true;
             }
-
-            if (flag) {
-                System.out.println("invalid command ... try again");
+            else{
+                System.out.println("invalid command . . . try again");
+                System.out.println("Keep in mind that this error may be caused by entering the wrong command or entering the name," +
+                        " mobile number or password in the wrong form.");
             }
         }
+
+        
 
 
     }
