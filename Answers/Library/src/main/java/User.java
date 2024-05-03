@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class User {
-    private String completeName;
+    private String fullName;
     private  String ID;
     private String phoneNumber;
     private String date_of_registration;
@@ -13,15 +13,15 @@ public class User {
             return date.format(formatter);
         }
 
-    public User(String completeName, String phoneNumber){
-        this.completeName = completeName;
+    public User(String fullName, String phoneNumber){
+        this.fullName = fullName;
         this.ID = UUID.randomUUID().toString();
         this.phoneNumber = phoneNumber;
         this.date_of_registration = getFormattedDate();
     }
 
-    public String getCompleteName() {
-        return completeName;
+    public String getFullName() {
+        return fullName;
     }
 
     public  String getID() {
@@ -36,8 +36,8 @@ public class User {
         return date_of_registration;
     }
 
-    public void setCompleteName(String completeName) {
-        this.completeName = completeName;
+    public void setFullName(String completeName) {
+        this.fullName = completeName;
     }
 
     public void setPhoneNumber(String phoneNumber) {

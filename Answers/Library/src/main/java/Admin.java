@@ -1,19 +1,19 @@
 import java.util.UUID;
 
 public class Admin {
-    private String completeName;
+    private String fullName;
     private String ID;
     private String phoneNumber;
-    private int password;
-    public User(String completeName, String phoneNumber, int password){
-        this.completeName = completeName;
+    private String password;
+    public Admin(String fullName, String phoneNumber, String password){
+        this.fullName = fullName;
         this.ID = UUID.randomUUID().toString();
         this.phoneNumber = phoneNumber;
         this.password = password;
     }
 
-    public String getCompleteName() {
-        return completeName;
+    public String getFullName() {
+        return fullName;
     }
 
     public  String getID() {
@@ -24,19 +24,19 @@ public class Admin {
         return phoneNumber;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setCompleteName(String completeName) {
-        this.completeName = completeName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 }
