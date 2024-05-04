@@ -4,11 +4,11 @@ import java.util.Date;
 public class NormalUser extends User {
 
     private static final String RegisterDate = CurrentDateTime();
-    private int userID;
-
+    private int UserID;
+    private static int lastNormalUserID = LastUserID;
     public NormalUser(String name , String phoneNumber){
         super(name , phoneNumber);
-        this.userID = getUserID();
+        this.UserID = ++lastNormalUserID;
     }
 
 

@@ -1,13 +1,14 @@
-abstract public class User {
+ public class User {
 
     private String name;
-    private static Integer userID = 0;
+    public static Integer LastUserID = 0;
+    private int UserID;
     private String phoneNumber;
 
     public User(String name, String phoneNumber) {
         this.name = name;
         this.phoneNumber = phoneNumber;
-        userID++;
+        this.UserID = ++LastUserID;
     }
 
 
@@ -20,14 +21,11 @@ abstract public class User {
     }
 
     public Integer getUserID() {
-        return userID;
-    }
-    public static int generateUserID() {
-        return ++userID;
+        return UserID;
     }
 
     public String toString(){
-        return this.name + " " + this.phoneNumber + " " + userID;
+        return this.name + " " + this.phoneNumber + " " + this.UserID;
     }
 
 
