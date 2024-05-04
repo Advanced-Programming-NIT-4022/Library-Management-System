@@ -2,19 +2,19 @@ import java.util.*;
 
 public class Rent {
 
-
-
     private User UserObject;
     private Book BookObject;
     private int RentalID;
     private Date RentalDate;
-    private static int Unique_LogID = 0;
+    private int RentalLogID;
+    private static int LastRentalLogID = 0;
 
+    public Rent(User UserObject, Book BookObject, Date RentalDate) {
 
-    public Rent(User UserObject , Book BookObject , Date RentalDate) {
         this.UserObject = UserObject;
         this.BookObject = BookObject;
         this.RentalDate = new Date();
+        this.RentalLogID = ++LastRentalLogID;
 
     }
 
@@ -25,8 +25,5 @@ public class Rent {
 
     public User getUserObject() {
         return UserObject;
-    }
-    private static int generateUniqueLogID() {
-        return ++Unique_LogID;
     }
 }

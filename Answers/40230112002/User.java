@@ -11,7 +11,6 @@
         this.UserID = ++LastUserID;
     }
 
-
     public String getName() {
         return name;
     }

@@ -5,12 +5,12 @@ public class Book {
     private String Title;
     private Boolean Availability_status = true;
     private String Description;
-    private static Integer BookID = 0;
-
+    private Integer BookID;
+    public static Integer LastBookID = 0;
 
 
     public Book( String Title, String Author, String Deccription) {
-        BookID = generateBookID();
+        this.BookID = ++LastBookID;
         this.Title = Title;
         this.Author = Author;
         this.Description = Deccription;
@@ -24,7 +24,6 @@ public class Book {
     public void setTitle(String title) {
         Title = title;
     }
-
 
     public String getAuthor() {
         return Author;
@@ -43,9 +42,6 @@ public class Book {
         return Description;
     }
 
-    private static int generateBookID() {
-        return ++BookID;
-    }
 
     public String toString(){
         return BookID + " " + this.Title + " " +  this.Author + " " +this.Description  +

@@ -120,7 +120,6 @@ public void addBook(String BookTitle , String BookAuthor , String BookDescriptio
         System.out.println("[!] # User Not Found #\n\r");
     }
 
-
     public void BookRentalForUser(String bookName, String UserName, int UserID) {
         for (Book book : bookRepository) {
             if (book.getTitle().equalsIgnoreCase(bookName) && book.getAvailability_status().equals(true)) {

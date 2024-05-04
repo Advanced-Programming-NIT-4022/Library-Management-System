@@ -8,7 +8,6 @@ public class Main {
         NormalUser user2 = new NormalUser("sol" , "65654");
         Admin admin = new Admin("dfjl" , "5854" , "dihfgiods");
         Admin admin1 = new Admin("lks" , "23423" , "kjdffgh");
-
         System.out.println(user.toString());
         System.out.println(user1.toString());
         System.out.println(user2.toString());

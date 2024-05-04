@@ -11,7 +11,6 @@ public class NormalUser extends User {
         this.UserID = ++lastNormalUserID;
     }
 
-
     public static String CurrentDateTime(){
         Date date = new Date();
         return String.valueOf(date);
