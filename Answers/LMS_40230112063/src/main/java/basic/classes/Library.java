@@ -141,41 +141,44 @@ public class Library {
 
     public void rentBook(String title, String author, String user_name, Integer user_phone_number) {
         random.setSeed(System.currentTimeMillis());
-        Book bookExistenceCheckerSaver = bookExistenceChecker(title, author);
-        NormalUser memberExistenceCheckerSaver = memberExistenceChecker(user_name, user_phone_number);
-        if (bookExistenceCheckerSaver != null) {
-            if (memberExistenceCheckerSaver != null) {
-                rent = new Rent(bookExistenceCheckerSaver.book_id, memberExistenceCheckerSaver.id, random.nextInt());
+        Book book_intended_to_rent = bookExistenceChecker(title, author);
+        NormalUser renter = memberExistenceChecker(user_name, user_phone_number);
+        if (book_intended_to_rent != null) {
+            if (renter != null) {
+                rent = new Rent(book_intended_to_rent.book_id, renter.id, random.nextInt());
+                rented_book_repo.add(rent);
+                book_repository.get(book_repository.indexOf(book_intended_to_rent)).availability_status = false;
                 System.out.println("The Book with " + title + "title ," + author + "author , and " +
-                        bookExistenceCheckerSaver.book_id + "ID , successfully rented by "+user_name+" with ID "
-                        +memberExistenceCheckerSaver.id);
+                        book_intended_to_rent.book_id + "ID , successfully rented by "+user_name+" with ID "
+                        +renter.id);
             } else {
                 System.out.println("The entered phone number or name is not registered in the system." +
                         " (Such a user does not exist in the list of registered users)");
-                return;
             }
         } else {
             System.out.println("The entered book name or author name is not registered in the system." +
                     " (Such a book does not exist in the list of registered books)");
-            return;
         }
 
-        rented_book_repo.add(rent);
 
-        bookExistenceCheckerSaver.availability_status = false;
     }
 
 
     public void returnBook(String title, String author, String user_name, Integer user_phone_number) {
-        Book bookExistenceCheckerSaver = bookExistenceChecker(title, author);
-        NormalUser memberExistenceCheckerSaver = memberExistenceChecker(user_name, user_phone_number);
-        if (bookExistenceCheckerSaver != null) {
-            if (memberExistenceCheckerSaver != null) {
+        Book book_intended_to_return = bookExistenceChecker(title, author);
+        NormalUser returner = memberExistenceChecker(user_name, user_phone_number);
+        if (book_intended_to_return != null) {
+            if (returner != null) {
                 for (Rent iterator : rented_book_repo) {
-                    if (Objects.equals(iterator.reserved_book_id, bookExistenceCheckerSaver.book_id) && Objects.equals(iterator.reserver_user_id, memberExistenceCheckerSaver.id))
+                    if (Objects.equals(iterator.reserved_book_id, book_intended_to_return.book_id) && Objects.equals(iterator.reserver_user_id, returner.id)){
                         rented_book_repo.remove(iterator);
+                        book_repository.get(book_repository.indexOf(book_intended_to_return)).availability_status = true;
+                        return;
+                    }
+
                 }
-                bookExistenceCheckerSaver.availability_status = true;
+                System.out.println("The book with the given information is not rented or the user name you entered is not the real renter !!");
+
             } else {
                 System.out.println("The entered phone number or name is not registered in the system." +
                         " (Such a user does not exist in the list of registered users)");
