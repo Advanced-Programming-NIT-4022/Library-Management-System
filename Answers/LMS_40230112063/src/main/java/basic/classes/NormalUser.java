@@ -12,12 +12,4 @@ class NormalUser extends User{
         registration_date = LocalDate.ofEpochDay(LocalDate.now().toEpochDay());
     }
 
-    static Integer idFinder(String name, Integer phone_number, ArrayList<NormalUser> normalUsers ){
-        for(NormalUser iterator : normalUsers){
-            if(Objects.equals(iterator.name, name) && Objects.equals(iterator.phone_number, phone_number)){
-                return iterator.id;
-            }
-        }
-        return -1;
-    }
 }

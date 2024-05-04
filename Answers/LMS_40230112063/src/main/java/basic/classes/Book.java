@@ -13,13 +13,4 @@ class Book {
         this.availability_status = availability_status;
     }
 
-
-    static Integer idFinder(String title, String author,ArrayList<Book> book_repo ){
-        for(Book iterator : book_repo){
-            if(Objects.equals(iterator.author, author) && Objects.equals(iterator.title, title)){
-                return iterator.book_id;
-            }
-        }
-        return -1;
-    }
 }
