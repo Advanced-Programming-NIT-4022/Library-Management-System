@@ -8,6 +8,7 @@ public class Library {
 
     private final String library_name;
     private final int capacity;
+    private final String operating_hours;
 
     public String getLibraryName() {
         return library_name;
@@ -17,15 +18,28 @@ public class Library {
         return capacity;
     }
 
-    public Library(String library_name, int capacity) {
+    public String getOperating_hours(){
+        return operating_hours;
+    }
+
+    public Library(String library_name, int capacity, String operating_hours) {
         this.library_name = library_name;
         this.capacity = capacity;
+        this.operating_hours = operating_hours;
     }
 
 //-----------------------------------------------------------------------------------------------
 
     ArrayList<NormalUser> normalUsers = new ArrayList<>();
     protected NormalUser normalUser;
+
+    public NormalUser memberExistenceChecker(String name, Integer phone_number){
+        for (NormalUser iterator : normalUsers) {
+            if (Objects.equals(iterator.name, name) && Objects.equals(iterator.phone_number, phone_number))
+                return iterator;
+        }
+        return null;
+    }
 
     public void addMember(String name, Integer phone_number) {
         random.setSeed(System.currentTimeMillis());
@@ -45,6 +59,34 @@ public class Library {
             return;
         }
     }
+
+
+    ArrayList<Admin> admins = new ArrayList<>();
+    protected Admin admin;
+
+
+    public Admin adminExistenceChecker(String name, Integer phone_number, String password){
+        for (Admin iterator : admins) {
+            if (Objects.equals(iterator.name, name) && Objects.equals(iterator.phone_number, phone_number) && Objects.equals(iterator.getPassword(), password))
+                return iterator;
+        }
+        return null;
+    }
+
+    public void addAmin(String name, Integer phone_number, String password) {
+        this.admin = new Admin(name, random.nextInt(), phone_number , password);
+        admins.add(admin);
+    }
+
+    public boolean passwordExistenceChecker(String password){
+        for(Admin iterator : admins){
+            if(Objects.equals(iterator.getPassword(), password))
+                return true;
+        }
+        return false;
+    }
+
+
 
     ArrayList<Book> book_repository = new ArrayList<>();
     protected Book book;
@@ -72,19 +114,41 @@ public class Library {
         System.out.println("There are no books with the given information. Make sure you have entered the book info correctly.");
     }
 
+    public Book bookExistenceChecker(String title, String author){
+        for(Book iterator : book_repository){
+            if(Objects.equals(iterator.title, title) && Objects.equals(iterator.author, author)){
+                return iterator;
+            }
+        }
+        return null;
+    }
+
+    public void printAvailableBooks(){
+        for(Book iterator : book_repository){
+            if(iterator.availability_status){
+                System.out.println("********");
+                System.out.println("Name : "+iterator.title);
+                System.out.println("Author : "+iterator.author);
+                System.out.println("Description : "+iterator.description);
+                System.out.println("BookID : "+iterator.book_id);
+            }
+        }
+    }
+
 
     ArrayList<Rent> rented_book_repo = new ArrayList<>();
     protected Rent rent;
 
     public void rentBook(String title, String author, String user_name, Integer user_phone_number) {
         random.setSeed(System.currentTimeMillis());
-        Integer book_id, user_id;
-        book_id = Book.idFinder(title, author, book_repository);
-
-        if (book_id != -1) {
-            user_id = NormalUser.idFinder(user_name, user_phone_number, normalUsers);
-            if (user_id != -1) {
-                rent = new Rent(book_id, user_id, random.nextInt());
+        Book bookExistenceCheckerSaver = bookExistenceChecker(title, author);
+        NormalUser memberExistenceCheckerSaver = memberExistenceChecker(user_name, user_phone_number);
+        if (bookExistenceCheckerSaver != null) {
+            if (memberExistenceCheckerSaver != null) {
+                rent = new Rent(bookExistenceCheckerSaver.book_id, memberExistenceCheckerSaver.id, random.nextInt());
+                System.out.println("The Book with " + title + "title ," + author + "author , and " +
+                        bookExistenceCheckerSaver.book_id + "ID , successfully rented by "+user_name+" with ID "
+                        +memberExistenceCheckerSaver.id);
             } else {
                 System.out.println("The entered phone number or name is not registered in the system." +
                         " (Such a user does not exist in the list of registered users)");
@@ -98,44 +162,27 @@ public class Library {
 
         rented_book_repo.add(rent);
 
-        for (Book iterator : book_repository) {
-            if (Objects.equals(iterator.book_id, book_id)) {
-                iterator.availability_status = false;
-            }
-        }
-
+        bookExistenceCheckerSaver.availability_status = false;
     }
 
 
     public void returnBook(String title, String author, String user_name, Integer user_phone_number) {
-        Integer book_id, user_id;
-        book_id = Book.idFinder(title, author, book_repository);
-
-        if (book_id != -1) {
-            user_id = NormalUser.idFinder(user_name, user_phone_number, normalUsers);
-            if (user_id == -1) {
+        Book bookExistenceCheckerSaver = bookExistenceChecker(title, author);
+        NormalUser memberExistenceCheckerSaver = memberExistenceChecker(user_name, user_phone_number);
+        if (bookExistenceCheckerSaver != null) {
+            if (memberExistenceCheckerSaver != null) {
+                for (Rent iterator : rented_book_repo) {
+                    if (Objects.equals(iterator.reserved_book_id, bookExistenceCheckerSaver.book_id) && Objects.equals(iterator.reserver_user_id, memberExistenceCheckerSaver.id))
+                        rented_book_repo.remove(iterator);
+                }
+                bookExistenceCheckerSaver.availability_status = true;
+            } else {
                 System.out.println("The entered phone number or name is not registered in the system." +
                         " (Such a user does not exist in the list of registered users)");
-                return;
             }
         } else {
             System.out.println("The entered book name or author name is not registered in the system." +
                     " (Such a book does not exist in the list of registered books)");
-            return;
         }
-
-        for (Rent iterator : rented_book_repo) {
-            if (Objects.equals(iterator.reserved_book_id, book_id) && Objects.equals(iterator.reserver_user_id, user_id))
-                rented_book_repo.remove(iterator);
-
-        }
-
-        for (Book iterator : book_repository) {
-            if (Objects.equals(iterator.book_id, book_id))
-                iterator.availability_status = true;
-        }
-
-
     }
-
 }
