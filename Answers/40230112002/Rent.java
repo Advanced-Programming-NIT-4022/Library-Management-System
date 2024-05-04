@@ -2,20 +2,29 @@ import java.util.*;
 
 public class Rent {
 
-    static NormalUser UserObject;
-    static Book BookObject;
-    static int RentalID;
-    static Date RentalDate;
-    static int Unique_LogID = 0;
 
 
-    //private String[] RentalDetail = new String[3];
-    static String[] RentalDetail = {Integer.toString(UserObject.getUnique_UserID()) , Integer.toString(BookObject.getUnique_BookID()) , RentalDate.toString() };
-    private static HashMap<Integer , String[]> RentalRegistery;
+    private User UserObject;
+    private Book BookObject;
+    private int RentalID;
+    private Date RentalDate;
+    private static int Unique_LogID = 0;
 
-    public static void RentBookLOG(){
-        generateUniqueLogID();
-        RentalRegistery.put(RentalID , RentalDetail);
+
+    public Rent(User UserObject , Book BookObject , Date RentalDate) {
+        this.UserObject = UserObject;
+        this.BookObject = BookObject;
+        this.RentalDate = new Date();
+
+    }
+
+    public Book getBookObject() {
+        return BookObject;
+    }
+
+
+    public User getUserObject() {
+        return UserObject;
     }
     private static int generateUniqueLogID() {
         return ++Unique_LogID;

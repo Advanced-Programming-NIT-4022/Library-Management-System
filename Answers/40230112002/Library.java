@@ -1,4 +1,7 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -7,7 +10,7 @@ public class Library {
     private int capacity;
     private ArrayList<Book> bookRepository;
     private  ArrayList<User> users;
-    private ArrayList<Object> RentalDetails;
+    private ArrayList<Rent> RentalDetails;
 
     public Library(String Library_Name , Integer capacity){
 
@@ -56,5 +59,48 @@ public void addBook(String BookTitle , String BookAuthor , String BookDescriptio
     public void addAdmin(String name , String phoneNumber , String Password){
         Admin admin = new Admin(name , phoneNumber , Password);
         users.add(admin);
+    }
+
+
+    public void BookRental(String BookName , String UserName){
+        for(Book book : bookRepository){
+            if(book.getTitle().equalsIgnoreCase(BookName) && book.getAvailability_status()){
+                User user = getUserobject(UserName);
+                if(user != null){
+                    Rent rent = new Rent(user , book , new Date());
+                    RentalDetails.add(rent);
+                    System.out.println("|"+book.getTitle() + "| Has been Rented by : " + user.getName() + user.getUserID() + user.getPhoneNumber());
+                    return;
+                }
+                else {
+                    System.out.println("[!] # User Not Found #\n\r");
+                }
+            }
+        }
+        System.out.println("[!] # Book Not Found #\n\r");
+    }
+
+    public void ReturnBook(String BookName){
+        for (Book book : bookRepository){
+            if (book.getTitle().equalsIgnoreCase(BookName) && book.getAvailability_status().equals(false)){
+                book.setAvailability_status(true);
+                System.out.println("[+] |"+ book.getTitle() + "| Has been Returned ");
+                for(Rent rent : RentalDetails){
+                    if(rent.getBookObject().equals(book)){
+                        RentalDetails.remove(rent);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public User getUserobject(String UserName){
+        for(User user : users){
+            if(user.getName().equalsIgnoreCase(UserName)){
+                return user;
+            }
+        }
+        return null;
     }
 }
