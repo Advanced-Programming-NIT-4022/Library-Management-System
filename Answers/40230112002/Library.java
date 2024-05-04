@@ -1,9 +1,6 @@
 import org.w3c.dom.ls.LSOutput;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Library {
     private String Library_Name;
@@ -102,5 +99,41 @@ public void addBook(String BookTitle , String BookAuthor , String BookDescriptio
             }
         }
         return null;
+    }
+
+    public void ShowAvailableBooks(){
+        bookRepository.forEach(book -> {
+            if(book.getAvailability_status().equals(true)){
+                System.out.println(bookRepository.indexOf(book) + ". " + book.getTitle() + " wrote By " + book.getAuthor());
+            }
+        });
+    }
+
+
+    public void RemoveUser(String UserID){
+        for(User user : users){
+            if(user.getUserID().equals(UserID)){
+                users.remove(user);
+                System.out.println("[+] User" + user.getName() +" Has Been Removed");
+            }
+        }
+        System.out.println("[!] # User Not Found #\n\r");
+    }
+
+
+    public void BookRentalForUser(String bookName, String UserName, int UserID) {
+        for (Book book : bookRepository) {
+            if (book.getTitle().equalsIgnoreCase(bookName) && book.getAvailability_status().equals(true)) {
+                for(User user : users){
+                    if(user.getName().equalsIgnoreCase(UserName) && user.getUserID().equals(UserID)){
+                        book.setAvailability_status(false);
+                        Rent newRent = new Rent(user , book , new Date());
+                        RentalDetails.add(newRent);
+                        System.out.println("[+] "+ bookName + " Has Been Rented by " + UserName + " " + UserID);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
