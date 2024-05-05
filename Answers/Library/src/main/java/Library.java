@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class Library {
      private final List<Book> books = new ArrayList<>();
+     private final List<User> users = new ArrayList<>();
      private static final String FILE_NAME = "Library.dat";
      private String libName = "NIT";
      private static int capacity = 1250;
@@ -13,7 +14,11 @@ public class Library {
      public String getOperatinghours() {
           return operatinghours;
      }
+     public String getLibName(){
+          return libName;
+     }
      public Library(){
+          loadUsers();
           loadBooks();
      }
      public void addBook(String title, String author, String description){
@@ -98,6 +103,51 @@ public class Library {
                     }
                } catch (IOException | ClassNotFoundException e) {
                     System.out.println("Error loading books: " + e.getMessage());
+               }
+          }
+     }
+     //----------------------------------------------------------------------------------------------------------
+     //User registries
+     public void addUser(String fullName,String phoneNumber){
+          users.add(new User(fullName,phoneNumber));
+          users.sort(Comparator.comparing(User::getFullName));
+          saveUsers();
+          System.out.println("User " + fullName + " added successfully.");
+     }
+
+     public void removeUser(String ID){
+          boolean found = false;
+          for (int i = 0; i < users.size(); i++) {
+               if (users.get(i).getID().equalsIgnoreCase(ID)){
+                    users.remove(users.get(i));
+                    saveUsers();
+                    System.out.println("User " + users.get(i).getFullName() + " removed successfully.");
+                    found = true;
+                    break;
+               }
+          }
+          if (!found){
+               System.out.println("Error removing user!");
+          }
+     }
+     private void saveUsers(){
+          try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))){
+               oos.writeObject(users);
+          } catch (IOException e) {
+               System.out.println("Error saving users: " + e.getMessage());
+          }
+     }
+     @SuppressWarnings("unchecked")
+     private void loadUsers(){
+          File file = new File(FILE_NAME);
+          if (file.exists()){
+               try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))){
+                    Object object = ois.readObject();
+                    if (object instanceof List) {
+                         users.addAll((List<User>) object);
+                    }
+               } catch (IOException |ClassNotFoundException e) {
+                    System.out.println("Error loading users: " + e.getMessage());
                }
           }
      }

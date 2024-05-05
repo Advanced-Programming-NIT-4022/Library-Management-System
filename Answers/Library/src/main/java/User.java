@@ -1,8 +1,10 @@
+import java.io.Serializable;
 import java.util.UUID;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String fullName;
     private  String ID;
     private String phoneNumber;
