@@ -18,6 +18,7 @@ public class CLI {
             case "lib":
                 LibraryCommand(args);
                 break;
+
             default:
                 System.out.println("Invalid command.");
         }
@@ -35,7 +36,7 @@ public class CLI {
                     String Title = args[3];
                     String Author = args[4];
                     String Description = args.length > 5 ? args[5] : "";
-                    Library.addbook(Title , Author , Description);
+                    Library.addBook(Title , Author , Description);
                     System.out.println("Book Successfully Added. ");
                 }
                 else if(args[2].equals("member")){
@@ -45,8 +46,8 @@ public class CLI {
                     }
                     String Name = args[3];
                     String PhoneNumber = args[4];
-                    Library.adduser(Name , PhoneNumber);
-                    System.out.println("Member Successfully Created. ");
+                    Library.addUser(Name, PhoneNumber);
+
                 }else if(args[2].equals("admin")){
                     if(args.length < 6){
                         System.out.println("Invalid Command Please Provide Detail of Admin. ");
@@ -55,12 +56,12 @@ public class CLI {
                     String Name = args[3];
                     String PhoneNumber = args[4];
                     String PassWord = args[5];
-                    Library.addadmin(Name , PhoneNumber , PassWord);
-                    System.out.println("Admin Successfully Created. ");
+                    Library.addAdmin(Name, PhoneNumber , PassWord);
                 }else{
                     System.out.println("Invalid Command!");
                 }
                 break;
+
             case "rent":
                 if (args.length < 5) {
                     System.out.println("Invalid command. Please provide book, member name, and member ID.");
@@ -68,8 +69,9 @@ public class CLI {
                 }
                 String bookName = args[2];
                 String userName = args[3];
-                Library.rentbook(bookName, userName);
+                Library.rentBook(bookName, userName);
                 break;
+
             case "return" :
                 if(args.length < 3){
                     System.out.println("Invalid Command Please Provide Detail of Book. ");
@@ -79,12 +81,13 @@ public class CLI {
                 Library.returnBook(ReturnBook);
                 System.out.println(ReturnBook + " Successfully Returned. ");
                 break;
+
             case "get" :
                 if(args.length < 3){
                     System.out.println("Invalid Command Please Provide Valid Argument. ");
                 }
                 if(args[2].equals("available") && args.length <=4 && args[3].equals("books")){
-                    List<Book> availablebook = Library.getAvailableBook();
+                    List<Book> availablebook = Library.getAvailableBooks();
                     for(Book book : availablebook){
                         System.out.println(book.getTitle() + " by " + book.getAuthor() + " Is Available. ");
                     }
@@ -94,13 +97,14 @@ public class CLI {
                     System.out.println("Invalid Command!");
                 }
                 break;
+
             case "remove" :
                 if(args.length < 3){
                     System.out.println("Invalid Command Please Provide Detail of UserID. ");
                     return;
                 }
                 String PhoneNumber = args[2];
-                Library.removeuser(PhoneNumber);
+                Library.removeUser(PhoneNumber);
                 break;
             default:
                 System.out.println("Invalid Command");
