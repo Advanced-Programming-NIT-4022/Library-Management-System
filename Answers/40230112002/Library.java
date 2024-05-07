@@ -9,6 +9,8 @@ public class Library {
     private  ArrayList<User> users;
     private ArrayList<Rent> RentalDetails;
 
+
+    private String hrs = " Sat to Fri : 8am to 1am Service 9am to 10pm";
     public Library(String Library_Name , Integer capacity){
 
         this.Library_Name = Library_Name;
@@ -134,5 +136,11 @@ public void addBook(String BookTitle , String BookAuthor , String BookDescriptio
                 }
             }
         }
+    }
+
+
+
+    public String getHrs() {
+        return hrs;
     }
 }
