@@ -40,6 +40,7 @@ public void RemoveUser(Integer UserID){
     users.forEach(user -> {
         if (UserID == users.indexOf(user))
             users.remove(user);
+        System.out.println("User Has been removed");
     });}
 
 public void addBook(String BookTitle , String BookAuthor , String BookDescription){
@@ -62,21 +63,24 @@ public void addBook(String BookTitle , String BookAuthor , String BookDescriptio
 
 
     public void BookRental(String BookName , String UserName){
-        for(Book book : bookRepository){
-            if(book.getTitle().equalsIgnoreCase(BookName) && book.getAvailability_status()){
+        bookRepository.forEach(book -> {
+            if (Objects.equals(book.getTitle(), BookName) && book.getAvailability_status()){
                 User user = getUserobject(UserName);
-                if(user != null){
-                    Rent rent = new Rent(user , book , new Date());
+                if (user != null) {
+                    Rent rent = new Rent(user, book, new Date());
                     RentalDetails.add(rent);
-                    System.out.println("|"+book.getTitle() + "| Has been Rented by : " + user.getName() + user.getUserID() + user.getPhoneNumber());
+                    System.out.println("|" + book.getTitle() + "| Has been Rented by : " + user.getName()  + "ID: "+ user.getUserID() + "Phone: " +user.getPhoneNumber());
                     return;
-                }
-                else {
+                } else {
                     System.out.println("[!] # User Not Found #\n\r");
                 }
+
             }
-        }
-        System.out.println("[!] # Book Not Found #\n\r");
+            else {
+                System.out.println("[!] # Book Not Found #\n\r");
+            }
+        });
+
     }
 
     public void ReturnBook(String BookName){
@@ -106,21 +110,21 @@ public void addBook(String BookTitle , String BookAuthor , String BookDescriptio
     public void ShowAvailableBooks(){
         bookRepository.forEach(book -> {
             if(book.getAvailability_status().equals(true)){
-                System.out.println(bookRepository.indexOf(book) + ". " + book.getTitle() + " wrote By " + book.getAuthor());
+                System.out.println((bookRepository.indexOf(book)+1) + ". " + book.getTitle() + " written By " + book.getAuthor());
             }
         });
     }
 
 
-    public void RemoveUser(String UserID){
-        for(User user : users){
-            if(user.getUserID().equals(UserID)){
-                users.remove(user);
-                System.out.println("[+] User" + user.getName() +" Has Been Removed");
-            }
-        }
-        System.out.println("[!] # User Not Found #\n\r");
-    }
+//    public void RemoveUser(String UserID){
+//        for(User user : users){
+//            if(user.getUserID().equals(UserID)){
+//                users.remove(user);
+//                System.out.println("[+] User" + user.getName() +" Has Been Removed");
+//            }
+//        }
+//        System.out.println("[!] # User Not Found #\n\r");
+//    }
 
     public void BookRentalForUser(String bookName, String UserName, int UserID) {
         for (Book book : bookRepository) {

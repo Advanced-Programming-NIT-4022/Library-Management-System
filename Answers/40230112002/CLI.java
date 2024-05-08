@@ -1,66 +1,56 @@
-
-import java.util.Scanner;
-
 public class CLI {
     private static Library library;
 
     public CLI(Library library) {
-        this.library = library;
+        CLI.library = library;
     }
 
     public void CommandLineArgument(String[] args) {
 
+            try {
+                if (args[0].equalsIgnoreCase("lib")) {
+                    if (args[1].equalsIgnoreCase("add")) {
+                        if (args[2].equalsIgnoreCase("book")) {
+                            LibAddBook(args);
+                        } else if (args[2].equalsIgnoreCase("Member")) {
+                            LibAddUser(args);
+                        } else if (args[2].equalsIgnoreCase("admin")) {
+                            LibAddAdmin(args);
+                        }
+                    }
 
-        for (String Argument : args) {
-            if (Argument.equalsIgnoreCase("lib")) {
-                continue;
-            } else {
-                System.out.println("[!] # Invalid Command #");
-            }
-            if (Argument.equalsIgnoreCase("add")) {
-                continue;
-            } else {
-                System.out.println("[!] # Invalid Command #\n [+] Enter A Method to work with");
-            }
-            if (Argument.equalsIgnoreCase("book")) {
-                LibAddBook(args);
-            } else if (Argument.equalsIgnoreCase("Member")) {
-                LibAddUser(args);
-            } else if (Argument.equalsIgnoreCase("admin")) {
-                LibAddAdmin(args);
-            }
+                    if (args[1].equalsIgnoreCase("get")) {
+                        if (args[2].equalsIgnoreCase("hrs")) {
+                            System.out.println(library.getHrs());
 
-            if (Argument.equalsIgnoreCase("get")) {
-                continue;
-            } else {
-                System.out.println("[!] # Invalid Command #\n [+] Enter A Method to work with");
-            }
-            if (Argument.equalsIgnoreCase("hrs")) {
-                System.out.println(library.getHrs());
+                        } else if (args[2].equalsIgnoreCase("available") && args[3].equalsIgnoreCase("books")) {
+                            library.ShowAvailableBooks();
+                        }
 
-            } else if (args[3].equalsIgnoreCase("available") && args[4].equalsIgnoreCase("books")) {
-                library.ShowAvailableBooks();
-            }
-            if (Argument.equalsIgnoreCase("rent")) {
-                if (args.length == 5) {
-                    LibRentBook(args);
+                    }
+
+                    if (args[1].equalsIgnoreCase("rent")) {
+                        if (args.length == 4) {
+                            LibRentBook(args);
+                        }
+                        if (args.length == 5) {
+                            LibRentBookforUser(args);
+                        }
+
+                    }
+                    if (args[1].equalsIgnoreCase("return")) {
+                        LibReturnBook(args);
+                    }
+
+                    if (args[1].equalsIgnoreCase("remove") && args[2].equalsIgnoreCase("member")) {
+                        LibRemoveUser(args);
+                    }
+                } else {
+                    System.out.println("[!] # Invalid Command #\n [+] Enter A Method to work with");
                 }
-                if (args.length == 6) {
-                    LibRentBookforUser(args);
-                }
-            } else {
-                System.out.println("[!] # Invalid Command #\n [+] Enter A Method to work with");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            if (Argument.equalsIgnoreCase("return")) {
-                LibReturnBook(args);
-            }
-            else{
-                System.out.println("[!] # Invalid Command #\n [+] Enter A Method to work with");
-            }
-            if(args[1].equalsIgnoreCase("remove") && args[2].equalsIgnoreCase("member")){
-                LibRemoveUser(args);
-            }
-        }
     }
         public void LibAddBook (String[]args){
             if (args.length == 6) {
@@ -87,12 +77,13 @@ public class CLI {
 
 
         public void LibAddAdmin (String[]args){
-            if (args.length == 6) {
+            if (args.length == 5) {
                 String name = args[3];
                 String phoneNumber = args[4];
                 System.out.println("[+] Enter a password: ");
-                Scanner sc = new Scanner(System.in);
                 // reads password without showing it on the console (just like setting pass in linux os)
+                //it cannot be run in IDE because it is for console like cmd or powershell
+                //you'll get a nullpointer error if you run it because there is no console to read from
                 String Password = String.valueOf(System.console().readPassword());
                 System.out.println("[+] Confirm your password: ");
                 String confirmPassword = String.valueOf(System.console().readPassword());
@@ -102,16 +93,15 @@ public class CLI {
                 } else {
                     System.out.println("[!] # Passwords do not match. Please try again #");
                 }
-                sc.close();
                 library.addAdmin(name, phoneNumber, Password);
                 System.out.println("[+] Admin: " + name + " Added to the Library");
             }
         }
 
         public void LibRentBook (String[]args){
-            if (args.length == 5) {
-                String BookName = args[4];
-                String UserName = args[3];
+            if (args.length == 4) {
+                String BookName = args[3];
+                String UserName = args[2];
                 //I don't know how to automatically get the Username without getting the argument from console
                 library.BookRental(BookName, UserName);
             } else {
@@ -123,7 +113,7 @@ public class CLI {
             if (args.length == 6) {
                 String BookName = args[3];
                 String UserName = args[4];
-                Integer UserID = Integer.valueOf(args[5]);
+                int UserID = Integer.parseInt(args[5]);
                 //String Exception Handling Needed Here
                 library.BookRentalForUser(BookName, UserName, UserID);
             } else {

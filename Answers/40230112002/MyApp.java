@@ -15,6 +15,7 @@ public class MyApp {
         Scanner scanner = new Scanner(System.in);
 
         while(true){
+            System.out.print(">>> ");
             String input = scanner.nextLine();
             if(input.equalsIgnoreCase("quit")){
                 break;
@@ -33,7 +34,7 @@ public class MyApp {
                         ">>> ");
             }
             else {
-                cli.CommandLineArgument(scanner.delimiter().split(" "));
+                cli.CommandLineArgument(input.split(" "));
             }
         }
 

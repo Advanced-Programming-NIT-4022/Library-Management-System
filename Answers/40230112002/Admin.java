@@ -9,7 +9,6 @@ public class Admin extends User{
 
         super(name, phoneNumber);
         this.UserID = ++lastAdminID;
-        AdminPassword = setAdminPassword();
         RegisterDate = NormalUser.CurrentDateTime();
         this.AdminPassword = Password;
 
@@ -17,15 +16,6 @@ public class Admin extends User{
 
 
     public String getAdminPassword() {
-        return AdminPassword;
-    }
-
-    public String setAdminPassword() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter your Password: ");
-        AdminPassword = sc.nextLine();
-        ///can be conditioned to 8 char length
-        System.out.println("Password Successfully updated !!!");
         return AdminPassword;
     }
 

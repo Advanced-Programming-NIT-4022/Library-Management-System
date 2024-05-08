@@ -3,7 +3,7 @@ public class Book {
 
     private String Author;
     private String Title;
-    private Boolean Availability_status = true;
+    private Boolean Availability_status;
     private String Description;
     private Integer BookID;
     public static Integer LastBookID = 0;
@@ -14,6 +14,7 @@ public class Book {
         this.Title = Title;
         this.Author = Author;
         this.Description = Deccription;
+        this.Availability_status = true;
     }
 
 
