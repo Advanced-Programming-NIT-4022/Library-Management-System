@@ -58,7 +58,7 @@ public class CLI {
                 System.out.println("[!] # Invalid Command #\n [+] Enter A Method to work with");
             }
             if(args[1].equalsIgnoreCase("remove") && args[2].equalsIgnoreCase("member")){
-
+                LibRemoveUser(args);
             }
         }
     }
