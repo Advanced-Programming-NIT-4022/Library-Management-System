@@ -4,7 +4,7 @@ import java.util.*;
 import java.io.*;
 
 public class Book extends UniqueID {
-    private String ID = getID();
+    private final String ID = getID();
     private String Title , Author , Description;
     ArrayList<String> Total = new ArrayList<>();
     boolean AvailabilityStatus;
@@ -22,10 +22,10 @@ public class Book extends UniqueID {
     public void setTitle(String title) { Title = title; }
     public String getTitle() { return Title; }
 
-    public void WriteFileBook()
+    public void WriteFileBook(String filepath)
     {
         try  {
-            FileWriter writer = new FileWriter("Book.txt");
+            FileWriter writer = new FileWriter(filepath);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             for (String temp : Total)
             {
@@ -37,10 +37,10 @@ public class Book extends UniqueID {
             System.out.println("Wrong");
         }
     }
-    public void ReadFileBook()
+    public void ReadFileBook(String filepath)
     {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("Book.txt"));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath));
             String line;
             Total.clear();
             while ((line = bufferedReader.readLine()) != null)
@@ -54,7 +54,7 @@ public class Book extends UniqueID {
     }
     public void AddBook()
     {
-        ReadFileBook();
+        ReadFileBook("Book.txt");
         System.out.println("Enter the name of the book");
         Scanner scanner = new Scanner(System.in);
         Title = scanner.nextLine();
@@ -75,7 +75,7 @@ public class Book extends UniqueID {
             else
             {
                 Total.add(ID + "/" + Title + "/" + Author + "/" + Description + "/" + AvailabilityStatus);
-                WriteFileBook();
+                WriteFileBook("Book.txt");
                 System.out.println("The book has been successfully added");
                 System.out.println("Your Unique ID is : " + ID);
             }
@@ -114,7 +114,7 @@ public class Book extends UniqueID {
     }
     public void Delete(String number)
     {
-        ReadFileBook();
+        ReadFileBook("Book.txt");
             for (int i = 0; i < Total.size(); i++)
             {
                 String line1 = Total.get(i);
@@ -125,11 +125,11 @@ public class Book extends UniqueID {
                     Total.remove(i);
                 }
             }
-        WriteFileBook();
+        WriteFileBook("Book.txt");
     }
     public void Rent(String number)
     {
-        ReadFileBook();
+        ReadFileBook("Book.txt");
         for (int i = 0; i < Total.size(); i++)
         {
             String line1 = Total.get(i);
@@ -146,6 +146,6 @@ public class Book extends UniqueID {
                 System.out.println("The book is rented.");
             }
         }
-        WriteFileBook();
+        WriteFileBook("Book.txt");
     }
 }
