@@ -4,11 +4,40 @@ import java.util.*;
 import java.io.*;
 
 public class Book extends UniqueID {
-    String ID = getID();
-    String Title , Author , Description;
+    private String ID = getID();
+    private String Title , Author , Description;
     ArrayList<String> Total = new ArrayList<>();
     boolean AvailabilityStatus;
-    public void AddBook()
+
+    public Book()
+    {
+        this.Title = getTitle();
+        this.Description = getDescription();
+        this.Author = getAuthor();
+    }
+    public void setAuthor(String author) { Author = author; }
+    public String getAuthor() { return Author; }
+    public String getDescription() { return Description; }
+    public void setDescription(String description) { Description = description; }
+    public void setTitle(String title) { Title = title; }
+    public String getTitle() { return Title; }
+
+    public void WriteFileBook()
+    {
+        try  {
+            FileWriter writer = new FileWriter("Book.txt");
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            for (String temp : Total)
+            {
+                bufferedWriter.write(temp);
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+        } catch (IOException e){
+            System.out.println("Wrong");
+        }
+    }
+    public void ReadFileBook()
     {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("Book.txt"));
@@ -21,8 +50,11 @@ public class Book extends UniqueID {
             bufferedReader.close();
         } catch (IOException r){
             System.out.println("An error occurred.");
-            r.printStackTrace();
         }
+    }
+    public void AddBook()
+    {
+        ReadFileBook();
         System.out.println("Enter the name of the book");
         Scanner scanner = new Scanner(System.in);
         Title = scanner.nextLine();
@@ -35,7 +67,7 @@ public class Book extends UniqueID {
         {
             String line = Total.get(i);
             String[] list = line.split("/");
-            if (Objects.equals(Title, list[1]))
+            if (Objects.equals(Title, list[1]) || Objects.equals(Author, list[2]) || Objects.equals(Description, list[3]))
             {
                 System.out.println("you can not add the book");
                 System.out.println("because we have that");
@@ -43,30 +75,11 @@ public class Book extends UniqueID {
             else
             {
                 Total.add(ID + "/" + Title + "/" + Author + "/" + Description + "/" + AvailabilityStatus);
-                while (true)
-                {
-                    try {
-                        FileWriter writer = new FileWriter("Book.txt");
-                        BufferedWriter bufferedWriter = new BufferedWriter(writer);
-                        for (String temp : Total)
-                        {
-                            bufferedWriter.write(temp);
-                            bufferedWriter.newLine();
-                        }
-                        bufferedWriter.close();
-                        System.out.println("The book has been successfully added");
-                        System.out.println("Your Unique ID is : " + ID);
-                        bufferedWriter.close();
-                        break;
-                    } catch (IOException e){
-                        System.out.println("An error occurred.");
-                        System.out.println("Try Again");
-                        e.printStackTrace();
-                    }
-                }
+                WriteFileBook();
+                System.out.println("The book has been successfully added");
+                System.out.println("Your Unique ID is : " + ID);
             }
         }
-
     }
     public String SearchBook(String sentence)
     {
@@ -96,20 +109,12 @@ public class Book extends UniqueID {
             bufferedReader.close();
         }catch (IOException e){
             System.out.println("Wrong");
-            e.printStackTrace();
         }
         return flag;
     }
     public void Delete(String number)
     {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("Book.txt"));
-            String line;
-            Total.clear();
-            while ((line = bufferedReader.readLine()) != null)
-            {
-                Total.add(line);
-            }
+        ReadFileBook();
             for (int i = 0; i < Total.size(); i++)
             {
                 String line1 = Total.get(i);
@@ -120,54 +125,27 @@ public class Book extends UniqueID {
                     Total.remove(i);
                 }
             }
-            bufferedReader.close();
-            FileWriter writer = new FileWriter("Book.txt");
-            BufferedWriter bufferedWriter = new BufferedWriter(writer);
-            for (String temp : Total)
-            {
-                bufferedWriter.write(temp);
-                bufferedWriter.newLine();
-            }
-            bufferedWriter.close();
-        } catch (IOException e){
-            System.out.println("Wrong");
-            e.printStackTrace();
-        }
+        WriteFileBook();
     }
     public void Rent(String number)
     {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("Book.txt"));
-            String line;
-            Total.clear();
-            while ((line = bufferedReader.readLine()) != null)
+        ReadFileBook();
+        for (int i = 0; i < Total.size(); i++)
+        {
+            String line1 = Total.get(i);
+            String[] list = line1.split("/");
+            if (Objects.equals(list[0], number))
             {
-                Total.add(line);
+                System.out.println("please read");
+                Total.remove(i);
+                String temp = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + "false" ;
+                Total.add(temp);
             }
-            for (int i = 0; i < Total.size(); i++)
+            else
             {
-                String line1 = Total.get(i);
-                String[] list = line1.split("/");
-                if (Objects.equals(list[0], number))
-                {
-                    System.out.println("please read");
-                    Total.remove(i);
-                    String temp = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + "false" ;
-                    Total.add(temp);
-                }
+                System.out.println("The book is rented.");
             }
-            bufferedReader.close();
-            FileWriter writer = new FileWriter("Book.txt");
-            BufferedWriter bufferedWriter = new BufferedWriter(writer);
-            for (String temp : Total)
-            {
-                bufferedWriter.write(temp);
-                bufferedWriter.newLine();
-            }
-            bufferedWriter.close();
-        }catch (IOException e){
-            System.out.println("Wrong");
-            e.printStackTrace();
         }
+        WriteFileBook();
     }
 }
