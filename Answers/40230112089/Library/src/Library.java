@@ -351,16 +351,19 @@ public class Library {
             System.exit(0);
         } else {
             String[] commandSegs = command.split(" ");
+
             if (commandSegs[0].equals("lib")) {
                 if (commandSegs[1].equals("-h") && commandSegs.length == 2) {
                     showAllCommand();
                 } else if (commandSegs[1].equals("add")) {
-                    if (commandSegs.length == 5 && commandSegs[2].equals("book") && commandSegs[3].matches("[a-zA-Z]+") && commandSegs[4].matches("[a-zA-Z]+")) {
-                        addBook(commandSegs[3], commandSegs[4]);
-                    } else if (commandSegs.length == 6 && commandSegs[2].equals("user") && commandSegs[3].matches("[a-zA-Z]+") && commandSegs[4].matches("[0-9]+")) {
-                        addUser(commandSegs[3], commandSegs[4], commandSegs[5]);
+                    if (commandSegs.length == 5 && commandSegs[2].equals("book") && commandSegs[3].matches("[a-zA-Z0-9_]+(/[a-zA-Z0-9_]+)?") && commandSegs[4].matches("[a-zA-Z0-9_]+(/[a-zA-Z0-9_]+)?")) {
+
+                        addBook(commandSegs[3].replace("/", " "), commandSegs[4].replace("/", " "));
+
+                    } else if (commandSegs.length == 6 && commandSegs[2].equals("user") && commandSegs[3].matches("[a-zA-Z0-9_]+(/[a-zA-Z0-9_]+)?") && commandSegs[4].matches("09[0-9]{9}")) {
+                        addUser(commandSegs[3].replace("/", " "), commandSegs[4], commandSegs[5]);
                     } else {
-                        System.out.println("Wrong try agin");
+                        System.out.println("Wrong try again");
                     }
                 } else if (commandSegs[1].equals("remove")) {
                     if (commandSegs.length == 4 && commandSegs[2].equals("user") && commandSegs[3].matches("[0-9]+")) {
@@ -370,7 +373,7 @@ public class Library {
                         removeBook(Integer.parseInt(commandSegs[3]));
 
                     } else {
-                        System.out.println("Wrong try agin");
+                        System.out.println("Wrong try again");
                     }
                 } else if (commandSegs[1].equals("show") && commandSegs[2].equals("all") && commandSegs.length == 4) {
                     if (commandSegs[3].equals("book")) {
@@ -381,7 +384,7 @@ public class Library {
                     } else if (commandSegs[3].equals("rent")) {
                         showAllRent();
                     } else {
-                        System.out.println("Wrong try agin");
+                        System.out.println("Wrong try again");
                     }
 
                 } else if (commandSegs[1].equals("rent") && commandSegs[2].equals("book") && commandSegs[3].matches("[0-9]+") && commandSegs[4].matches("[0-9]+") && commandSegs.length == 5) {
@@ -392,7 +395,7 @@ public class Library {
                 else if (commandSegs[1].equals("return") && commandSegs[2].equals("book") && commandSegs[3].matches("[0-9]+") && commandSegs[4].matches("[0-9]+") && commandSegs.length == 5) {
                     returnBook(Integer.parseInt(commandSegs[3]), Integer.parseInt(commandSegs[4]));
                 } else {
-                    System.out.println("Wrong try agin");
+                    System.out.println("Wrong try again");
                     return;
                 }
             }
@@ -404,11 +407,12 @@ public class Library {
         public void run() {
             System.out.println("xxx Welcome to " + this.libraryName + " xxx");
             if (!isLibraryOpen()) {
-                System.out.println("Sorry we are closed right now please try agin betwin" + openHour+" - " + closeHour);
+                System.out.println("Sorry we are closed right now please try again betwin" + openHour+" - " + closeHour);
             } else {
                 while (true) {
                     System.out.println("For see options write lib -h");
                     System.out.println("For exit write exit");
+                    System.out.println("Use the (/) to write a space in the middle of the names");
                     Scanner input = new Scanner(System.in);
                     String command = input.nextLine();
                     checkCommand(command);
