@@ -1,15 +1,14 @@
 package basic.classes;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Objects;
+
 
 class NormalUser extends User{
-    protected LocalDate registration_date;
+    protected String registration_date;
 
-    NormalUser(String name, Integer id, Integer phone_number) {
+    NormalUser(String name, String id, String phone_number) {
         super(name, id, phone_number);
-        registration_date = LocalDate.ofEpochDay(LocalDate.now().toEpochDay());
+        registration_date = LocalDate.now().toString();
     }
 
 }
