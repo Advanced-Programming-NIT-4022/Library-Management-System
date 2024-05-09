@@ -5,15 +5,15 @@ public class Book {
     private String bookID;
     private String title;
     private String author;
-    private boolean availabillity;
+    private boolean exist;
     private String description;
     public Book(){}//برای ساخت object بدون نیاز به اطلاعات قبلی
     public Book(String title,String author,String description){
         this.title = title;
         this.author = author;
-        this.availabillity = true;
+        this.exist = true;
         this.description = description;
-        this.bookId = BookID();
+        this.bookID = String.valueOf(BookID());// این متد مقدار را به رشته تبدیل میکند
     }
 // برای گرفتن مقادیر ازgetter
 // برای تغیر ویژگی ها از setter
@@ -35,8 +35,12 @@ public String getTitle(){
     public void setAuthor(String author) {
         this.author = author;
     }
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
+    public boolean isExist() {
+        return exist;
+    }
+
+    public void setExist(boolean exist) {
+        this.exist = exist;
     }
     public void setDescription(String description) {
         this.description = description;
