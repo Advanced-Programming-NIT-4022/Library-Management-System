@@ -14,7 +14,8 @@ public class Library {
         this.libraryName = libraryName;
         this.workingHours = workingHours;
         this.libraryPassword = libraryPassword;
-        CheckFiles();
+        checkFiles();
+        fileUpdater();
         if (!this.bookArray.isEmpty()) {
             booksId = this.bookArray.size() + 1;
         }
@@ -25,7 +26,7 @@ public class Library {
             rentsId = this.rentArray.size() + 1;
         }
     }
-    public void CheckFiles() {
+    public void checkFiles() {
         try {
             File file1 = new File("rents.txt");
             File file2 = new File("Users.txt");
@@ -69,6 +70,16 @@ public class Library {
             //دستورات ObjectInputStream را بسته و فایل را ازاد میکند
             fileInput1.close();
             objInput1.close();
+            FileInputStream fileInput2 = new FileInputStream("Users.txt");
+            ObjectInputStream objInput2 = new ObjectInputStream(fileInput2);
+            this.userArray = (ArrayList<User>) objInput2.readObject();
+            fileInput2.close();
+            objInput2.close();
+            FileInputStream fileInput3 = new FileInputStream("Rents.txt");
+            ObjectInputStream objInput3 = new ObjectInputStream(fileInput3);
+            this.rentArray = (ArrayList<Rent>) objInput3.readObject();
+            fileInput3.close();
+            objInput3.close();
         } catch (Exception ignored) {
         }
     }
