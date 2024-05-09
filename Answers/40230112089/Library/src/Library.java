@@ -145,4 +145,34 @@ public class Library {
         System.out.println(" Book removed");
         fileSaver();
     }
+    public void addUser(String userName, String phoneNumber, String password) {
+        if (!checkPassword()) {
+            System.out.println("Wrong Password");
+            return;
+        }
+        User user = new User(userName, phoneNumber, this.usersId, new Date().toString(), password);
+        this.userArray.add(user);
+        this.usersId++;
+        System.out.println("User id : " + user.userId);
+        System.out.println("User added ");
+        fileSaver();
+    }
+    public void removeUser(int userId) {
+        if (!checkUserId(userId)) {
+            System.out.println("Wrong User");
+            return;
+        }
+        if (!checkPassword()) {
+            System.out.println("Wrong Password ");
+            return;
+        }
+        for (int i = 0; i < this.userArray.size(); i++) {
+            if (this.userArray.get(i).userId == userId) {
+                this.userArray.remove(i);
+                break;
+            }
+        }
+        System.out.println("User removed");
+        fileSaver();
+    }
 }
