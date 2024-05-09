@@ -59,4 +59,17 @@ public class Library {
         } catch (Exception ignored) {
         }
     }
+    public void fileUpdater() {
+        try {
+            //داده ها را از فایل باینری میخوانیم
+            FileInputStream fileInput1 = new FileInputStream("Books.txt");
+            //خواندن اشیا سریالیزه از جریان ورودی
+            ObjectInputStream objInput1 = new ObjectInputStream(fileInput1);
+            this.bookArray = (ArrayList<Book>) objInput1.readObject();
+            //دستورات ObjectInputStream را بسته و فایل را ازاد میکند
+            fileInput1.close();
+            objInput1.close();
+        } catch (Exception ignored) {
+        }
+    }
 }
