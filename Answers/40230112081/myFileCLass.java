@@ -113,9 +113,24 @@ public class myFileCLass {
             f1 = l.indexOf(",");
             f2 = l.indexOf(",", f1+1);
             f3 = l.indexOf(",",f2+1);
-            roles.add(l.substring(f3+1));
+            f4 = l.indexOf(",", f3+1);
+            roles.add(l.substring(f3+1,f4));
         }
         return roles;
+    }
+
+    public ArrayList<String> getUserPassword(){
+        int f1,f2,f3,f4;
+        ArrayList<String> passwords = new ArrayList<>();
+        ArrayList<String> lines = lines_of_file();
+        for(String l : lines){
+            f1 = l.indexOf(",");
+            f2 = l.indexOf(",", f1+1);
+            f3 = l.indexOf(",",f2+1);
+            f4 = l.indexOf(",", f3+1);
+            passwords.add(l.substring(f4+1));
+        }
+        return passwords;
     }
 
     public void addBook(Book b){
@@ -195,5 +210,5 @@ public class myFileCLass {
 
 
 
-// user : id,username,phonenumber,role
+// user : id,username,phonenumber,role,password
 // book : id,title,author,description,status
