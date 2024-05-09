@@ -115,4 +115,34 @@ public class Library {
         }
         return result;
     }
+    public void addBook(String bookName, String bookAuthor) {
+        if (!checkPassword()) {
+            System.out.println("Wrong Password");
+            return;
+        }
+        Book book = new Book(bookName, bookAuthor, this.booksId, true);
+        this.booksId++;
+        this.bookArray.add(book);
+        System.out.println("Book id : " + book.bookId);
+        System.out.println(" Book added");
+        fileSaver();
+    }
+    public void removeBook(int bookId) {
+        if (!checkBookId(bookId)) {
+            System.out.println("Wrong Book");
+            return;
+        }
+        if (!checkPassword()) {
+            System.out.println("Wrong Password");
+            return;
+        }
+        for (int i = 0; i < this.bookArray.size(); i++) {
+            if (this.bookArray.get(i).bookId == bookId) {
+                this.bookArray.remove(i);
+                break;
+            }
+        }
+        System.out.println(" Book removed");
+        fileSaver();
+    }
 }
