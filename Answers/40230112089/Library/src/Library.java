@@ -44,12 +44,18 @@ public class Library {
             ObjectOutputStream objOutput1 = new ObjectOutputStream(fileOutput1);
             //به فایل می نویسد ان جریان باینری را
             objOutput1.writeObject(this.bookArray);
+            fileOutput1.close();
+            objOutput1.close();
             FileOutputStream fileOutput2 = new FileOutputStream("Users.txt");
             ObjectOutputStream objOutput2 = new ObjectOutputStream(fileOutput2);
             objOutput2.writeObject(this.userArray);
+            fileOutput2.close();
+            objOutput2.close();
             FileOutputStream fileOutput3 = new FileOutputStream("Rents.txt");
             ObjectOutputStream objOutput3 = new ObjectOutputStream(fileOutput3);
             objOutput3.writeObject(this.rentArray);
+            fileOutput3.close();
+            objOutput3.close();
         } catch (Exception ignored) {
         }
     }
