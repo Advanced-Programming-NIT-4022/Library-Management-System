@@ -1,6 +1,13 @@
 public class Manual {
     public static void print() {
         System.out.println("All of commands are :\n");
+
+        // command log in
+        System.out.println("lib login <userid> : Log in to your account");
+
+        // command log out
+        System.out.println("lib logout : Log out from your account");
+
         // command add
         System.out.println("lib add book <name> <author> <subtitle> : Add a new book to the library.");
 
@@ -11,7 +18,7 @@ public class Manual {
         System.out.println("lib rent <bookName> : Rent a book from the library.");
 
         // command add member
-        System.out.println("lib add member <studentID> <password>" +
+        System.out.println("lib add member <name> <phoneNumber> <password[optional]>" +
                 " : Add a new member to the library (admin privilege required).");
 
         // command rent for member
