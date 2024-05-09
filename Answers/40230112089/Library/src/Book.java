@@ -1,4 +1,5 @@
-public class Book  {
+import java.io.Serializable;
+public class Book implements Serializable {
     int bookId;
     boolean isAvailable;
     String bookAuthor;

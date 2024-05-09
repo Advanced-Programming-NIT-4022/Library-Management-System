@@ -1,4 +1,6 @@
-public class User {
+import java.io.Serializable;
+public class User implements Serializable{
+    // اینترفیس Serializable را implements کردیم تا یتوان اشیا این کلاس را Serialized کرد یعنی تبدیل به داده قابل ذخیره کردن در فایل کرد
     int userId;
     String UserName;
     String password;
