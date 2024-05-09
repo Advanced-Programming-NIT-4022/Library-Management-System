@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Library {
@@ -12,20 +13,10 @@ public class Library {
         Admin firstAdmin = new Admin("Mahta", 1, "09036339284".toCharArray(), "1234");
         adminList.add(firstAdmin);
     }
-
-    public void newNormalUser(ArrayList<NormalUser> userList, String name, char[] phone, String password, int date) {
-        int userID;
-        if (userList.isEmpty()) {
-            userID = 1;
-        }
-        else {
-            User lastUser = userList.get(userList.size() - 1);
-            userID = lastUser.getID();
-            userID++;
-        }
-        NormalUser newUser = new NormalUser(name, userID, phone, date, password);
-        userList.add(newUser);
+    public ArrayList<NormalUser> getUserList() {
+        return userList;
     }
+
     public void signup() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter your name: ");
@@ -49,17 +40,28 @@ public class Library {
                 }
             }
         } while (!flag);
-        System.out.println("Choose a password: ");
-        String password = sc.nextLine();
+        Random id = new Random();
+        int uniqueID = id.nextInt(9000) + 1000;
         int date = 1;
-        newNormalUser(userList, name, phone, password, date);
+        newNormalUser(userList, name, uniqueID, phone, date);
     }
     public void login() {
         System.out.println("Welcome back! Enter your name:");
         Scanner sc = new Scanner(System.in);
         String name = sc.nextLine();
-        System.out.println("Enter your password: ");
-        String password = sc.nextLine();
 
+    }
+    public void newNormalUser(ArrayList<NormalUser> userList, String name,int uniqueID, char[] phone, int date) {
+        int userID;
+        if (userList.isEmpty()) {
+            userID = 1;
+        }
+        else {
+            User lastUser = userList.get(userList.size() - 1);
+            userID = lastUser.getUniqueID();
+            userID++;
+        }
+        NormalUser newUser = new NormalUser(name, uniqueID, phone, date);
+        userList.add(newUser);
     }
 }

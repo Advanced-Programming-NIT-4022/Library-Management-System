@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class NormalUser extends User{
     private int date;
 
-    public NormalUser(String name, int ID, char[] phone, int date, String password) {
-        super(name, ID, phone, password);
+    public NormalUser(String name, int uniqueID, char[] phone, int date) {
+        super(name, uniqueID, phone);
         this.date = date;
     }
 
