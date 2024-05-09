@@ -83,4 +83,36 @@ public class Library {
         } catch (Exception ignored) {
         }
     }
+    public boolean checkUserId(int userId) {
+        boolean result = false;
+        for (int i = 0; i < this.userArray.size(); i++) {
+            if (this.userArray.get(i).userId == userId) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean checkPassword() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("enter Library password : ");
+        String password = input.nextLine();
+        return libraryPassword.equals(password);
+    }
+    public boolean userCheckPassword(int userid) {
+        Scanner input = new Scanner(System.in);
+        System.out.print("enter User password: ");
+        String userPassword = input.nextLine();
+        return this.userArray.get(userid - 1).password.equals(userPassword);
+    }
+    public boolean checkBookId(int bookId) {
+        boolean result = false;
+        for (int i = 0; i < this.bookArray.size(); i++) {
+            if (this.bookArray.get(i).bookId == bookId) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
 }
