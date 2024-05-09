@@ -175,4 +175,40 @@ public class Library {
         System.out.println("User removed");
         fileSaver();
     }
+    public void rentBook(int userId, int bookId) {
+        if (!checkBookId(bookId)) {
+            System.out.println("Wrong Book");
+            return;
+        }
+        if (!checkUserId(userId)) {
+            System.out.println("Wrong User");
+            return;
+        }
+        if (!userCheckPassword(userId)) {
+            System.out.println("Wrong Password  ");
+            return;
+        }
+        int bookIndex = 0, userIndex = 0;
+        for (int i = 0; i < this.userArray.size(); i++) {
+            if (this.userArray.get(i).userId == userId) {
+                userIndex = i;
+            }
+
+        }
+        for (int i = 0; i < this.bookArray.size(); i++) {
+            if (this.bookArray.get(i).bookId == bookId) {
+                if (!this.bookArray.get(i).isAvailable) {
+                    System.out.println("Book is already rented ");
+                    return;
+                }
+                bookIndex = i;
+                this.bookArray.get(i).isAvailable = false;
+                break;
+            }
+        }
+        Rent rent = new Rent(this.rentsId, new Date().toString(), this.userArray.get(userIndex), this.bookArray.get(bookIndex));
+        this.rentArray.add(rent);
+        System.out.println(" Book rented ");
+        fileSaver();
+    }
 }
