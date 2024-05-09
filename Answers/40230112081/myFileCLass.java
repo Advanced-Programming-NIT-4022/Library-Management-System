@@ -118,6 +118,79 @@ public class myFileCLass {
         return roles;
     }
 
+    public void addBook(Book b){
+        String query;
+        String id, title, author, desc, status;
+        id = b.getId();
+        title = b.getTitle();
+        author = b.getAuthor();
+        desc = b.getDescription();
+        status = b.getStatus();
+        query = id + "," + title + "," + author + "," + desc + "," + status;
+        add_to_file(query);
+    }
+
+    public ArrayList<String> getIdFromFileBook(){
+        int f1;
+        ArrayList<String> lines = lines_of_file();
+        ArrayList<String> ids = new ArrayList<>();
+        for(String str : lines){
+            f1 = str.indexOf(",");
+            ids.add(str.substring(0, f1));
+        }
+        return ids;
+    }
+
+    public ArrayList<String> getTitlesFromFileBook(){
+        int f1,f2;
+        ArrayList<String> lines = lines_of_file();
+        ArrayList<String> titles = new ArrayList<>();
+        for(String str : lines){
+            f1 = str.indexOf(",");
+            f2 = str.indexOf(",", f1+1);
+            titles.add(str.substring(f1+1, f2));
+        }
+        return titles;
+    }
+    public ArrayList<String> getAuthorsFromFileBook(){
+        int f1,f2, f3;
+        ArrayList<String> lines = lines_of_file();
+        ArrayList<String> authors = new ArrayList<>();
+        for(String str : lines){
+            f1 = str.indexOf(",");
+            f2 = str.indexOf(",", f1+1);
+            f3 = str.indexOf(",", f2+1);
+            authors.add(str.substring(f2+1, f3));
+        }
+        return authors;
+    }
+    public ArrayList<String> getDescriptionsFromFileBook(){
+        int f1,f2, f3, f4;
+        ArrayList<String> lines = lines_of_file();
+        ArrayList<String> descrips = new ArrayList<>();
+        for(String str : lines){
+            f1 = str.indexOf(",");
+            f2 = str.indexOf(",", f1+1);
+            f3 = str.indexOf(",", f2+1);
+            f4 = str.indexOf(",", f3+1);
+            descrips.add(str.substring(f3+1, f4));
+        }
+        return descrips;
+    }
+    public ArrayList<String> getStatsFromFileBook(){
+        int f1,f2, f3, f4;
+        ArrayList<String> lines = lines_of_file();
+        ArrayList<String> stats = new ArrayList<>();
+        for(String str : lines){
+            f1 = str.indexOf(",");
+            f2 = str.indexOf(",", f1+1);
+            f3 = str.indexOf(",", f2+1);
+            f4 = str.indexOf(",", f3+1);
+            stats.add(str.substring(f4+1));
+        }
+        return stats;
+    }
+
 }
 
 
