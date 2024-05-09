@@ -3,6 +3,17 @@ package org.example;
 import java.util.*;
 
 public class Library {
+    private final String LibraryName;
+    private final String OperatingHours;
+    private final String Capacity;
+    public Library(){
+        this.LibraryName = "HOMA";
+        this.OperatingHours =  "9 a.m. - 9 p.m.";
+        this.Capacity = "Infinity";
+    }
+    public String getCapacity() { return Capacity; }
+    public String getOperatingHours() { return OperatingHours; }
+    public String getLibraryName() {  return LibraryName; }
     public void CLIComment()
     {
         boolean flag = true;
@@ -21,6 +32,7 @@ public class Library {
             switch (comment) {
                 case "lib add book":
 
+                    CLIComment();
                     break;
                 case "lib get hrs":
 
@@ -48,5 +60,12 @@ public class Library {
                     break;
             }
         }
+    }
+
+    public static void main(String[] args) {
+        User user = new User();
+//        user.AddBook();
+//        user.Delete("6");
+        user.SearchBook("a");
     }
 }

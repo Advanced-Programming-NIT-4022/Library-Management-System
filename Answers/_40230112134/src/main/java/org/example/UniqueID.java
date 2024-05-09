@@ -1,13 +1,15 @@
 package org.example;
 
 public class UniqueID {
-    static int UniqueID ;
-    public UniqueID() {
-        this.UniqueID = 0;
+    private int UniqueID = getUniqueIDINT();
+    public String getUniqueID() {
+        return String.valueOf(this.UniqueID);
     }
-    public static String getUniqueID() {
-        int uniqueID = UniqueID;
-        UniqueID ++;
-        return String.valueOf(uniqueID);
+    public int getUniqueIDINT() {
+        return this.UniqueID;
+    }
+
+    public void setUniqueID(int uniqueID) {
+        this.UniqueID = uniqueID + 1;
     }
 }

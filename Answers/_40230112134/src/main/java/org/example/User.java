@@ -1,6 +1,8 @@
 package org.example;
 
 import java.io.*;
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 
 public class User extends UniqueID {
@@ -79,51 +81,58 @@ public class User extends UniqueID {
         {
             String line = book.Total.get(i);
             String[] list = line.split("/");
-            if (Objects.equals(book.getTitle(), list[1]) || Objects.equals(book.getAuthor(), list[2]) || Objects.equals(book.getDescription(), list[3]))
+            if (Objects.equals(book.getTitle(), list[1])  || Objects.equals(book.getDescription(), list[3]))
             {
                 System.out.println("you can not add the book");
                 System.out.println("because we have that");
             }
             else
             {
-                book.Total.add(book.getID() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
+                setUniqueID(FindBigID(book.Total));
+                book.Total.add(getUniqueIDINT() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
                 WriteFileBook("Book.txt");
                 System.out.println("The book has been successfully added");
-                System.out.println("Your Unique ID is : " + book.getID());
+                System.out.println("Your Unique ID is : " + getUniqueIDINT());
                 break;
             }
         }
+        if (book.Total.isEmpty()) {
+            setUniqueID(1);
+            book.Total.add(getUniqueIDINT() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
+            WriteFileBook("Book.txt");
+            System.out.println("The book has been successfully added");
+            System.out.println("Your Unique ID is : " + getUniqueIDINT());
+        }
     }
-    public String SearchBook(String sentence)
+    public void SearchBook(String sentence)
     {
-        String flag = "0";
-        try{
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("Book.txt"));
-            String line;
-            while ((line = bufferedReader.readLine()) != null)
+        boolean flag = false;
+        ReadFileBook("Book.txt");
+        char[] word = sentence.toCharArray();
+        for (int i = 0; i < book.Total.size(); i++)
+        {
+            char[] jomle = book.Total.get(i).toCharArray();
+            for (int j = 0; j < jomle.length; j++)
             {
-                String[] list = line.split("/");
-                for (int i = 0; i < list.length; i++)
+                for (int k = 0; k < word.length; k++)
                 {
-                    if (Objects.equals(list[i], sentence))
+                    if (word[k] == jomle[j])
                     {
-                        System.out.println("Your ID book: " + list[0]);
-                        System.out.println("Your Title: " + list[1]);
-                        System.out.println("Your Author: " + list[2]);
-                        System.out.println("Your Description: " + list[3]);
-                        System.out.println("Your Availability Status: " + list[4]);
-                        flag = list[0];
-                    }
-                    else
-                    {
+                        flag = true;
                     }
                 }
             }
-            bufferedReader.close();
-        }catch (IOException e){
-            System.out.println("Wrong");
+            if (flag == true)
+            {
+                String[] list = book.Total.get(i).split("/");
+                System.out.println("Your ID book: " + list[0]);
+                System.out.println("Your Title: " + list[1]);
+                System.out.println("Your Author: " + list[2]);
+                System.out.println("Your Description: " + list[3]);
+                System.out.println("Your Availability Status: " + list[4]);
+            }
         }
-        return flag;
+        WriteFileBook("Book.txt");
     }
     public void Delete(String number)
     {
@@ -134,10 +143,57 @@ public class User extends UniqueID {
             String[] list = line1.split("/");
             if (Objects.equals(list[0], number))
             {
-                System.out.println("Successful");
+                System.out.println("The deletion was successful");
                 book.Total.remove(i);
             }
         }
         WriteFileBook("Book.txt");
     }
+    public int FindBigID(ArrayList<String> total)
+    {
+        int bigerid = 0;
+        for (int i = 0; i < total.size(); i++)
+        {
+            String[] list = total.get(i).split("/");
+            char[] id = list[0].toCharArray();
+            int[] numbersArray = new int[id.length];
+            int[] numbers = new int[id.length];
+            int x=0;
+            for (int j = 0; j < id.length; j++)
+            {
+                numbersArray[j] = ((int) id[j])-48;
+            }
+            int c=1;
+            for (int j = 0; j < id.length; j++)
+            {
+                 x += (numbersArray[j]*c);
+                 c *= 10;
+            }
+            if (x > bigerid)
+            {
+                bigerid = x;
+            }
+        }
+        return bigerid;
+    }
+}
+class NormalUser extends User {
+
+    LocalDateTime currentDateTime = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private String formattedDateTime = currentDateTime.format(formatter);
+    public NormalUser(String name, String phoneNumber) {
+        super(name, phoneNumber);
+    }
+    public NormalUser() { super(); }
+    public String getFormattedDateTime() { return formattedDateTime; }
+}
+class Admin extends User {
+    private final String Password;
+    public Admin(String name, String phonenumber)
+    {
+        super(name, phonenumber);
+        this.Password = "8488";
+    }
+    public String getPassword() {return Password;}
 }
