@@ -2,9 +2,9 @@ package org.example;
 
 import java.util.*;
 
-public class MyApp {
+public class MyApp extends UniqueID{
     public static void main(String[] args) {
-        Book book = new Book();
+//        Book book = new Book();
 //        book.AddBook();
 //        book.AddBook();
 ////        book.AddBook();
@@ -15,5 +15,4 @@ public class MyApp {
 //        book.SearchBook("e");
 //        book.SearchBook("a");
     }
-
 }
