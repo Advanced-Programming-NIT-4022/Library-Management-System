@@ -83,6 +83,60 @@ public class Library {
         } catch (Exception ignored) {
         }
     }
+    public void showAllUser() {
+        if (!checkPassword()) {
+            System.out.println("Wrong Password ");
+            return;
+        }
+        if (this.userArray.isEmpty()) {
+            System.out.println("User list is empty");
+            return;
+        }
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        for (int i = 0; i < this.userArray.size(); i++) {
+            System.out.println((i + 1) + "-");
+            System.out.println("User name          : " + this.userArray.get(i).userName);
+            System.out.println("User id            : " + this.userArray.get(i).userId);
+            System.out.println("User password      : " + this.userArray.get(i).password);
+            System.out.println("User phone number  : " + this.userArray.get(i).phoneNumber);
+            System.out.println("User register date : " + this.userArray.get(i).registerDate);
+            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        }
+    }
+    public void showAllBook() {
+        if (this.bookArray.isEmpty()) {
+            System.out.println("Book list is empty");
+            return;
+        }
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        for (int i = 0; i < this.bookArray.size(); i++) {
+            System.out.println((i + 1) + "-");
+            System.out.println("Book name    : " + this.bookArray.get(i).bookName);
+            System.out.println("Book id      : " + this.bookArray.get(i).bookId);
+            System.out.println("Book author  : " + this.bookArray.get(i).bookAuthor);
+            System.out.println("Availability : " + this.bookArray.get(i).isAvailable);
+            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        }
+    }
+    public void showAllRent() {
+        if (this.rentArray.isEmpty()) {
+            System.out.println("Rent list is empty ");
+            return;
+        }
+        if (!checkPassword()) {
+            System.out.println("Wrong Password");
+            return;
+        }
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        for (int i = 0; i < this.rentArray.size(); i++) {
+            System.out.println(  (i + 1) + "-");
+            System.out.println("Rent id      : " + this.rentArray.get(i).rentId);
+            System.out.println("Rent date    : " + this.rentArray.get(i).rentDate);
+            System.out.println("Rent book id : " + this.rentArray.get(i).book.bookId);
+            System.out.println("Rent user id : " + this.rentArray.get(i).user.userId);
+            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        }
+    }
     public boolean checkUserId(int userId) {
         boolean result = false;
         for (int i = 0; i < this.userArray.size(); i++) {
