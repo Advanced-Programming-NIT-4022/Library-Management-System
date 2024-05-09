@@ -1,4 +1,4 @@
-""// this class simulates books in the library
+// this class simulates books in the library
 import java.util.UUID; // to generate the unique ID for books
 
 public class Book {
