@@ -211,4 +211,28 @@ public class Library {
         System.out.println(" Book rented ");
         fileSaver();
     }
+    public void returnBook(int userId, int bookId) {
+        if (!checkUserId(userId)) {
+            System.out.println("Wrong user");
+            return;
+        }
+        if (!checkBookId(bookId)) {
+            System.out.println("Wrong Book");
+            return;
+        }
+        for (int i = 0; i < this.rentArray.size(); i++) {
+            if (this.rentArray.get(i).book.bookId == bookId && this.rentArray.get(i).user.userId == userId) {
+                for (int j = 0; j < this.bookArray.size(); j++) {
+                    if (this.bookArray.get(j).bookId == bookId) {
+                        this.bookArray.get(j).isAvailable = true;
+                        break;
+                    }
+                }
+                this.rentArray.remove(i);
+                break;
+            }
+        }
+        System.out.println("Book returned");
+        fileSaver();
+    }
 }
