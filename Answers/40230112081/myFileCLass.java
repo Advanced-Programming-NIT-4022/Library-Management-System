@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -206,9 +207,58 @@ public class myFileCLass {
         return stats;
     }
 
+    public void addRental(Rent r){
+        String query;
+        String date = r.getDate();
+        String userID = r.getUserID();
+        String bookID = r.getBookID();
+
+        query = date+","+userID+","+bookID;
+        add_to_file(query);
+    }
+
+    public ArrayList<String> getRentalsDate(){
+        ArrayList<String> lines = lines_of_file();
+        ArrayList<String> dates = new ArrayList<>();
+        int f1;
+        for(String str: lines){
+            f1 = str.indexOf(",", 0);
+            dates.add(str.substring(0, f1));
+        }
+        return dates;
+    }
+
+    public ArrayList<String> getRentalsUserID(){
+        ArrayList<String> lines = lines_of_file();
+        ArrayList<String> userIds = new ArrayList<>();
+        int f1, f2;
+        for(String str: lines){
+            f1 = str.indexOf(",", 0);
+            f2 = str.indexOf(",", f1+1);
+            userIds.add(str.substring(f1+1, f2));
+        }
+        return userIds;
+    }
+
+    public ArrayList<String> getRentalsBookID(){
+        ArrayList<String> lines = lines_of_file();
+        ArrayList<String> bookIds = new ArrayList<>();
+        int f1, f2;
+        for(String str: lines){
+            f1 = str.indexOf(",", 0);
+            f2 = str.indexOf(",", f1+1);
+            bookIds.add(str.substring(f2+1));
+        }
+        return bookIds;
+    }
+
+
+
+
 }
 
 
 
 // user : id,username,phonenumber,role,password
 // book : id,title,author,description,status
+// rent : date,userID,bookID
