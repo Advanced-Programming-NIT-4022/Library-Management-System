@@ -36,4 +36,21 @@ public class Library {
         } catch (Exception ignored) {
         }
     }
+    public void fileSaver() {
+        try {
+            //کلاس FileOutputStream یک جریان خروجی برای نوشتن داده‌ها به یک فایل فراهم می‌کند.
+            FileOutputStream fileOutput1 = new FileOutputStream("Books.txt");
+            //کلاس ObjectOutputStream در جاوا یک جریان خروجی است که می‌تواند اشیاء جاوا را به یک جریان خروجی باینری بنویسد
+            ObjectOutputStream objOutput1 = new ObjectOutputStream(fileOutput1);
+            //به فایل می نویسد ان جریان باینری را
+            objOutput1.writeObject(this.bookArray);
+            FileOutputStream fileOutput2 = new FileOutputStream("Users.txt");
+            ObjectOutputStream objOutput2 = new ObjectOutputStream(fileOutput2);
+            objOutput2.writeObject(this.userArray);
+            FileOutputStream fileOutput3 = new FileOutputStream("Rents.txt");
+            ObjectOutputStream objOutput3 = new ObjectOutputStream(fileOutput3);
+            objOutput3.writeObject(this.rentArray);
+        } catch (Exception ignored) {
+        }
+    }
 }
