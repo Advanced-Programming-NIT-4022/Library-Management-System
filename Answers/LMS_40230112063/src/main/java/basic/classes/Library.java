@@ -4,7 +4,12 @@ import java.util.*;
 
 public class Library {
 
-    Random random = new Random();
+    private Long initial_value_of_id = 1598713L;
+
+    private String idGenerator() {
+        initial_value_of_id++;
+        return initial_value_of_id.toString();
+    }
 
     private final String library_name;
     private final int capacity;
@@ -28,12 +33,11 @@ public class Library {
         this.operating_hours = operating_hours;
     }
 
-//-----------------------------------------------------------------------------------------------
 
     ArrayList<NormalUser> normalUsers = new ArrayList<>();
     protected NormalUser normalUser;
 
-    public NormalUser memberExistenceChecker(String name, Integer phone_number) {
+    public NormalUser memberExistenceChecker(String name, String phone_number) {
         for (NormalUser iterator : normalUsers) {
             if (Objects.equals(iterator.name, name) && Objects.equals(iterator.phone_number, phone_number))
                 return iterator;
@@ -41,13 +45,12 @@ public class Library {
         return null;
     }
 
-    public void addMember(String name, Integer phone_number) {
-        random.setSeed(System.currentTimeMillis());
-        this.normalUser = new NormalUser(name, random.nextInt(), phone_number);
+    public void addMember(String name, String phone_number) {
+        this.normalUser = new NormalUser(name, idGenerator(), phone_number);
         normalUsers.add(normalUser);
     }
 
-    public void rmMember(String name, Integer phone_number) {
+    public void rmMember(String name, String phone_number) {
         for (NormalUser iterator : normalUsers) {
             if (Objects.equals(iterator.name, name) && Objects.equals(iterator.phone_number, phone_number)) {
                 normalUsers.remove(iterator);
@@ -65,7 +68,7 @@ public class Library {
     protected Admin admin;
 
 
-    public Admin adminExistenceChecker(String name, Integer phone_number, String password) {
+    public Admin adminExistenceChecker(String name, String phone_number, String password) {
         for (Admin iterator : admins) {
             if (Objects.equals(iterator.name, name) && Objects.equals(iterator.phone_number, phone_number) && Objects.equals(iterator.getPassword(), password))
                 return iterator;
@@ -73,8 +76,8 @@ public class Library {
         return null;
     }
 
-    public void addAmin(String name, Integer phone_number, String password) {
-        this.admin = new Admin(name, random.nextInt(), phone_number, password);
+    public void addAmin(String name, String phone_number, String password) {
+        this.admin = new Admin(name, idGenerator(), phone_number, password);
         admins.add(admin);
     }
 
@@ -91,22 +94,21 @@ public class Library {
     protected Book book;
 
     public void addBook(String title, String author, String description) {
-        random.setSeed(System.currentTimeMillis());
-        book = new Book(random.nextInt(), true);
+        book = new Book(idGenerator(), true);
         book.author = author;
         book.title = title;
         book.description = description;
         book_repository.add(book);
-        System.out.println("The Book with " + book.title + "title ," + book.author + "author , and " +
-                book.book_id + "ID , successfully was added to the book depository .");
+        System.out.println("The Book " + book.title + " with author " + book.author + " and Id " +
+                book.book_id + ", successfully was added to the book depository .");
     }
 
     public void rmBook(String title, String author) {
         for (Book iterator : book_repository) {
             if (Objects.equals(iterator.title, title) && Objects.equals(iterator.author, author)) {
                 book_repository.remove(iterator);
-                System.out.println("The Book with " + iterator.title + "title ," + iterator.author + "author , and " +
-                        iterator.book_id + "ID , successfully deleted from the book depository .");
+                System.out.println("The Book " + iterator.title + " with author " + iterator.author + " and Id " +
+                        iterator.book_id + ", successfully deleted from the book depository .");
                 return;
             }
         }
@@ -143,13 +145,12 @@ public class Library {
     ArrayList<Rent> rented_book_repo = new ArrayList<>();
     protected Rent rent;
 
-    public void rentBook(String title, String author, String user_name, Integer user_phone_number) {
-        random.setSeed(System.currentTimeMillis());
+    public void rentBook(String title, String author, String user_name, String user_phone_number) {
         Book book_intended_to_rent = bookExistenceChecker(title, author);
         NormalUser renter = memberExistenceChecker(user_name, user_phone_number);
         if (book_intended_to_rent != null) {
             if (renter != null) {
-                rent = new Rent(book_intended_to_rent.book_id, renter.id, random.nextInt());
+                rent = new Rent(book_intended_to_rent.book_id, renter.id, idGenerator());
                 rented_book_repo.add(rent);
                 book_repository.get(book_repository.indexOf(book_intended_to_rent)).availability_status = false;
                 System.out.println("The Book with " + title + "title ," + author + "author , and " +
@@ -168,7 +169,7 @@ public class Library {
     }
 
 
-    public void returnBook(String title, String author, String user_name, Integer user_phone_number) {
+    public void returnBook(String title, String author, String user_name, String user_phone_number) {
         Book book_intended_to_return = bookExistenceChecker(title, author);
         NormalUser returner = memberExistenceChecker(user_name, user_phone_number);
         if (book_intended_to_return != null) {
