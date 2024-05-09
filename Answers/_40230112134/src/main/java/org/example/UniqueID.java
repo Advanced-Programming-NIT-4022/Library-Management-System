@@ -6,8 +6,8 @@ public class UniqueID {
         this.UniqueID = 0;
     }
     public static String getUniqueID() {
-        int IDID = UniqueID;
+        int uniqueID = UniqueID;
         UniqueID ++;
-        return String.valueOf(IDID);
+        return String.valueOf(uniqueID);
     }
 }

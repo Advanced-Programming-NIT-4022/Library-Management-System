@@ -14,11 +14,7 @@ public class User extends UniqueID {
         this.PhoneNumber = phoneNumber;
         this.IDUser = getUniqueID();
     }
-
-    public User() {
-
-    }
-
+    public User() {}
     public String getPhoneNumber() {
         return PhoneNumber;
     }
