@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidParameterException;
+import java.sql.ResultSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -50,7 +51,7 @@ public class  MyApp {
 
                     Admin admin = new Admin(name, phoneNumber, password);
 
-                    if (library.addUser(admin, password) == null) {
+                    if (library.addUser(admin, password) == 0) {
                         // delete library file
                         File libraryFile = PATH.toFile();
                         libraryFile.delete();
@@ -60,7 +61,8 @@ public class  MyApp {
                     }
 
                     library.setUser(admin); // this is log in now
-                    System.out.println("You are now logged in!\n");
+                    System.out.printf("You are now logged in! Your ID is %s.%n",
+                            library.getUser().getUniqueID());
                 } catch (IllegalArgumentException e) {
                     System.err.printf("%s%n", e.getMessage());
                     System.out.println("Try again.");
@@ -151,12 +153,32 @@ public class  MyApp {
     }
 
     public static void CLI(String command) throws IllegalArgumentException, NoPermissionException {
+        // command lib man
         if (command.matches("lib\\sman"))
             Manual.print();
-        else if (command.matches("lib\\slogout")) {
-            System.out.printf("%s logged out successfully.%n", library.getUser().getName());
-            library.setUser(null);
+        // command lib get hrs
+        else if (command.matches("lib\\sget\\shrs"))
+            System.out.print(library.getOperatingHours());
+        else if (command.matches("lib\\sget\\savailable\\sbooks"))
+            library.getAvailableBooks();
+        // command lib remove member
+        else if (command.matches("lib\\sremove\\smember\\s\\d{7,}")) {
+            // get user id from command
+            int userID = Integer.parseInt(command.substring(18));
+
+            if (library.removeUser(userID) == 0)
+                throw new IllegalArgumentException("User with " + userID + " not found!");
+
+            System.out.printf("Account with ID = %d deleted successfully.%n", userID);
+        } else if (command.matches("lib\\slogout")) {
+            if (library.getUser() == null)
+                System.out.println("No one has logged in yet");
+            else {
+                System.out.printf("%s logged out successfully.%n", library.getUser().getName());
+                library.setUser(null);
+            }
         } else if (command.matches("lib\\sadd\\sbook\\s\"?[^\"]*\"?\\s\"?[^\"]*\"?\\s?(\"?[^\"]*\"?)?")) {
+            // command lib add book
             // if he didn't admin user yet throw exception
             if (library.getUser() instanceof Admin) {
                 String title, author;
@@ -230,10 +252,10 @@ public class  MyApp {
         } else if (command.matches("lib return \\w*")) {
             // return a book
         } else if (command.matches("lib\\slogin\\s\\d+")) {
+            //command lib login
             if (library.getUser() != null)
                 throw new NoPermissionException("Another account is still logged in! " +
                         "Log out and try again.");
-
             String[] temp = command.split("\\s");
             library.setUser(library.login(temp[2]));
             if (library.getUser() == null)
@@ -254,24 +276,26 @@ public class  MyApp {
                 library.setUser(null);
                 throw new IllegalArgumentException("3 incorrect password attempts...");
             }
-        } else if (command.matches("lib\\sadd\\smember\\s\"?[^\"]*\"?\\s\\+?\\d+\\s?[^(\"\\s)]*")) {
+        } else if (command.matches("lib\\sadd\\smember\\s\"?[^\"]*\"?\\s\\+?[\\d-]+\\s?[^(\"\\s)]*")) {
+            // commadn lib add member
             // if he didn't admin user yet throw exception
             if (library.getUser() instanceof Admin) {
                 String name, phoneNumber;
+                int userID;
 
                 String[] temp1 = command.split("\"");
                 if (temp1.length == 3) {
-                    name = temp1[1];
+                    name = temp1[1].trim();
 
-                    String[] temp2 = temp1[2].split("\\s");
-                    phoneNumber = temp2[0];
+                    String[] temp2 = temp1[2].trim().split("\\s");
+                    phoneNumber = temp2[0].trim();
                     User user;
                     if (temp2.length == 2) {
-                        user = new Admin(name, phoneNumber, temp2[1]);
-                        library.addUser(user, temp2[1]);
+                        user = new Admin(name, phoneNumber, temp2[1].trim());
+                        userID = library.addUser(user, temp2[1].trim());
                     } else {
                         user = new NormalUser(name, phoneNumber);
-                        library.addUser((NormalUser) user);
+                        userID = library.addUser((NormalUser) user);
                     }
                 } else {
                     String[] temp = command.split("\\s");
@@ -280,26 +304,29 @@ public class  MyApp {
                         throw new IllegalArgumentException(
                                 "You should use \" character to split string with space");
 
-                    name = temp[3];
-                    phoneNumber = temp[4];
+                    name = temp[3].trim();
+                    phoneNumber = temp[4].trim();
 
                     User user;
                     if (temp.length == 6) {
-                        user = new Admin(name, phoneNumber, temp[5]);
-                        library.addUser(user, temp[5]);
+                        user = new Admin(name, phoneNumber, temp[5].trim());
+                        userID = library.addUser(user, temp[5].trim());
                     } else {
                         user = new NormalUser(name, phoneNumber);
-                        library.addUser((NormalUser) user);
+                        userID = library.addUser((NormalUser) user);
                     }
-                } // end if (library.user instanceof Admin)
-            } else
+                }
+
+                // prompt the user
+                System.out.printf("User %s with ID = %d added to library.%n", name, userID);
+            } // end if (library.user instanceof Admin)
+            else
                 throw new NoPermissionException("You don't have permission to add members!");
-        } // end lib add member
-        else if (command.matches("lib\\sexit")) {
+        } else if (command.matches("lib\\sexit")) {
+            //command lib exit
             System.out.print("Bye.");
             System.exit(0);
-        } // end lib exit
-        else
+        } else
             throw new IllegalArgumentException();
     }
 }
