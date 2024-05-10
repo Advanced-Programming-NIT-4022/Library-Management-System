@@ -2,6 +2,7 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class myFileCLass {
     public File f;
@@ -59,7 +60,33 @@ public class myFileCLass {
         }
         return lines;
     }
+    public void editLineInFile(String lineToEdit, String newLine) {
+        try {
+            // Read the file
+            f = new File(dir);
+            BufferedReader reader = new BufferedReader(new FileReader(f));
+            String line;
+            StringBuilder fileContent = new StringBuilder();
 
+            // Read each line and replace if it matches
+            while ((line = reader.readLine()) != null) {
+                if (line.equals(lineToEdit)) {
+                    fileContent.append(newLine).append("\n");
+                } else {
+                    fileContent.append(line).append("\n");
+                }
+            }
+            reader.close();
+
+            // Write back to the file
+            FileWriter writer = new FileWriter(dir);
+            writer.write(fileContent.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
     public int set_id(){
         return lines_of_file().size();
     }
@@ -69,7 +96,8 @@ public class myFileCLass {
         String id = u.getUserID();
         String phone = u.getPhonenumber();
         String role = u.getRole();
-        String query =id+","+username + "," +phone+","+role;
+        String pass = u.getPassword();
+        String query =id+","+username + "," +phone+","+role+","+pass;
         add_to_file(query);
     }
 
@@ -78,6 +106,8 @@ public class myFileCLass {
         ArrayList<String> ids = new ArrayList<>();
         ArrayList<String> lines = lines_of_file();
         for(String l : lines){
+            if(Objects.equals(l, ""))
+                continue;
             flag = l.indexOf(",");
             ids.add(l.substring(0, flag));
         }
@@ -88,6 +118,8 @@ public class myFileCLass {
         ArrayList<String> usernames = new ArrayList<>();
         ArrayList<String> lines = lines_of_file();
         for(String l : lines){
+            if(Objects.equals(l, ""))
+                continue;
             f1 = l.indexOf(",");
             f2 = l.indexOf(",", f1+1);
             usernames.add(l.substring(f1+1,f2));
@@ -99,6 +131,8 @@ public class myFileCLass {
         ArrayList<String> phones = new ArrayList<>();
         ArrayList<String> lines = lines_of_file();
         for(String l : lines){
+            if(Objects.equals(l, ""))
+                continue;
             f1 = l.indexOf(",");
             f2 = l.indexOf(",", f1+1);
             f3 = l.indexOf(",",f2+1);
@@ -111,6 +145,8 @@ public class myFileCLass {
         ArrayList<String> roles = new ArrayList<>();
         ArrayList<String> lines = lines_of_file();
         for(String l : lines){
+            if(Objects.equals(l, ""))
+                continue;
             f1 = l.indexOf(",");
             f2 = l.indexOf(",", f1+1);
             f3 = l.indexOf(",",f2+1);
@@ -125,6 +161,8 @@ public class myFileCLass {
         ArrayList<String> passwords = new ArrayList<>();
         ArrayList<String> lines = lines_of_file();
         for(String l : lines){
+            if(Objects.equals(l, ""))
+                continue;
             f1 = l.indexOf(",");
             f2 = l.indexOf(",", f1+1);
             f3 = l.indexOf(",",f2+1);
@@ -142,7 +180,8 @@ public class myFileCLass {
         author = b.getAuthor();
         desc = b.getDescription();
         status = b.getStatus();
-        query = id + "," + title + "," + author + "," + desc + "," + status;
+        int exst = b.getExistence();
+        query = id + "," + title + "," + author + "," + desc + "," + status + "," + String.valueOf(exst);
         add_to_file(query);
     }
 
@@ -151,6 +190,8 @@ public class myFileCLass {
         ArrayList<String> lines = lines_of_file();
         ArrayList<String> ids = new ArrayList<>();
         for(String str : lines){
+            if(Objects.equals(str, ""))
+                continue;
             f1 = str.indexOf(",");
             ids.add(str.substring(0, f1));
         }
@@ -162,6 +203,8 @@ public class myFileCLass {
         ArrayList<String> lines = lines_of_file();
         ArrayList<String> titles = new ArrayList<>();
         for(String str : lines){
+            if(Objects.equals(str, ""))
+                continue;
             f1 = str.indexOf(",");
             f2 = str.indexOf(",", f1+1);
             titles.add(str.substring(f1+1, f2));
@@ -173,6 +216,8 @@ public class myFileCLass {
         ArrayList<String> lines = lines_of_file();
         ArrayList<String> authors = new ArrayList<>();
         for(String str : lines){
+            if(Objects.equals(str, ""))
+                continue;
             f1 = str.indexOf(",");
             f2 = str.indexOf(",", f1+1);
             f3 = str.indexOf(",", f2+1);
@@ -185,6 +230,8 @@ public class myFileCLass {
         ArrayList<String> lines = lines_of_file();
         ArrayList<String> descrips = new ArrayList<>();
         for(String str : lines){
+            if(Objects.equals(str, ""))
+                continue;
             f1 = str.indexOf(",");
             f2 = str.indexOf(",", f1+1);
             f3 = str.indexOf(",", f2+1);
@@ -198,6 +245,8 @@ public class myFileCLass {
         ArrayList<String> lines = lines_of_file();
         ArrayList<String> stats = new ArrayList<>();
         for(String str : lines){
+            if(Objects.equals(str, ""))
+                continue;
             f1 = str.indexOf(",");
             f2 = str.indexOf(",", f1+1);
             f3 = str.indexOf(",", f2+1);
@@ -213,6 +262,8 @@ public class myFileCLass {
         ArrayList<String> lines = lines_of_file();
         ArrayList<String> exists = new ArrayList<>();
         for(String str : lines){
+            if(Objects.equals(str, ""))
+                continue;
             f1 = str.indexOf(",");
             f2 = str.indexOf(",", f1+1);
             f3 = str.indexOf(",", f2+1);
@@ -222,8 +273,6 @@ public class myFileCLass {
         }
         return exists;
     }
-
-
 
 
     public void addRental(Rent r){
@@ -241,6 +290,8 @@ public class myFileCLass {
         ArrayList<String> dates = new ArrayList<>();
         int f1;
         for(String str: lines){
+            if(Objects.equals(str, ""))
+                continue;
             f1 = str.indexOf(",", 0);
             dates.add(str.substring(0, f1));
         }
@@ -252,6 +303,8 @@ public class myFileCLass {
         ArrayList<String> userIds = new ArrayList<>();
         int f1, f2;
         for(String str: lines){
+            if(Objects.equals(str, ""))
+                continue;
             f1 = str.indexOf(",", 0);
             f2 = str.indexOf(",", f1+1);
             userIds.add(str.substring(f1+1, f2));
@@ -264,6 +317,8 @@ public class myFileCLass {
         ArrayList<String> bookIds = new ArrayList<>();
         int f1, f2;
         for(String str: lines){
+            if(Objects.equals(str, ""))
+                continue;
             f1 = str.indexOf(",", 0);
             f2 = str.indexOf(",", f1+1);
             bookIds.add(str.substring(f2+1));
