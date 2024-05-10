@@ -3,7 +3,7 @@ import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Objects;
-
+import java.util.Scanner;
 public class myFileCLass {
     public File f;
     public String dir;
@@ -59,6 +59,36 @@ public class myFileCLass {
             }
         }
         return lines;
+    }
+
+    public void show_myUsername(){
+        System.out.println("Enter your phonenumber :");
+        String phone;
+        Scanner scn = new Scanner(System.in);
+        phone = scn.nextLine();
+        int i = getPhoneNumbersInFile().indexOf(phone);
+        if(i != -1) {
+            System.out.println(getUsernameInFile().get(i));
+            return;
+        }
+        else{
+            System.out.println("Your phonenumber is not found, try phonenumber you were signed up");
+        }
+
+    }
+    public void show_myPassword(){
+        System.out.println("Enter your phonenumber :");
+        String phone;
+        Scanner scn = new Scanner(System.in);
+        phone = scn.nextLine();
+        int i = getPhoneNumbersInFile().indexOf(phone);
+        if(i != -1) {
+            System.out.println(getUserPassword().get(i));
+            return;
+        }
+        else{
+            System.out.println("Your phonenumber is not found, try phonenumber you were signed up");
+        }
     }
     public void editLineInFile(String lineToEdit, String newLine) {
         try {
