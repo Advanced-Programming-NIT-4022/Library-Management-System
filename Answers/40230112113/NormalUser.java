@@ -8,6 +8,8 @@ public class NormalUser extends User
     private String Userdate = userdate.format(CUSTOM_FORMATTER);
     //converting to a known format in form of String
 
+    Boolean IsAdmin=false;
+
     public NormalUser(String name , int ID , int number , String Userdate)
     {
         super(name, ID, number);

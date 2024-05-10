@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Admin extends User
 {
     private String Password;
+    Boolean IsAdmin=true;
     Scanner sc = new Scanner(System.in);
 
     public Admin(String name , int ID , int number , String Password)
