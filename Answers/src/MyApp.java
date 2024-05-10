@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.InvalidParameterException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -50,7 +51,7 @@ public class  MyApp {
                         System.exit(1);
                     }
 
-                    library.user = admin; // this is log in now
+                    library.setUser(admin); // this is log in now
                     System.out.println("You are now logged in!\n");
                 } catch (IllegalArgumentException e) {
                     System.err.printf("%s%n", e.getMessage());
@@ -81,9 +82,16 @@ public class  MyApp {
             String command = null;
 
             try {
-                System.out.print(">>> ");
+                if (library.getUser() == null)
+                    System.out.print(">>> ");
+                else if (library.getUser() instanceof Admin)
+                    System.out.print("Admin> ");
+                else
+                    System.out.printf("%s> ", library.getUser().getName());
                 command = input.nextLine();
                 CLI(command.trim());
+            } catch (InvalidParameterException e) {
+                System.err.println("Invalid username. please try again.");
             } catch (IllegalArgumentException e) {
                 if (e.getMessage() == null)
                     System.out.printf("command <%s> %s%n", command.trim(), "Not Found.");
@@ -137,9 +145,12 @@ public class  MyApp {
     public static void CLI(String command) throws IllegalArgumentException, NoPermissionException {
         if (command.matches("lib\\sman"))
             Manual.print();
-        else if (command.matches("lib\\sadd\\sbook\\s\"?[^\"]*\"?\\s\"?[^\"]*\"?\\s?(\"?[^\"]*\"?)?")) {
+        else if (command.matches("lib\\slogout")) {
+            System.out.printf("%s logged out successfully.%n", library.getUser().getName());
+            library.setUser(null);
+        } else if (command.matches("lib\\sadd\\sbook\\s\"?[^\"]*\"?\\s\"?[^\"]*\"?\\s?(\"?[^\"]*\"?)?")) {
             // if he didn't admin user yet throw exception
-            if (library.user instanceof Admin) {
+            if (library.getUser() instanceof Admin) {
                 String title, author;
 
                 // delete lib add book from command
@@ -207,9 +218,30 @@ public class  MyApp {
                 throw new NoPermissionException("You don't have permission to add books!");
         } else if (command.matches("lib return \\w*")) {
             // return a book
+        } else if (command.matches("lib\\slogin\\s\\d+")) {
+            String[] temp = command.split("\\s");
+            library.setUser(library.login(temp[2]));
+            if (library.getUser() == null)
+                throw new InvalidParameterException();
+            else if (library.getUser() instanceof NormalUser)
+                System.out.printf("Hello %s!You logged in successfully.%n", library.getUser().getName());
+            else {
+                Admin adminUser = (Admin) library.getUser();
+                for (int i = 0; i < 3; i++) {
+                    System.out.printf("Enter password for %s: ", adminUser.getName());
+                    String password = input.nextLine();
+                    if (adminUser.verify(password)) {
+                        System.out.printf("Hello %s!You logged in successfully.%n", adminUser.getName());
+                        return;
+                    } else
+                        System.out.println("Invalid password. Try again.");
+                }
+                library.setUser(null);
+                throw new IllegalArgumentException("3 incorrect password attempts...");
+            }
         } else if (command.matches("lib\\sadd\\smember\\s\"?[^\"]*\"?\\s\\+?\\d+\\s?[^(\"\\s)]*")) {
             // if he didn't admin user yet throw exception
-            if (library.user instanceof Admin) {
+            if (library.getUser() instanceof Admin) {
                 String name, phoneNumber;
 
                 String[] temp1 = command.split("\"");
