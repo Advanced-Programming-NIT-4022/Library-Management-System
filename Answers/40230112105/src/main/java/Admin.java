@@ -1,2 +1,5 @@
-public class Admin {
+public class Admin extends User{
+
+    String password;
+
 }
