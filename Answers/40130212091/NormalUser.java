@@ -7,7 +7,4 @@ public class NormalUser extends User {
         this.password = password;
     }
 
-    public String[] add(String[] members){
-        return members;
-    }
 }

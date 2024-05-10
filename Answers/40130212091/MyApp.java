@@ -1,6 +1,4 @@
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.Scanner;
 
 public class MyApp {
@@ -8,31 +6,10 @@ public class MyApp {
         // create library object
         Library library = new Library();
 
-        try {
-            File book = new File("book.txt");
-            if (book.createNewFile()) {
-                System.out.println("File created: " + book.getName());
-            }
-            File n_user = new File("user.txt");
-            if (n_user.createNewFile()){
-                System.out.println("File created: " + n_user.getName());
-            }
-            File rents = new File("rents.txt");
-            if (rents.createNewFile()){
-                System.out.println("File created: " + rents.getName());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        String[] memberList = new String[400];
-        String[] rentList = new String[400];
-
 
         Scanner command = new Scanner(System.in);
         String input = command.nextLine();
         String[] order = input.split(" ");
-        ArrayList<String> books = new ArrayList<>();
         int i = 0;
         while(true){
             if(order[i] == "lib"){
@@ -41,13 +18,11 @@ public class MyApp {
                     i++;
                     if(order[i] == "book"){
                         i++;
-                        Book book = new Book(order[i], order[i + 1], order[i + 2]);
-                        library.bookRepository = book.add(library.bookRepository);
+                        library.addBook(order[i], order[i + 1], order[i + 2]);
                     }
                     else if(order[i] == "member"){
                         i++;
-                        NormalUser member = new NormalUser(order[i], order[i + 1]);
-                        memberList = member.add(memberList);
+                        library.addMember(order[i], order[i + 1]);
                     }
                     else {
                         try {
@@ -59,19 +34,20 @@ public class MyApp {
                 }
                 else if(order[i] == "rent"){
                     i++;
-                    Rent r = new Rent(order[i]);
-                    i++;
-                    if (order[i] == null){
-                        r.rentBook();
-                    }else{
-                        //check password
-                        r.rentBook(order[i]);
-                    }
+                    library.rentBook(order[i]);
                 }
                 else if(order[i] == "get"){
                     i++;
                     if(order[i] == "hrs"){
                         System.out.println(library.getHours());
+                    }
+                    else if(order[i].equals("available")){
+                        i++;
+                        if (order[i].equals("books")){
+                            library.availableBooks();
+                        }else {
+                            System.out.println("enter a correct command");
+                        }
                     }
                     else{
                         System.out.println("enter a correct command");
@@ -80,14 +56,14 @@ public class MyApp {
                     i++;
                     if (order[i] == "member"){
                         i++;
-
+                        library.removeMember(order[i]);
                     }
                     else{
                         System.out.println("Enter a correct command");
                     }
                 } else if (order[i] == "return") {
                     i++;
-
+                    library.returnBook(order[i]);
                 } else{
                     try {
                         throw new Exception("Enter a correct command");
