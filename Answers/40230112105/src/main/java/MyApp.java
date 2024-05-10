@@ -16,6 +16,7 @@ public class MyApp {
         NormalUser normalUser = new NormalUser();
         Rent rent = new Rent();
         Admin admin = new Admin();
+        Library lib = new Library();
         String input;
         Scanner strScanner = new Scanner(System.in);
         System.out.println("Hello and welcome to your own library!");
@@ -42,7 +43,7 @@ public class MyApp {
                     System.out.print("Password: ");
                     String password = strScanner.next();
                     admin.setPassword(password);
-                    while(admin.accessed(admin.getId(), password)){
+                    while(admin.accessed(admin.getId(), admin.getPassword())){
                         System.out.println("   add member(add-member-<name>-<phone number>)");
                         System.out.println("   add book(add-book-<name>-<author>-<subtitle>)");
                         System.out.println("   remove member(remove-member-<user id>)");
@@ -75,7 +76,7 @@ public class MyApp {
                                 }
                             } else if (devide[1].equals("get")) {
                                 if (devide[2].equals("hrs")) {
-
+                                    lib.workingHours();
                                 } else if (devide[2].equals("available") && devide[3].equals("books")) {
                                     book.availableBooks();
                                 }
@@ -93,7 +94,7 @@ public class MyApp {
                             } else if (devide[1].equals("return")) {
                                 rent.returnBook(devide[2]);
                             } else if(devide[1].equals("exit")){
-                                System.out.println("You are goy out of admin access");
+                                System.out.println("You got out of admin access");
                                 break;
                             } // admin part
                         } else {
@@ -103,7 +104,7 @@ public class MyApp {
                     }
                 } else if (devide[1].equals("get")) {
                     if (devide[2].equals("hrs")) {
-
+                        lib.workingHours();
                     } else if (devide[2].equals("available") && devide[3].equals("books")) {
                         book.availableBooks();
                     }

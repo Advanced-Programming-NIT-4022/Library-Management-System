@@ -1,7 +1,10 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class Rent {
+
+    Timestamp time = new Timestamp(System.currentTimeMillis());
     public void rentBook(String id, String userId) {
         ResultSet rs = Connect.getConnectExecute("SELECT availability FROM book WHERE bookid = '" +id+ "'");
         try {
@@ -9,7 +12,7 @@ public class Rent {
                 if(rs.getBoolean("availability")){
                     ResultSet rs2 = Connect.getConnectExecute("SELECT id FROM student WHERE id = '" +userId+ "'");
                     if(rs2.next()){
-                        Connect.getConnect("INSERT INTO rent (bookid, id) VALUES ('" +id+ "','" + userId+ "')");
+                        Connect.getConnect("INSERT INTO rent (bookid, id, rentaldate) VALUES ('" +id+ "','" +userId+ "','" +time+ "')");
                         Connect.getConnect("UPDATE book SET availability = 'false' WHERE bookid = '" +id+ "'");
                         System.out.println("Done!Here It's your book");
                     } else {

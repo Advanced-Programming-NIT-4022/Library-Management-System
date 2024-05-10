@@ -22,6 +22,10 @@ public class Admin extends User{
         }
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void addAdmin(String name, String phoneNumber) {
         if (numberCheck(getPhoneNumber(), "manager")) {
             Connect.getConnect("INSERT INTO manager (name, password, phonenumber) VALUES ('" +getName()+ "','" +password+ "','" +getPhoneNumber()+ "')");
