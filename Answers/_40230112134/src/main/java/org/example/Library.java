@@ -1,12 +1,18 @@
 package org.example;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;
 
 public class Library {
+    User user;
     private final String LibraryName;
     private final String OperatingHours;
     private final String Capacity;
     public Library(){
+        user = new User();
         this.LibraryName = "HOMA";
         this.OperatingHours =  "9 a.m. - 9 p.m.";
         this.Capacity = "Infinity";
@@ -14,6 +20,22 @@ public class Library {
     public String getCapacity() { return Capacity; }
     public String getOperatingHours() { return OperatingHours; }
     public String getLibraryName() {  return LibraryName; }
+    public  void ReadFileUser()
+    {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("User.txt"));
+            String line;
+            user.getPeople().clear();
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                user.getPeople().add(line);
+            }
+            bufferedReader.close();
+        } catch (IOException r){
+            System.out.println("An error occurred.");
+        }
+        user.setPeople(user.getPeople());
+    }
     public void CLIComment()
     {
         boolean flag = true;

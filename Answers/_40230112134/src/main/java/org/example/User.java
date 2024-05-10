@@ -6,16 +6,20 @@ import java.time.format.*;
 import java.util.*;
 
 public class User extends UniqueID {
-    Book book = new Book();
+    Book book;
     private String Name;
     private String IDUser ;
     private String PhoneNumber;
+    private ArrayList<String> people = new ArrayList<>();
     public User(String name , String phoneNumber )
     {
+        book = new Book();
         this.Name = name;
         this.PhoneNumber = phoneNumber;
         this.IDUser = getUniqueID();
     }
+    public ArrayList<String> getPeople() { return people; }
+    public void setPeople(ArrayList<String> people) { this.people = people; }
     public User() {}
     public String getPhoneNumber() {
         return PhoneNumber;
@@ -205,12 +209,12 @@ class NormalUser extends User {
 
     LocalDateTime currentDateTime = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private String formattedDateTime = currentDateTime.format(formatter);
+    private String UserDate;
     public NormalUser(String name, String phoneNumber) {
         super(name, phoneNumber);
+        UserDate = currentDateTime.format(formatter);
     }
-    public NormalUser() { super(); }
-    public String getFormattedDateTime() { return formattedDateTime; }
+    public String getFormattedDateTime() { return UserDate; }
 }
 class Admin extends User {
     private final String Password;
