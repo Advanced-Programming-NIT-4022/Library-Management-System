@@ -1,5 +1,6 @@
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -132,6 +133,8 @@ public class Library {
                 continue;
             }
         }
+        User u = new User(user,usersFileHandle.getIDInFile().get(flag),usersFileHandle.getPhoneNumbersInFile().get(flag),"normal",pass);
+        normalUserPanel(u);
 
     }
     public void login_AdminUsers(){
@@ -171,6 +174,172 @@ public class Library {
         }
 
     }
+    public void show_helpMenuNormalUser(){
+        String cmd;
+        Scanner scn = new Scanner(System.in);
+        System.out.println("to add a book to library : lib add title author description(nonSpace description & brief)");
+        System.out.println("to Rent a book from library : lib rent your_id Book_title");
+        System.out.println("to Edit your phonenumber : user edit ph current_ph new_ph");
+        System.out.println("to Edit your username : user edit usr current_usr new_usr");
+        System.out.println("to Edit your password : user edit pss current_pss new_pss");
+        System.out.println("to Return a book : lib return book_title your_id");
+        System.out.println("to logout& close : enter close/exit");
+        System.out.println("to get back to your panel : Enter back");
+        while (true){
+            System.out.print(">>>");
+            cmd = scn.nextLine();
+            if(Objects.equals(cmd, "back") || Objects.equals(cmd, "Back"))
+                break;
+            else{
+                System.out.println("Wrong input : Try again.");
+            }
+        }
+    }
+    public void normalUserPanel(User u){
+        v = new Verifications();
+        String cmd;
+        String p1,p2, u1,u2, ps1,ps2;
+        String query;
+        ArrayList<String> list;
+        Scanner scn = new Scanner(System.in);
+        System.out.println("*******************************************************************");
+        System.out.println("Welcome to your panel " + u.getUser_name() + " :");
+        while (true) {
+            System.out.println("Print help to get help with your commands :(Normal user privileges)");
+            System.out.print(">>>");
+            cmd = scn.nextLine();
+            if(Objects.equals(cmd, "help") || Objects.equals(cmd, "Help") || cmd.contains("help")){
+                show_helpMenuNormalUser();
+            } else if (Objects.equals(cmd ,"close") || Objects.equals(cmd, "exit")) {
+                break;
+
+            } else if((cmd.contains("lib") || cmd.contains("user")) && (!cmd.contains("  ") || !cmd.contains("*"))){
+                list = v.get_SectionsPanelQuery(cmd);
+                if(Objects.equals(list.get(1), "add")){
+                    // add book
+                }
+                else if(Objects.equals(list.get(1), "rent")){
+                    // rent a book
+                }
+                else if(Objects.equals(list.get(1), "edit")){
+                    // edit your info
+                    if(Objects.equals(list.get(2), "ph")){
+                        // edit phonenumber
+                        p1 = list.get(3);
+                        p2 = list.get(4);
+                        while(true){
+                            if(v.userPhonenumberValidator(p2)){
+                                break;
+                            }
+                            else{
+                                System.out.println("Enter valid username .");
+                                System.out.println("User phonenumber must start with any number instead of 0 with length 10");
+                                p2 = scn.nextLine();
+                            }
+                        }
+                        while (true){
+                            if(!usersFileHandle.getPhoneNumbersInFile().contains(p2))
+                                break;
+                            else{
+                                System.out.println("This phonenumber is already taken . try another one");
+                                System.out.print(">>>");
+                                p2 = scn.nextLine();
+                            }
+                        }
+
+                        int i = usersFileHandle.getPhoneNumbersInFile().indexOf(p1);
+                        if(Objects.equals(p1, u.getPhonenumber())){
+                            query = usersFileHandle.getIDInFile().get(i)+","+
+                                   usersFileHandle.getUsernameInFile().get(i)+","+p2+",normal,"+usersFileHandle.getUserPassword().get(i);
+                            usersFileHandle.editLineInFile(usersFileHandle.lines_of_file().get(i), query);
+                            System.out.println("phonenumber has been updated");
+                        }
+                        else{
+                            System.out.println("Repeat your command, your current username is not correct in input. ");
+                        }
+
+                    }
+                    else if(Objects.equals(list.get(2), "usr")){
+                        u1 = list.get(3);
+                        u2 = list.get(4);
+                        while(true){
+                            if(v.userUsernameValidator(u2)){
+                                break;
+                            }
+                            else{
+                                System.out.println("Enter valid username .");
+                                System.out.println("Username must include 0->9 and  a->z and A->Z , just underline '_' not dash '-'");
+                                u2 = scn.nextLine();
+                            }
+                        }
+                        while (true){
+                            if(!usersFileHandle.getUsernameInFile().contains(u2))
+                                break;
+                            else{
+                                System.out.println("This username is already taken . try another one");
+                                System.out.print(">>>");
+                                u2 = scn.nextLine();
+                            }
+                        }
+                        int i = usersFileHandle.getUsernameInFile().indexOf(u1);
+                        if(Objects.equals(u1, u.getUser_name())){
+                            query = usersFileHandle.getIDInFile().get(i)+","+
+                                    u2+","+usersFileHandle.getPhoneNumbersInFile().get(i)+",normal,"+usersFileHandle.getUserPassword().get(i);
+                            usersFileHandle.editLineInFile(usersFileHandle.lines_of_file().get(i), query);
+                            u.set_new_username(u2);
+                            System.out.println("Your username has been updated");
+                        }
+                        else{
+                            System.out.println("Repeat your command, your current username is not correct in input. ");
+                        }
+
+                    }
+                    else if(Objects.equals(list.get(2), "pss")){
+                        p1 = list.get(3);
+                        p2 = list.get(4);
+                        while (true){
+                            if(v.userPasswordValidator(p2)){
+                                break;
+                            }
+                            else{
+                                System.out.println("Wrong format, try another password.");
+                            }
+                        }
+
+                        if(!Objects.equals(p1, u.getPassword())){
+                            System.out.println("Try command again, current password is not correct.");
+                        }
+                        else{
+                            int i = usersFileHandle.getUserPassword().indexOf(p1);
+                            query = usersFileHandle.getIDInFile().get(i)+"," + usersFileHandle.getUsernameInFile().get(i)+","+
+                                    usersFileHandle.getPhoneNumbersInFile().get(i) + ",normal,"+p2;
+                            usersFileHandle.editLineInFile(usersFileHandle.lines_of_file().get(i), query);
+                            System.out.println("Your password has been updated.");
+                        }
+
+                    }
+                }
+                else if(Objects.equals(list.get(1), "return")){
+                    // return a book
+
+                }
+                else{
+                    System.out.println("Wrong format :-|");
+                }
+
+            }
+            else{
+                System.out.println("Wrong format, try again .");
+            }
+        }
+
+
+    }
+
+    public void adminUserPanel(){
+
+    }
+
 
 }
 
