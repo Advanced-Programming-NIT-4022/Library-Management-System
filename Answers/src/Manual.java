@@ -9,7 +9,7 @@ public class Manual {
         System.out.println("lib logout : Log out from your account");
 
         // command add
-        System.out.println("lib add book <name> <author> <subtitle> : Add a new book to the library.");
+        System.out.println("lib add book <name> <author> <subtitle[optional]> : Add a new book to the library.");
 
         // command hrs
         System.out.println("lib get hrs : Retrieve library operating hours.");
