@@ -40,6 +40,7 @@ public class Library {
     public void addAdmin(String name,String PhoneNumber,String Password) throws SQLException {
         statement.executeUpdate("INSERT INTO admin (Name,PhoneNumber,Password) VALUES ('"+name+"','"+PhoneNumber+"','"+Password+"')");
     }
+
     public void rmAdmin(String Id) throws SQLException {
         statement.executeUpdate("DELETE FROM admin WHERE Id='"+Id+"'");
         System.out.println("Done.");

@@ -43,6 +43,7 @@ public class LoginPage {
             Stage stage=(Stage) btnSign.getScene().getWindow();
             stage.close();
            System.out.println(lib.checkUserexistence("1"));
+           lib.rmUser("1");
         }
 
     public void pressRadioNormal(ActionEvent event) {

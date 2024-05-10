@@ -15,6 +15,9 @@ public class Ui {
 
     }
     public void mainPage(){
+        String username="";
+        boolean Admin=false;
+
         Scanner input=new Scanner(System.in);
         while(true){
             System.out.println("enter your command:");
