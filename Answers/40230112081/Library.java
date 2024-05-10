@@ -1,5 +1,6 @@
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Library {
@@ -96,14 +97,41 @@ public class Library {
     }
     // login as normal user
     // login as admin user
-
-    public void login_user(){
-        System.out.println("Enter your ID:");
-        String id, username, pass;
+    public void login_normalUsers(){
+        String phone, pass, id, user;
         Scanner scn = new Scanner(System.in);
+        int flag;
         while(true){
-
+            System.out.println("Enter your Username: (If you forget: type forget)");
+            user = scn.nextLine();
+            if(Objects.equals(user, "forget")) {
+                usersFileHandle.show_myUsername();
+                continue;
+            }
+            else if (v.userUsernameValidator(user) && usersFileHandle.getUsernameInFile().contains(user)) {
+                flag = usersFileHandle.getUsernameInFile().indexOf(user);
+                break;
+            }
+            else{
+                System.out.println("Username not found/wrong format, try again");
+                continue;
+            }
         }
+        while (true){
+            System.out.println("Enter your password :(if you forget , type forget)");
+            pass = scn.nextLine();
+            if(Objects.equals(pass,"forget")){
+                usersFileHandle.show_myPassword();
+                continue;
+            } else if (v.userPasswordValidator(pass) && Objects.equals(pass, usersFileHandle.getUserPassword().get(flag))) {
+                break;
+            }
+            else{
+                System.out.println("Password not found/wrong format, try again");
+                continue;
+            }
+        }
+
     }
 
 }
