@@ -217,6 +217,29 @@ public class Library {
                 list = v.get_SectionsPanelQuery(cmd);
                 if(Objects.equals(list.get(1), "add")){
                     // add book
+                    String title, auth, desc;
+                    title = list.get(2);
+                    auth = list.get(3);
+                    desc = list.get(4);
+                    if(booksFileHandle.getAuthorsFromFileBook().contains(auth) && booksFileHandle.getTitlesFromFileBook().contains(title) &&
+                        booksFileHandle.getDescriptionsFromFileBook().contains(desc)){
+                        // inc existence
+                        System.out.println("This book is added before.");
+                        int i = booksFileHandle.getAuthorsFromFileBook().indexOf(auth);
+                        String new_exst = String.valueOf(Integer.valueOf(booksFileHandle.getExistsFromFileBook().get(i))+1);
+                        query = booksFileHandle.getIdFromFileBook().get(i) + "," +booksFileHandle.getTitlesFromFileBook().get(i)+","+
+                                booksFileHandle.getAuthorsFromFileBook()+","+booksFileHandle.getDescriptionsFromFileBook().get(i)+","+
+                                "available,"+new_exst;
+                        booksFileHandle.editLineInFile(booksFileHandle.lines_of_file().get(i), query);
+                    }
+                    else{
+                        // add a new book
+                        String id = String.valueOf(booksFileHandle.set_id()+1);
+                        String existence = "1";
+                        query = id+","+title+","+auth+","+desc+","+"available,"+existence;
+                        booksFileHandle.add_to_file(query);
+                        System.out.println("Book is added successfully.");
+                    }
                 }
                 else if(Objects.equals(list.get(1), "rent")){
                     // rent a book
