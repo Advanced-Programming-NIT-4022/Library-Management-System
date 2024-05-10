@@ -14,6 +14,7 @@ public class Admin extends User{
         this.password = password;
     }
     public String getPassword() { return password; }
+
     public void removeBook(ArrayList<Book> booksList, String title) {
         for (int i = 0; i < booksList.size(); i++) {
             if (title.equals(booksList.get(i))) {
@@ -55,7 +56,28 @@ public class Admin extends User{
         m.newNormalUser(m.getUserList(), name, uniqueID, phone, date);
     }
 
-    public void addAdmin(){
+    public void addNewAdmin(){
+        Library lib = new Library();
+        Scanner sc = new Scanner(System.in);
+        String name;
+        boolean flag = true;
+        do {
+            flag = false;
+            System.out.println("Enter the name of the user: ");
+            name = sc.nextLine();
+            boolean user_found = false;
+            for (NormalUser i : lib.getUserList()) {
+                if (i.getName().equals(name)) {
+                    flag = true;
+                    user_found = true;
+                    break;
+                }
+            }
+            if (!user_found)
+                System.out.println("No user found. Try again.");
+        } while (!flag);
 
+
+//        lib.getAdminList().add()
     }
 }

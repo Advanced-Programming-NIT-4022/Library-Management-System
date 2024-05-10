@@ -13,6 +13,13 @@ public class Book {
         this.status = true;
         this.desc = desc;
     }
+    public Book() {
+        this.bookID = -1;
+        this.title = null;
+        this.author = null;
+        this.status = true;
+        this.desc = null;
+    }
     public void setBookID(int bookID) {
         this.bookID = bookID;
     }

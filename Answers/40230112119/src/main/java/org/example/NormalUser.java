@@ -9,6 +9,10 @@ public class NormalUser extends User{
         super(name, uniqueID, phone);
         this.date = date;
     }
+    public NormalUser() {
+        User u = new User();
+        this.date = -1;
+    }
 
     public void showInfo() {
 
