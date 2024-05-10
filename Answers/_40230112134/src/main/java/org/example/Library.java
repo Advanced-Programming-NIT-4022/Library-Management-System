@@ -117,60 +117,109 @@ public class Library {
         }
         normalUser.setPeople(normalUser.getPeople());
     }
-    private boolean ChapFileBook() {
-        boolean flag = false;
+    public void ChapFileUser() {
         ReadFileNormalUser("NormalUser.txt");
         for (int i = 0; i < normalUser.getPeople().size(); i++)
         {
             String[] list = normalUser.getPeople().get(i).split("/");
             System.out.println("Name: " + list[1] + "Phone number: " + list[2] + "Time to enter the library: " + list[3]);
+        }
+    }
+    public boolean ChapFileBook() {
+        boolean flag = false;
+        ReadFileNormalUser("Book.txt");
+        for (int i = 0; i < normalUser.getPeople().size(); i++)
+        {
+            String[] list = normalUser.getPeople().get(i).split("/");
+            System.out.println("Name: " + list[1] + "Author: " + list[2] + "AvailabilityStatus: " + list[4]);
             flag = true;
         }
         return flag;
     }
-    public void CLIComment()
-    {
+
+//    public void HomePage() {
+//        System.out.println("Enter your way");
+//        System.out.println("1. User");
+//        System.out.println("2. Admin");
+//        Scanner scanner = new Scanner(System.in);
+//        int comment = scanner.nextInt();
+//        boolean flag = true;
+//        while (flag)
+//        {
+//            switch (comment)
+//            {
+//                case 1:
+//
+//                    break;
+//                case 2:
+//
+//                    break;
+//                default:
+//                    System.out.println("try again");
+//                    break;
+//            }
+//        }
+//
+//    }
+    public void CLIComment() {
         boolean flag = true;
         while (flag) {
-            System.out.println("lib add book");
-            System.out.println("lib get hrs");
-            System.out.println("lib rent book");
-            System.out.println("lib add member");
-            System.out.println("lib rent");
-            System.out.println("lib get available books");
-            System.out.println("lib remove member");
-            System.out.println("lib return book");
+            System.out.println("1.lib add book");
+            System.out.println("2.lib get hrs");
+            System.out.println("3.lib rent book");
+            System.out.println("4.lib get available books");
+            System.out.println("5.lib return book");
+            System.out.println("6.lib get available members");
+            System.out.println("7.lib remove member");
+            System.out.println("8.lib add member");
+            System.out.println("9.exit");
             System.out.println("Enter your comment :");
             Scanner scanner = new Scanner(System.in);
-            String comment = scanner.nextLine();
-            switch (comment) {
-                case "lib add book":
+            int comment = scanner.nextInt();
+            switch (comment)
+            {
+                case 1:
 
                     CLIComment();
                     break;
-                case "lib get hrs":
+                case 2:
 
+                    CLIComment();
                     break;
-                case "lib rent book":
+                case 3:
 
+                    CLIComment();
                     break;
-                case "lib add member":
+                case 4:
+                    boolean bb = getBookRepository();
+                    if (!bb)
+                    {
+                        System.out.println("we do not have book");
+                    }
+                    CLIComment();
+                    break;
+                case 5:
 
+                    CLIComment();
                     break;
-                case "lib get available books":
+                case 6:
+                    ChapFileUser();
+                    CLIComment();
+                    break;
+                case 7:
 
+                    CLIComment();
                     break;
-                case "lib remove member":
+                case 8:
 
+                    CLIComment();
                     break;
-                case "lib return book":
-
-                    break;
-                case "exit":
+                case 9:
+                    System.out.println("Bye Bye");
                     flag = false;
                     break;
                 default:
-                    System.out.println("please enter again");
+                    System.out.println("Try again");
                     break;
             }
         }
