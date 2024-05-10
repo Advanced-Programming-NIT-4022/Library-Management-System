@@ -1,5 +1,6 @@
 package controler;
 
+import com.example.lib.Library;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,6 +8,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
 
 
 public class LoginPage {
@@ -35,10 +38,8 @@ public class LoginPage {
         }
 
         @FXML
-        void pressSignin(ActionEvent event) {
-            if(btnAdmin.isSelected()){
-                System.out.println("you are admin");
-            }
+        void pressSignin(ActionEvent event) throws SQLException {
+            Library lib=new Library();
             Stage stage=(Stage) btnSign.getScene().getWindow();
             stage.close();
 
