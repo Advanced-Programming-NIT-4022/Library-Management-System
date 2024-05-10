@@ -13,7 +13,6 @@ public class User {
         this.PhoneNumber = phoneNumber;
         this.password = password;
     }
-
     public String getName() {
         return Name;
     }
@@ -33,7 +32,7 @@ public class User {
     public String getPassword() {
         return password;
     }
-    
+
     public void setInformation(){
         try (Scanner scanner = new Scanner(System.in)) {
             this.Name = scanner.nextLine();
@@ -41,8 +40,6 @@ public class User {
             this.Id = scanner.nextLine();
             this.password = scanner.nextLine();
             this.PhoneNumber = scanner.nextLine();
-           
-
         }
     }
 }

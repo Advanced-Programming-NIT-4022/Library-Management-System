@@ -10,7 +10,6 @@ public class Rent {
         this.user = user;
         this.dueDate = LocalDate.now().plusDays(rentDays);
     }
-
     public Book getBook() {
         return book;
     }
@@ -34,7 +33,4 @@ public class Rent {
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
-    public void printRentInfo() {
-        System.out.println("ketab" + book.getTitle() + "\" from" + user.getName() + " date " + dueDate);
-}
 }
