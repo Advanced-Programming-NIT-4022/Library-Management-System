@@ -6,14 +6,13 @@ import java.time.format.*;
 import java.util.*;
 
 public class User extends UniqueID {
-    Book book;
+    Book book = new Book();
     private String Name;
     private String IDUser;
     private String PhoneNumber;
     private ArrayList<String> people = new ArrayList<>();
     public User(String name , String phoneNumber )
     {
-        book = new Book();
         this.Name = name;
         this.PhoneNumber = phoneNumber;
         this.IDUser = getUniqueID();
@@ -39,7 +38,6 @@ public class User extends UniqueID {
     public void setName(String name) {
         Name = name;
     }
-
     public void WriteFileBook(String filepath)
     {
         try  {
@@ -204,6 +202,7 @@ public class User extends UniqueID {
             book.getTotal().add(s);
         }
     }
+
 }
 class NormalUser extends User {
 

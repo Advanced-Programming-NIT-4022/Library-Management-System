@@ -6,20 +6,22 @@ import java.util.*;
 public class Library {
     NormalUser normalUser = new NormalUser();
     Admin admin = new Admin();
-    User user;
+    User user = new User();
     private final String LibraryName;
     private final String OperatingHours;
-    private final int Capacity;
+    private final int CapacityBook;
+    private final int CapacityUser;
     private final boolean BookRepository;
     public Library(){
-        user = new User();
         this.LibraryName = "HOMA";
         this.OperatingHours =  "9 a.m. - 9 p.m.";
-        this.Capacity = 25;
+        this.CapacityBook = 50;
+        this.CapacityUser = 25;
         this.BookRepository = ChapFileBook();
     }
+    public int getCapacityUser() { return CapacityUser; }
     public boolean getBookRepository() { return BookRepository; }
-    public int getCapacity() { return Capacity; }
+    public int getCapacityBook() { return CapacityBook; }
     public String getOperatingHours() { return OperatingHours; }
     public String getLibraryName() {  return LibraryName; }
     public  void ReadFileNormalUser(String filepath) {
@@ -122,7 +124,7 @@ public class Library {
         for (int i = 0; i < normalUser.getPeople().size(); i++)
         {
             String[] list = normalUser.getPeople().get(i).split("/");
-            System.out.println("Name: " + list[1] + "Phone number: " + list[2] + "Time to enter the library: " + list[3]);
+            System.out.println("ID: " + list[0] + "Name: " + list[1] + "Phone number: " + list[2] + "Time to enter the library: " + list[3]);
         }
     }
     public boolean ChapFileBook() {
@@ -131,7 +133,7 @@ public class Library {
         for (int i = 0; i < normalUser.getPeople().size(); i++)
         {
             String[] list = normalUser.getPeople().get(i).split("/");
-            System.out.println("Name: " + list[1] + "Author: " + list[2] + "AvailabilityStatus: " + list[4]);
+            System.out.println("ID: " + list[0] + "Name: " + list[1] + "Author: " + list[2] + "AvailabilityStatus: " + list[4]);
             flag = true;
         }
         return flag;
@@ -164,6 +166,7 @@ public class Library {
     public void CLIComment() {
         boolean flag = true;
         while (flag) {
+            System.out.println(getLibraryName() +  "How can I help you???!!!");
             System.out.println("1.lib add book");
             System.out.println("2.lib get hrs");
             System.out.println("3.lib rent book");
@@ -173,21 +176,35 @@ public class Library {
             System.out.println("7.lib remove member");
             System.out.println("8.lib add member");
             System.out.println("9.exit");
-            System.out.println("Enter your comment :");
+            System.out.println("Enter your comment:");
             Scanner scanner = new Scanner(System.in);
             int comment = scanner.nextInt();
+            int BookCapacity = 0 , UserCapacity = 0;
             switch (comment)
             {
                 case 1:
-
+                    if (BookCapacity <= getCapacityBook())
+                    {
+                        BookCapacity++;
+                        user.AddBook();
+                    }
+                    else
+                    {
+                        System.out.println("Sorry, we don't have room for books.");
+                        System.out.println("Try something else.");
+                    }
                     CLIComment();
                     break;
                 case 2:
-
+                    System.out.println(getOperatingHours());
                     CLIComment();
                     break;
                 case 3:
-
+                    Rent rent = new Rent();
+                    ChapFileBook();
+                    System.out.println("Enter your ID you want to rent: ");
+                    String testId =  scanner.nextLine();
+                    rent.Rent(testId);
                     CLIComment();
                     break;
                 case 4:
@@ -207,11 +224,39 @@ public class Library {
                     CLIComment();
                     break;
                 case 7:
-
+                    String temp1 = scanner.nextLine();
+                    if (Objects.equals(temp1, admin.getPassword()))
+                    {
+                        ChapFileUser();
+                        System.out.println("Enter your ID you want delete : ");
+                        String testid = scanner.nextLine();
+                        DeleteNormalUser(testid);
+                    }
+                    else
+                    {
+                        System.out.println("Sorry,Try something else.");
+                    }
                     CLIComment();
                     break;
                 case 8:
-
+                    if (UserCapacity < getCapacityUser())
+                    {
+                        UserCapacity++;
+                        String temp = scanner.nextLine();
+                        if (Objects.equals(temp, admin.getPassword()))
+                        {
+                            AddNormalUser();
+                        }
+                        else
+                        {
+                            System.out.println("Sorry,Try something else.");
+                        }
+                    }
+                    else
+                    {
+                        System.out.println("Sorry, we don't have room for User");
+                        System.out.println("Try something else.");
+                    }
                     CLIComment();
                     break;
                 case 9:
