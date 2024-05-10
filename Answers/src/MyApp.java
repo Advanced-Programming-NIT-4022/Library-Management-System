@@ -1,16 +1,18 @@
 // main class for handling the CLI
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.nio.file.Path;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class  MyApp {
     public static final Library library = new Library(); // our library
     public static final Path PATH = Paths.get(".library.txt");
+    public static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
         // check to library is existed or not
@@ -22,8 +24,6 @@ public class  MyApp {
             System.out.println("Now you should add a new admin to your library!");
             // add a new admin user
             while (true) {
-                Scanner input = new Scanner(System.in);
-
                 System.out.println("\nEnter these information about your admin:");
                 try {
                     // get admin name
@@ -77,23 +77,21 @@ public class  MyApp {
         System.out.println("\nEnter your command:");
 
         while (true) {
-            String command = "";
-            Scanner input = new Scanner(System.in);
+            String command = null;
 
             try {
                 System.out.print(">>> ");
                 command = input.nextLine();
-                CLI(command);
+                CLI(command.trim());
             } catch (IllegalArgumentException e) {
-                System.err.printf("%s: %s%n", command, "Not Found.");
+                System.out.printf("command <%s> %s%n", command.trim(), "Not Found.");
             }
         }
     }
 
     private static boolean createLibrary() {
-        Scanner input = new Scanner(System.in);
-
         System.out.println("Please enter these information about your library:");
+
         try {
             System.out.print("name : ");
             library.setName(input.nextLine());
@@ -129,20 +127,50 @@ public class  MyApp {
     }
 
     public static void CLI(String command) throws IllegalArgumentException {
-        if (command.equals("lib man"))
+        if (command.matches("lib\\sman"))
             Manual.print();
-        else if (command.matches("lib return \\w*")) {
+        else if (command.matches("lib\\sadd\\sbook\\s\"[^\"]+\" \"")) {
+
+        } else if (command.matches("lib return \\w*")) {
             // return a book
-        } else if (command.matches("lib add member \\d{7} .+")) {
+        } else if (command.matches("lib\\sadd\\smember\\s\"?.+\"?\\s+?\\d+\\s([^(\"\\s)]*)?")) {
             if (library.user instanceof Admin) {
-                   
+                String name, phoneNumber;
+
+                String[] temp1 = command.split("\"");
+                if (temp1.length == 3) {
+                    name = temp1[1];
+
+                    String[] temp2 = temp1[2].split("\\s");
+                    phoneNumber = temp2[0];
+                    User user;
+                    if (temp2.length == 2) {
+                        user = new Admin(name, phoneNumber, temp2[1]);
+                        library.addUser(user, temp2[1]);
+                    } else {
+                        user = new NormalUser(name, phoneNumber);
+                        library.addUser((NormalUser) user);
+                    }
+                } else {
+                    String[] temp = command.split("\\s");
+                    name = temp[3];
+                    phoneNumber = temp[4];
+
+                    User user;
+                    if (temp.length == 6) {
+                        user = new Admin(name, phoneNumber, temp[5]);
+                        library.addUser(user, temp[5]);
+                    } else {
+                        user = new NormalUser(name, phoneNumber);
+                        library.addUser((NormalUser) user);
+                    }
+                }
             }
             else
                 System.out.println("You don't have permission to add members!");
-        } else if (command.equals("lib exit")) {
+        } else if (command.matches("li\\sexit")) {
             System.out.println("Bye.");
             System.exit(0);
-
         }
         else
             throw new IllegalArgumentException();
