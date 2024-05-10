@@ -12,8 +12,16 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class  MyApp {
+    // database information
+    public static final String DB_URL = "jdbc:mysql://localhost/library";
+    public static final String DB_USERNAME = "LMSjava";
+    public static final String DB_PASSWORD = "lmsjava1234";
+
+    // library information
     public static final Library library = new Library(); // our library
     public static final Path PATH = Paths.get(".library.txt");
+
+    // scanner for input from client
     public static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -42,7 +50,7 @@ public class  MyApp {
 
                     Admin admin = new Admin(name, phoneNumber, password);
 
-                    if (!library.addUser(admin, password)) {
+                    if (library.addUser(admin, password) == null) {
                         // delete library file
                         File libraryFile = PATH.toFile();
                         libraryFile.delete();
@@ -222,6 +230,10 @@ public class  MyApp {
         } else if (command.matches("lib return \\w*")) {
             // return a book
         } else if (command.matches("lib\\slogin\\s\\d+")) {
+            if (library.getUser() != null)
+                throw new NoPermissionException("Another account is still logged in! " +
+                        "Log out and try again.");
+
             String[] temp = command.split("\\s");
             library.setUser(library.login(temp[2]));
             if (library.getUser() == null)
