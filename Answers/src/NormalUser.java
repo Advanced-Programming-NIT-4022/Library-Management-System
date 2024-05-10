@@ -1,21 +1,30 @@
-import java.time.LocalTime;
+import java.sql.Time;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
 
 public class NormalUser extends User {
-        private final LocalDate registerDate;
-        private final LocalTime registerTime;
+    private final Date registerDate;
+    private final Time registerTime;
 
-        public NormalUser(String name, String phoneNumber) throws IllegalArgumentException {
-            super(name, phoneNumber);
-            this.registerDate = LocalDate.now();
-            this.registerTime = LocalTime.now();
+    public NormalUser(String name, String phoneNumber, Date registerDate, Time registerTime) {
+        super(name, phoneNumber);
+        this.registerDate = registerDate;
+        this.registerTime = registerTime;
+    }
+
+    public NormalUser(String name, String phoneNumber) {
+        super(name, phoneNumber);
+        this.registerDate = Date.from(Instant.from(LocalDate.now()));
+        this.registerTime = Time.valueOf(LocalTime.now());
         }
 
-        public LocalDate getRegisterDate() {
+    public Date getRegisterDate() {
             return registerDate;
         }
 
-        public LocalTime getRegisterTime() {
+    public Time getRegisterTime() {
             return registerTime;
         }
     }
