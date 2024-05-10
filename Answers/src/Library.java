@@ -8,10 +8,6 @@ public class Library {
     private String operatingHours;
     private User user; // user that log in now
 
-    private static final String DB_URL = "jdbc:mysql://localhost/library";
-    private static final String DB_USERNAME = "LMSjava";
-    private static final String DB_PASSWORD = "lmsjava1234";
-
     public void saveLibrary() throws FileNotFoundException, SecurityException {
         Formatter output = new Formatter(MyApp.PATH.toString());
         output.format("%s%n%d%n%s", name, capacity, operatingHours);
@@ -53,10 +49,12 @@ public class Library {
 
     // add normal user
     public void addUser(NormalUser user) {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            PreparedStatement insertUser = connection.prepareStatement(
-                    "INSERT INTO Users (Name, PhoneNumber, UserType, RegisterTimestamp)" +
-                            "VALUES (?, ?, ?, ?)")) {
+        final String SQL_COMMAND = "INSERT INTO Users (Name, PhoneNumber, UserType," +
+                " RegisterTimestamp) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
+                MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
+             PreparedStatement insertUser = connection.prepareStatement(SQL_COMMAND)) {
 
             insertUser.setString(1, user.getName());
             insertUser.setString(2, user.getPhoneNumber());
@@ -74,11 +72,13 @@ public class Library {
     }
 
     // add admin user
-    public boolean addUser(User admin, String password) {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            PreparedStatement insertUser = connection.prepareStatement(
-                    "INSERT INTO Users (Name, PhoneNumber, UserType, Password) "
-                            + "VALUES (?, ?, ?, ?)")) {
+    // return the unique ID of the user
+    public String addUser(User admin, String password) {
+        final String SQL_COMMAND = "INSERT INTO Users (Name, PhoneNumber, UserType, Password) "
+                + "VALUES (?, ?, ?, ?)";
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
+                MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
+             PreparedStatement insertUser = connection.prepareStatement(SQL_COMMAND)) {
 
             insertUser.setString(1, admin.getName());
             insertUser.setString(2, admin.getPhoneNumber());
@@ -92,17 +92,21 @@ public class Library {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             System.err.print("Connection to database failed!");
-            return false;
+            return null;
         }
-        return true;
+
+        // get the unique id from database
+        admin.uniqueIDUpdate();
+        return admin.getUniqueID();
     }
 
     // add book
     public boolean addBook(Book book) {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            PreparedStatement insertBook = connection.prepareStatement(
-                    "INSERT INTO books (UniqueBookID, Title, Author, Description) " +
-                            "VALUES (?, ?, ?, ?)")) {
+        final String SQL_COMMAND = "INSERT INTO books (UniqueBookID, Title, Author, Description) " +
+                "VALUES (?, ?, ?, ?)";
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
+                MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
+            PreparedStatement insertBook = connection.prepareStatement(SQL_COMMAND)) {
 
             insertBook.setString(1, book.getUniqueBookID());
             insertBook.setString(2, book.getTitle());
@@ -124,19 +128,18 @@ public class Library {
     // login to library
     public User login(String userID) {
         User user = null;
+        final String SQL_COMMAND = "SELECT * FROM Users WHERE UserID = ?";
 
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-             PreparedStatement loginUser = connection.prepareStatement(
-                     "SELECT * FROM Users WHERE UserID = ?")) {
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
+                MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
+             PreparedStatement loginUser = connection.prepareStatement(SQL_COMMAND)) {
 
             loginUser.setString(1, userID);
-
             ResultSet resultSet = loginUser.executeQuery();
 
             // If there is no such user
             if (!resultSet.isBeforeFirst())
                 return null;
-
             resultSet.next();
 
             // get name and phone number of the user
@@ -146,11 +149,11 @@ public class Library {
             if (resultSet.getString("UserType").equals("admin")) {
                 String password = resultSet.getString("Password");
                 user = new Admin(name, phoneNumber, password);
-                user.setUniqueID(userID);
+                user.uniqueIDUpdate();
             } else {
                 Timestamp registerTimestamp = resultSet.getTimestamp("RegisterTimestamp");
                 user = new NormalUser(name, phoneNumber, registerTimestamp);
-                user.setUniqueID(userID);
+                user.uniqueIDUpdate();
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
