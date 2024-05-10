@@ -55,14 +55,13 @@ public class Library {
     public void addUser(NormalUser user) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             PreparedStatement insertUser = connection.prepareStatement(
-                    "INSERT INTO Users (Name, PhoneNumber, UserType, RegisterDate, RegisterTime)" +
-                            "VALUES (?, ?, ?, ?, ?)")) {
+                    "INSERT INTO Users (Name, PhoneNumber, UserType, RegisterTimestamp)" +
+                            "VALUES (?, ?, ?, ?)")) {
 
             insertUser.setString(1, user.getName());
             insertUser.setString(2, user.getPhoneNumber());
-            insertUser.setString(3, "'normal'");
-            insertUser.setString(4, user.getRegisterDate().toString());
-            insertUser.setString(5, user.getRegisterTime().toString());
+            insertUser.setString(3, "normal");
+            insertUser.setTimestamp(4, user.getRegisterTimestamp());
 
             insertUser.executeUpdate();
 
@@ -149,9 +148,8 @@ public class Library {
                 user = new Admin(name, phoneNumber, password);
                 user.setUniqueID(userID);
             } else {
-                Date registerDate = resultSet.getDate("RegisterDate");
-                Time registerTime = resultSet.getTime("RegisterTime");
-                user = new NormalUser(name, phoneNumber, registerDate, registerTime);
+                Timestamp registerTimestamp = resultSet.getTimestamp("RegisterTimestamp");
+                user = new NormalUser(name, phoneNumber, registerTimestamp);
                 user.setUniqueID(userID);
             }
         } catch (SQLException sqlException) {
