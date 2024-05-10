@@ -1,30 +1,19 @@
-import java.sql.Time;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class NormalUser extends User {
-    private final Date registerDate;
-    private final Time registerTime;
+    private Timestamp registerTimestamp;
 
-    public NormalUser(String name, String phoneNumber, Date registerDate, Time registerTime) {
+    public NormalUser(String name, String phoneNumber, Timestamp registerDateTime) {
         super(name, phoneNumber);
-        this.registerDate = registerDate;
-        this.registerTime = registerTime;
+        this.registerTimestamp = registerDateTime;
     }
 
     public NormalUser(String name, String phoneNumber) {
         super(name, phoneNumber);
-        this.registerDate = Date.from(Instant.from(LocalDate.now()));
-        this.registerTime = Time.valueOf(LocalTime.now());
-        }
-
-    public Date getRegisterDate() {
-            return registerDate;
-        }
-
-    public Time getRegisterTime() {
-            return registerTime;
-        }
+        this.registerTimestamp = new Timestamp(System.currentTimeMillis());
     }
+
+    public Timestamp getRegisterTimestamp() {
+        return registerTimestamp;
+    }
+}
