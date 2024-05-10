@@ -346,17 +346,21 @@ public class Library {
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     }
 
-    public void checkCommand(String command) {
+    public void checkCommand(String command ) {
+        command = command.trim();
         if (command.equals("exit")) {
             System.exit(0);
+        } else if (!command.contains(" ")) {
+            System.out.println("Wrong try again");
         } else {
+
             String[] commandSegs = command.split(" ");
 
             if (commandSegs[0].equals("lib")) {
                 if (commandSegs[1].equals("-h") && commandSegs.length == 2) {
                     showAllCommand();
                 } else if (commandSegs[1].equals("add")) {
-                    if (commandSegs.length == 5 && commandSegs[2].equals("book") && commandSegs[3].matches("[a-zA-Z0-9_]+(/[a-zA-Z0-9_]+)?") && commandSegs[4].matches("[a-zA-Z0-9_]+(/[a-zA-Z0-9_]+)?")) {
+                    if (commandSegs.length == 5 && commandSegs[2].equals("book") && commandSegs[3].matches("[a-zA-Z0-9_]+(/[a-zA-Z0-9_]+)?") && commandSegs[4].matches("[a-zA-Z_]+(/[a-zA-Z_]+)?")) {
 
                         addBook(commandSegs[3].replace("/", " "), commandSegs[4].replace("/", " "));
 
@@ -394,10 +398,12 @@ public class Library {
 
                 else if (commandSegs[1].equals("return") && commandSegs[2].equals("book") && commandSegs[3].matches("[0-9]+") && commandSegs[4].matches("[0-9]+") && commandSegs.length == 5) {
                     returnBook(Integer.parseInt(commandSegs[3]), Integer.parseInt(commandSegs[4]));
-                } else {
-                    System.out.println("Wrong try again");
-                    return;
                 }
+                else {
+                    System.out.println("Wrong try again");
+                }
+            }else{
+                System.out.println("Wrong try again");
             }
 
         }
@@ -405,11 +411,13 @@ public class Library {
 
 
         public void run() {
+
             System.out.println("xxx Welcome to " + this.libraryName + " xxx");
             if (!isLibraryOpen()) {
                 System.out.println("Sorry we are closed right now please try again betwin" + openHour+" - " + closeHour);
             } else {
                 while (true) {
+
                     System.out.println("For see options write lib -h");
                     System.out.println("For exit write exit");
                     System.out.println("Use the (/) to write a space in the middle of the names");
