@@ -194,7 +194,7 @@ public class myFileCLass {
         return descrips;
     }
     public ArrayList<String> getStatsFromFileBook(){
-        int f1,f2, f3, f4;
+        int f1,f2, f3, f4, f5;
         ArrayList<String> lines = lines_of_file();
         ArrayList<String> stats = new ArrayList<>();
         for(String str : lines){
@@ -202,10 +202,29 @@ public class myFileCLass {
             f2 = str.indexOf(",", f1+1);
             f3 = str.indexOf(",", f2+1);
             f4 = str.indexOf(",", f3+1);
-            stats.add(str.substring(f4+1));
+            f5 = str.indexOf(",", f4+1);
+            stats.add(str.substring(f4+1,f5));
         }
         return stats;
     }
+
+    public ArrayList<String> getExistsFromFileBook(){
+        int f1,f2, f3, f4, f5;
+        ArrayList<String> lines = lines_of_file();
+        ArrayList<String> exists = new ArrayList<>();
+        for(String str : lines){
+            f1 = str.indexOf(",");
+            f2 = str.indexOf(",", f1+1);
+            f3 = str.indexOf(",", f2+1);
+            f4 = str.indexOf(",", f3+1);
+            f5 = str.indexOf(",", f4+1);
+            exists.add(str.substring(f5));
+        }
+        return exists;
+    }
+
+
+
 
     public void addRental(Rent r){
         String query;
@@ -260,5 +279,5 @@ public class myFileCLass {
 
 
 // user : id,username,phonenumber,role,password
-// book : id,title,author,description,status
+// book : id,title,author,description,status,existence
 // rent : date,userID,bookID
