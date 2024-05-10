@@ -4,5 +4,7 @@ module com.example.lib {
 
 
     opens com.example.lib to javafx.fxml;
+    opens controler to javafx.fxml;
+    exports controler;
     exports com.example.lib;
 }

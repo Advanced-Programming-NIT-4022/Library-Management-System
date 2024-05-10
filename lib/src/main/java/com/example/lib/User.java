@@ -28,4 +28,9 @@ public class User {
     private String name;
     private String number;
     private String Id;
+    User(String name,String Number,String Id){
+        this.name=name;
+        this.number=number;
+        this.Id=Id;
+    }
 }
