@@ -6,8 +6,15 @@ import java.util.Scanner;
 
 public class Library {
      private final List<Book> books = new ArrayList<>();
+     private final List<Admin> admins = new ArrayList<>();
      private final List<User> users = new ArrayList<>();
-     private static final String FILE_NAME = "Library.dat";
+
+
+     private static final String Book_FILE_NAME = "Books.dat";
+     private static final String Admin_FILE_NAME = "Admins.dat";
+     private static final String User_FILE_NAME = "Users.dat";
+
+
      private String libName = "NIT";
      private static int capacity = 1250;
      private String operatinghours = "NIT library is open from 8 AM to 6 PM";
@@ -18,8 +25,9 @@ public class Library {
           return libName;
      }
      public Library(){
-          loadUsers();
           loadBooks();
+          loadAdmins();
+          loadUsers();
      }
      public void addBook(String title, String author, String description){
           if (capacity > 0){
@@ -75,7 +83,6 @@ public class Library {
                     break;
                }
           }
-          scanner.close();
      }
 
      public void getAvailableBooks(){
@@ -86,7 +93,7 @@ public class Library {
           }
      }
      private void saveBooks() {
-          try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+          try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(Book_FILE_NAME))) {
                oos.writeObject(books);
           } catch (IOException e) {
                System.out.println("Error saving books: " + e.getMessage());
@@ -94,9 +101,9 @@ public class Library {
      }
      @SuppressWarnings("unchecked")
      private void loadBooks(){
-          File file = new File(FILE_NAME);
+          File file = new File(Book_FILE_NAME);
           if (file.exists()){
-               try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))){
+               try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(Book_FILE_NAME))){
                     Object object = ois.readObject();
                     if (object instanceof List) {
                          books.addAll((List<Book>) object);
@@ -131,7 +138,7 @@ public class Library {
           }
      }
      private void saveUsers(){
-          try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))){
+          try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(User_FILE_NAME))){
                oos.writeObject(users);
           } catch (IOException e) {
                System.out.println("Error saving users: " + e.getMessage());
@@ -139,15 +146,60 @@ public class Library {
      }
      @SuppressWarnings("unchecked")
      private void loadUsers(){
-          File file = new File(FILE_NAME);
+          File file = new File(User_FILE_NAME);
           if (file.exists()){
-               try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))){
+               try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(User_FILE_NAME))){
                     Object object = ois.readObject();
                     if (object instanceof List) {
                          users.addAll((List<User>) object);
                     }
-               } catch (IOException |ClassNotFoundException e) {
+               } catch (IOException | ClassNotFoundException e) {
                     System.out.println("Error loading users: " + e.getMessage());
+               }
+          }
+     }
+     //----------------------------------------------------------------------------------------------------------
+     //Admin registries
+     public void addAdmin(String fullName,String phoneNumber,String password){
+          admins.add(new Admin(fullName,phoneNumber,password));
+          admins.sort(Comparator.comparing(Admin::getFullName));
+          saveAdmins();
+          System.out.println("Admin " + fullName + " added successfully.");
+     }
+     public void removeAdmin(String ID){
+          boolean found = false;
+          for (int i = 0; i < admins.size(); i++) {
+               if (admins.get(i).getID().equalsIgnoreCase(ID)){
+                    admins.remove(admins.get(i));
+                    saveUsers();
+                    System.out.println("Admin " + admins.get(i).getFullName() + " removed successfully.");
+                    found = true;
+                    break;
+               }
+          }
+          if (!found){
+               System.out.println("Error removing admin!");
+          }
+     }
+
+     private void saveAdmins(){
+          try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(Admin_FILE_NAME))){
+               oos.writeObject(admins);
+          } catch (IOException e) {
+               System.out.println("Error saving admins: " + e.getMessage());
+          }
+     }
+     @SuppressWarnings("unchecked")
+     private void loadAdmins(){
+          File file = new File(Admin_FILE_NAME);
+          if (file.exists()){
+               try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(Admin_FILE_NAME))){
+                    Object object = ois.readObject();
+                    if (object instanceof List) {
+                         admins.addAll((List<Admin>) object);
+                    }
+               } catch (IOException | ClassNotFoundException e) {
+                    System.out.println("Error loading admins: " + e.getMessage());
                }
           }
      }

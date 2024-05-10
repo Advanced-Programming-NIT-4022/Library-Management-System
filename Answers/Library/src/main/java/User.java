@@ -6,14 +6,9 @@ import java.time.format.DateTimeFormatter;
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     private String fullName;
-    private  String ID;
+    private  final String ID;
     private String phoneNumber;
     private String date_of_registration;
-        public static String getFormattedDate() {
-            LocalDate date = LocalDate.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            return date.format(formatter);
-        }
 
     public User(String fullName, String phoneNumber){
         this.fullName = fullName;
@@ -44,6 +39,21 @@ public class User implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public static String getFormattedDate() {
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        return date.format(formatter);
+    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "fullName='" + fullName + '\'' +
+                ", ID='" + ID + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", date_of_registration='" + date_of_registration + '\'' +
+                '}';
     }
 
 }

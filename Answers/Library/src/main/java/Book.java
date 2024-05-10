@@ -3,7 +3,7 @@ import java.io.Serializable;
 
 public class Book implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String bookID;
+    private final String bookID;
     private String title;
     private String author;
     private boolean availability;
@@ -51,5 +51,15 @@ public class Book implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookID='" + bookID + '\'' +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", availability=" + availability +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

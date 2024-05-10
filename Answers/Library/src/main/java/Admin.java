@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Admin {
+public class Admin implements Serializable {
     private String fullName;
-    private String ID;
+    private final String ID;
     private String phoneNumber;
     private String password;
     public Admin(String fullName, String phoneNumber, String password){
@@ -38,5 +39,14 @@ public class Admin {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "fullName='" + fullName + '\'' +
+                ", ID='" + ID + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                // Do not include the password for security reasons
+                '}';
     }
 }
