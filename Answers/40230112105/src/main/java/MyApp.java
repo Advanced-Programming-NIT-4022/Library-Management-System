@@ -65,7 +65,8 @@ public class MyApp {
                     }
 
                 } else if (devide[1].equals("return")) {
-
+                    rent.returnBook(devide[2]);
+                    clearScreen();
                 }
             } else {
                 System.out.print("Wrong entry! try again: ");

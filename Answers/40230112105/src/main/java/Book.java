@@ -41,7 +41,7 @@ public class Book {
     }
     public void availableBooks() {
         ResultSet rs =Connect.getConnectExecute("SELECT * FROM book WHERE availability = 'true'");
-        int i =1;
+        int i = 1;
         try {
             while(rs.next()) {
                 System.out.println(i + ". " + rs.getString("title") + "  (id: " + rs.getString("bookid") + ")");
