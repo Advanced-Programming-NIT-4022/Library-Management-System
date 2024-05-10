@@ -4,20 +4,25 @@ import java.io.*;
 import java.util.*;
 
 public class Library {
+    NormalUser normalUser = new NormalUser();
+    Admin admin = new Admin();
     User user;
     private final String LibraryName;
     private final String OperatingHours;
-    private final String Capacity;
+    private final int Capacity;
+    private final boolean BookRepository;
     public Library(){
         user = new User();
         this.LibraryName = "HOMA";
         this.OperatingHours =  "9 a.m. - 9 p.m.";
-        this.Capacity = "Infinity";
+        this.Capacity = 25;
+        this.BookRepository = ChapFileBook();
     }
-    public String getCapacity() { return Capacity; }
+    public boolean getBookRepository() { return BookRepository; }
+    public int getCapacity() { return Capacity; }
     public String getOperatingHours() { return OperatingHours; }
     public String getLibraryName() {  return LibraryName; }
-    public  void ReadFileUser(String filepath) {
+    public  void ReadFileNormalUser(String filepath) {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath));
             String line;
@@ -32,7 +37,7 @@ public class Library {
         }
         user.setPeople(user.getPeople());
     }
-    public void WriteFileUser(String filepath) {
+    public void WriteFileNormalUser(String filepath) {
         try  {
             FileWriter writer = new FileWriter(filepath);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
@@ -46,6 +51,64 @@ public class Library {
             System.out.println("Wrong");
         }
         user.getPeople().clear();
+    }
+    public  void AddNormalUser() {
+        ReadFileNormalUser("NormalUser.txt");
+        System.out.println("Enter the your name");
+        Scanner scanner = new Scanner(System.in);
+        normalUser.setName(scanner.nextLine());
+        boolean flag = true;
+        while (flag)
+        {
+            System.out.println("Enter your phone number");
+            String temp = scanner.nextLine();
+            char[] tem = temp.toCharArray();
+            for (char c : tem)
+            {
+                if (c < 48 || c > 57)
+                {
+                    System.out.println("You entered incorrectly\n" + "try again:");
+                    break;
+                }
+                else
+                {
+                    flag = false;
+                    normalUser.setPhoneNumber(temp);
+                }
+            }
+        }
+        for (int i = 0; i < normalUser.getPeople().size(); i++)
+        {
+            String[] list = normalUser.getPeople().get(i).split("/");
+            if (Objects.equals(normalUser.getName(), list[1])  || Objects.equals(normalUser.getPhoneNumber(), list[2]))
+            {
+                System.out.println("you can not add the user");
+                System.out.println("because we have that");
+            }
+            else
+            {
+                normalUser.setUniqueID(normalUser.FindBigID(normalUser.getPeople()));
+                normalUser.getPeople().add((normalUser.getIDUser()) + "/" + normalUser.getName() + "/" + normalUser.getPhoneNumber() + normalUser.getFormattedDateTime());
+                System.out.println("The user has been successfully added");
+                System.out.println("Your Unique ID is : " + normalUser.getIDUser());
+                break;
+            }
+        }
+        if (normalUser.getPeople().isEmpty()) {
+            normalUser.setUniqueID(1);
+            normalUser.getPeople().add((normalUser.getIDUser()) + "/" + normalUser.getName() + "/" + normalUser.getPhoneNumber() + normalUser.getFormattedDateTime());
+            System.out.println("The user has been successfully added");
+            System.out.println("Your Unique ID is : " + normalUser.getIDUser());
+        }
+        WriteFileNormalUser("NormalUser.txt");
+    }
+    public void DeleteNormalUser() {
+
+    }
+    private boolean ChapFileBook() {
+        boolean flag = false;
+
+        return flag;
     }
     public void CLIComment()
     {

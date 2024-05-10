@@ -8,7 +8,7 @@ import java.util.*;
 public class User extends UniqueID {
     Book book;
     private String Name;
-    private String IDUser ;
+    private String IDUser;
     private String PhoneNumber;
     private ArrayList<String> people = new ArrayList<>();
     public User(String name , String phoneNumber )
@@ -214,14 +214,18 @@ class NormalUser extends User {
         super(name, phoneNumber);
         UserDate = currentDateTime.format(formatter);
     }
+    public NormalUser() {
+    }
     public String getFormattedDateTime() { return UserDate; }
 }
 class Admin extends User {
-    private final String Password;
+    private String Password;
     public Admin(String name, String phonenumber)
     {
         super(name, phonenumber);
         this.Password = "8488";
+    }
+    public Admin() {
     }
     public String getPassword() {return Password;}
 }
