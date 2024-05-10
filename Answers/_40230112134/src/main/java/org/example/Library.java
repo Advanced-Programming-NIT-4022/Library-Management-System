@@ -102,12 +102,30 @@ public class Library {
         }
         WriteFileNormalUser("NormalUser.txt");
     }
-    public void DeleteNormalUser() {
-
+    public void DeleteNormalUser(String number) {
+        ReadFileNormalUser("NormalUser.txt");
+        for (int i = 0; i < normalUser.getPeople().size(); i++)
+        {
+            String line1 = normalUser.getPeople().get(i);
+            String[] list = line1.split("/");
+            if (Objects.equals(list[0], number))
+            {
+                System.out.println("The deletion was successful");
+                normalUser.getPeople().remove(i);
+                break;
+            }
+        }
+        normalUser.setPeople(normalUser.getPeople());
     }
     private boolean ChapFileBook() {
         boolean flag = false;
-
+        ReadFileNormalUser("NormalUser.txt");
+        for (int i = 0; i < normalUser.getPeople().size(); i++)
+        {
+            String[] list = normalUser.getPeople().get(i).split("/");
+            System.out.println("Name: " + list[1] + "Phone number: " + list[2] + "Time to enter the library: " + list[3]);
+            flag = true;
+        }
         return flag;
     }
     public void CLIComment()
