@@ -1,6 +1,8 @@
 // this class simulates the users
 // and it is superclass for NormalUser and Admin
 
+import java.sql.*;
+
 public class User {
     private String name;
     private String uniqueID; // unique id automatically creates in database
@@ -18,27 +20,33 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getName() {
-        return name;
+    public void uniqueIDUpdate() {
+        final String SQL_COMMAND = "SELECT UserID FROM Users WHERE PhoneNumber = ?";
+
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
+                MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
+             PreparedStatement selectID = connection.prepareStatement(SQL_COMMAND)) {
+
+            selectID.setString(1, this.phoneNumber);
+
+            ResultSet resultSet = selectID.executeQuery();
+            this.uniqueID = resultSet.getString(1);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            System.err.print("Connection to database failed! Terminating...");
+            System.exit(1);
+        }
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getName() {
+        return name;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public String getUniqueID() {
         return uniqueID;
-    }
-
-    public void setUniqueID(String uniqueID) {
-        this.uniqueID = uniqueID;
     }
 }
