@@ -41,7 +41,7 @@ public class User extends UniqueID {
         try  {
             FileWriter writer = new FileWriter(filepath);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
-            for (String temp : book.Total)
+            for (String temp : book.getTotal())
             {
                 bufferedWriter.write(temp);
                 bufferedWriter.newLine();
@@ -50,21 +50,23 @@ public class User extends UniqueID {
         } catch (IOException e){
             System.out.println("Wrong");
         }
+        book.getTotal().clear();
     }
     public void ReadFileBook(String filepath)
     {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath));
             String line;
-            book.Total.clear();
+            book.getTotal().clear();
             while ((line = bufferedReader.readLine()) != null)
             {
-                book.Total.add(line);
+                book.getTotal().add(line);
             }
             bufferedReader.close();
         } catch (IOException r){
             System.out.println("An error occurred.");
         }
+        book.setTotal(book.getTotal());
     }
     public void AddBook()
     {
@@ -77,10 +79,9 @@ public class User extends UniqueID {
         System.out.println("Write a description of the book in one line");
         book.setDescription(scanner.nextLine());
         book.setAvailabilityStatus(true);
-        for (int i = 0; i < book.Total.size(); i++)
+        for (int i = 0; i < book.getTotal().size(); i++)
         {
-            String line = book.Total.get(i);
-            String[] list = line.split("/");
+            String[] list = book.getTotal().get(i).split("/");
             if (Objects.equals(book.getTitle(), list[1])  || Objects.equals(book.getDescription(), list[3]))
             {
                 System.out.println("you can not add the book");
@@ -88,30 +89,29 @@ public class User extends UniqueID {
             }
             else
             {
-                setUniqueID(FindBigID(book.Total));
-                book.Total.add(getUniqueIDINT() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
-                WriteFileBook("Book.txt");
+                setUniqueID(FindBigID(book.getTotal()));
+                book.getTotal().add(getUniqueIDINT() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
                 System.out.println("The book has been successfully added");
                 System.out.println("Your Unique ID is : " + getUniqueIDINT());
                 break;
             }
         }
-        if (book.Total.isEmpty()) {
+        if (book.getTotal().isEmpty()) {
             setUniqueID(1);
-            book.Total.add(getUniqueIDINT() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
-            WriteFileBook("Book.txt");
+            book.getTotal().add(getUniqueIDINT() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
             System.out.println("The book has been successfully added");
             System.out.println("Your Unique ID is : " + getUniqueIDINT());
         }
+        WriteFileBook("Book.txt");
     }
     public void SearchBook(String sentence)
     {
         boolean flag = false;
         ReadFileBook("Book.txt");
         char[] word = sentence.toCharArray();
-        for (int i = 0; i < book.Total.size(); i++)
+        for (int i = 0; i < book.getTotal().size(); i++)
         {
-            char[] jomle = book.Total.get(i).toCharArray();
+            char[] jomle = book.getTotal().get(i).toCharArray();
             for (int j = 0; j < jomle.length; j++)
             {
                 for (int k = 0; k < word.length; k++)
@@ -122,9 +122,10 @@ public class User extends UniqueID {
                     }
                 }
             }
-            if (flag == true)
+            if (flag)
             {
-                String[] list = book.Total.get(i).split("/");
+                flag = false;
+                String[] list = book.getTotal().get(i).split("/");
                 System.out.println("Your ID book: " + list[0]);
                 System.out.println("Your Title: " + list[1]);
                 System.out.println("Your Author: " + list[2]);
@@ -137,16 +138,19 @@ public class User extends UniqueID {
     public void Delete(String number)
     {
         ReadFileBook("Book.txt");
-        for (int i = 0; i < book.Total.size(); i++)
+        for (int i = 0; i < book.getTotal().size(); i++)
         {
-            String line1 = book.Total.get(i);
+            String line1 = book.getTotal().get(i);
             String[] list = line1.split("/");
             if (Objects.equals(list[0], number))
             {
                 System.out.println("The deletion was successful");
-                book.Total.remove(i);
+                book.getTotal().remove(i);
+                Rewind(i);
+                break;
             }
         }
+        book.setTotal(book.getTotal());
         WriteFileBook("Book.txt");
     }
     public int FindBigID(ArrayList<String> total)
@@ -175,6 +179,26 @@ public class User extends UniqueID {
             }
         }
         return bigerid;
+    }
+    public void Rewind(int num)
+    {
+        ArrayList<String> test = new ArrayList<>();
+        for (int i = num; i < book.getTotal().size() ; i++)
+        {
+            String[] list = book.getTotal().get(i).split("/");
+            int number = Integer.parseInt(list[0]) -1;
+            list[0] = Integer.toString(number);
+            String temp = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + list[4];
+            test.add(temp);
+        }
+        for (int i = 0; i < book.getTotal().size(); i++)
+        {
+            book.getTotal().remove(num);
+        }
+        for (String s : test)
+        {
+            book.getTotal().add(s);
+        }
     }
 }
 class NormalUser extends User {

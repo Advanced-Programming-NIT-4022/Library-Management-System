@@ -61,11 +61,4 @@ public class Library {
             }
         }
     }
-
-    public static void main(String[] args) {
-        User user = new User();
-//        user.AddBook();
-//        user.Delete("6");
-        user.SearchBook("a");
-    }
 }

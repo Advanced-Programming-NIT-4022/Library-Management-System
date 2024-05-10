@@ -9,29 +9,40 @@ public class Rent extends UniqueID{
     User user;
     LocalDateTime currentDateTime = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private final String RentalDate = currentDateTime.format(formatter);
-    private final String RentID = getUniqueID();
+    private final String RentalDate;
+    private final String RentID ;
     public String getRentID() { return RentID; }
     public String getRentalDate() { return RentalDate; }
-    public void Rent(String number , String filepath)
+    public Rent(){
+        book = new Book();
+        user = new User();
+        RentalDate = currentDateTime.format(formatter);
+        RentID = getUniqueID();
+    }
+    public void Rent(String number)
     {
-        user.ReadFileBook(filepath);
-        for (int i = 0; i < book.Total.size(); i++)
+        user.ReadFileBook("Book.txt");
+        String temp = "";
+        for (int i = 0; i < book.getTotal().size(); i++)
         {
-            String line1 = book.Total.get(i);
-            String[] list = line1.split("/");
+            String[] list = book.getTotal().get(i).split("/");
             if (Objects.equals(list[0], number))
             {
-                System.out.println("please read");
-                book.Total.remove(i);
-                String temp = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + "false" ;
-                book.Total.add(temp);
+                System.out.println("The book has been successfully rented.");
+                System.out.println("enjoy , Bye.");
+                book.getTotal().remove(i);
+                book.setTotal(book.getTotal());
+                temp = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + RentalDate ;
+                break;
             }
             else
             {
                 System.out.println("The book is rented.");
             }
         }
-        user.WriteFileBook(filepath);
+        user.WriteFileBook("Book.txt");
+        user.ReadFileBook("Rent.txt");
+        book.getTotal().add(temp);
+        user.WriteFileBook("Rent.txt");
     }
 }

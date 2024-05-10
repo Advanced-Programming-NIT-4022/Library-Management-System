@@ -5,7 +5,7 @@ import java.util.*;
 public class Book extends UniqueID {
     private String ID ;
     private String Title , Author , Description;
-    ArrayList<String> Total = new ArrayList<>();
+    private ArrayList<String> Total = new ArrayList<>();
     private boolean AvailabilityStatus;
 
     public Book()
@@ -16,7 +16,8 @@ public class Book extends UniqueID {
         this.AvailabilityStatus = true;
         this.ID = getUniqueID();
     }
-
+    public ArrayList<String> getTotal() { return Total;}
+    public void setTotal(ArrayList<String> total) { Total = total;}
     public String getID() {return ID;}
     public boolean getAvailabilityStatus(){return AvailabilityStatus;}
     public void setAvailabilityStatus(boolean availabilityStatus) {AvailabilityStatus = availabilityStatus;}
