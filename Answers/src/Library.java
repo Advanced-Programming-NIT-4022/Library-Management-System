@@ -47,7 +47,7 @@ public class Library {
     }
 
     // add normal user
-    public Boolean addUser(NormalUser user) {
+    public void addUser(NormalUser user) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             PreparedStatement insertUser = connection.prepareStatement(
                     "INSERT INTO Users (Name, PhoneNumber, UserType, RegisterDate, RegisterTime)" +
@@ -66,9 +66,7 @@ public class Library {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             System.err.print("Connection to database failed!");
-            return false;
         }
-        return true;
     }
 
     // add admin user
