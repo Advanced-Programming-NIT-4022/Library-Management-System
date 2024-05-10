@@ -42,7 +42,7 @@ public class LoginPage {
             Library lib=new Library();
             Stage stage=(Stage) btnSign.getScene().getWindow();
             stage.close();
-
+           System.out.println(lib.checkUserexistence("1"));
         }
 
     public void pressRadioNormal(ActionEvent event) {
