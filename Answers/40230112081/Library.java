@@ -99,6 +99,7 @@ public class Library {
     // login as admin user
     public void login_normalUsers(){
         String phone, pass, id, user;
+        v = new Verifications();
         Scanner scn = new Scanner(System.in);
         int flag;
         while(true){
@@ -124,6 +125,43 @@ public class Library {
                 usersFileHandle.show_myPassword();
                 continue;
             } else if (v.userPasswordValidator(pass) && Objects.equals(pass, usersFileHandle.getUserPassword().get(flag))) {
+                break;
+            }
+            else{
+                System.out.println("Password not found/wrong format, try again");
+                continue;
+            }
+        }
+
+    }
+    public void login_AdminUsers(){
+        String phone, pass, id, user;
+        v = new Verifications();
+        Scanner scn = new Scanner(System.in);
+        int flag;
+        while(true){
+            System.out.println("Enter your Username: (If you forget: type forget)");
+            user = scn.nextLine();
+            if(Objects.equals(user, "forget")) {
+                adminsFileHandle.show_myUsername();
+                continue;
+            }
+            else if (v.userUsernameValidator(user) && adminsFileHandle.getUsernameInFile().contains(user)) {
+                flag = adminsFileHandle.getUsernameInFile().indexOf(user);
+                break;
+            }
+            else{
+                System.out.println("Username not found/wrong format, try again");
+                continue;
+            }
+        }
+        while (true){
+            System.out.println("Enter your password :(if you forget , type forget)");
+            pass = scn.nextLine();
+            if(Objects.equals(pass,"forget")){
+                adminsFileHandle.show_myPassword();
+                continue;
+            } else if (v.userPasswordValidator(pass) && Objects.equals(pass, adminsFileHandle.getUserPassword().get(flag))) {
                 break;
             }
             else{
