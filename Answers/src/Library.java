@@ -1,3 +1,6 @@
+import javax.naming.NoPermissionException;
+import javax.sql.rowset.JdbcRowSet;
+import javax.sql.rowset.RowSetProvider;
 import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.Formatter;
@@ -34,6 +37,10 @@ public class Library {
         this.user = user;
     }
 
+    public String getOperatingHours() {
+        return operatingHours;
+    }
+
     public void setOperatingHours(String operatingHours) throws IllegalArgumentException {
         {
             // validate operating hours
@@ -48,7 +55,8 @@ public class Library {
     }
 
     // add normal user
-    public void addUser(NormalUser user) {
+    // return the unique ID of the user
+    public int addUser(NormalUser user) {
         final String SQL_COMMAND = "INSERT INTO Users (Name, PhoneNumber, UserType," +
                 " RegisterTimestamp) VALUES (?, ?, ?, ?)";
 
@@ -62,18 +70,19 @@ public class Library {
             insertUser.setTimestamp(4, user.getRegisterTimestamp());
 
             insertUser.executeUpdate();
-
-            // prompt
-            System.out.printf("User <%s> was saved successfully!%n", user.getName());
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             System.err.print("Connection to database failed!");
+            return 0;
         }
+
+        user.uniqueIDUpdate();
+        return user.getUniqueID();
     }
 
     // add admin user
     // return the unique ID of the user
-    public String addUser(User admin, String password) {
+    public int addUser(User admin, String password) {
         final String SQL_COMMAND = "INSERT INTO Users (Name, PhoneNumber, UserType, Password) "
                 + "VALUES (?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
@@ -86,13 +95,10 @@ public class Library {
             insertUser.setString(4, password);
 
             insertUser.executeUpdate();
-
-            // prompt
-            System.out.printf("User <%s> was successfully saved!%n", admin.getName());
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             System.err.print("Connection to database failed!");
-            return null;
+            return 0;
         }
 
         // get the unique id from database
@@ -100,9 +106,38 @@ public class Library {
         return admin.getUniqueID();
     }
 
+    public int removeUser(int userID) throws NoPermissionException {
+        if (user == null || user instanceof NormalUser)
+            throw new NoPermissionException("You don't have permission to remove members!");
+
+        for (int i = 0; i < 3; i++) {
+            System.out.print("Enter your password: ");
+            String password = MyApp.input.nextLine();
+            if (((Admin) user).verify(password))
+                break;
+            else if (i == 2)
+                throw new IllegalArgumentException("3 incorrect password attempts...");
+            else
+                System.out.println("Invalid password. Try again.");
+        }
+
+        final String SQL_COMMAND = "DELETE FROM Users WHERE UserID = ?";
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
+                MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
+             PreparedStatement deleteUser = connection.prepareStatement(SQL_COMMAND)) {
+
+            deleteUser.setInt(1, userID);
+            return deleteUser.executeUpdate();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            System.err.print("Connection to database failed!");
+            return 0;
+        }
+    }
+
     // add book
-    public boolean addBook(Book book) {
-        final String SQL_COMMAND = "INSERT INTO books (UniqueBookID, Title, Author, Description) " +
+    public void addBook(Book book) {
+        final String SQL_COMMAND = "INSERT INTO books (BookID, Title, Author, Description) " +
                 "VALUES (?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
                 MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
@@ -120,9 +155,7 @@ public class Library {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             System.err.print("Connection to database failed!");
-            return false;
         }
-        return true;
     }
 
     // login to library
@@ -161,5 +194,47 @@ public class Library {
             System.exit(1);
         }
         return user;
+    }
+
+    public void getAvailableBooks() {
+        final String SQl_COMMAND = "SELECT BookID, Title, Author, Description " +
+                "FROM books WHERE AvailabilityStatus = 1";
+        // connect to database books and query database
+        try (JdbcRowSet rowSet = RowSetProvider.newFactory().createJdbcRowSet()) {
+
+            rowSet.setUrl(MyApp.DB_URL);
+            rowSet.setUsername(MyApp.DB_USERNAME);
+            rowSet.setPassword(MyApp.DB_PASSWORD);
+            rowSet.setCommand(SQl_COMMAND);
+            rowSet.execute();
+
+            // process query results
+            ResultSetMetaData metaData = rowSet.getMetaData();
+            int numberOfColumns = metaData.getColumnCount();
+            System.out.printf("Available books:%n%n");
+            // display rowset header
+            for (int i = 1; i <= numberOfColumns; i++) {
+                if (i > 2)
+                    System.out.printf("%-20s\t", metaData.getColumnName(i));
+                else
+                    System.out.printf("%-15s\t", metaData.getColumnName(i));
+            }
+            System.out.println();
+            // display each row
+            while (rowSet.next())
+            {
+                for (int i = 1; i <= numberOfColumns; i++) {
+                    if (i > 2)
+                        System.out.printf("%-20s\t", rowSet.getObject(i));
+                    else
+                        System.out.printf("%-15s\t", rowSet.getObject(i));
+                }
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.print("Connection to database failed! Terminating...");
+            System.exit(1);
+        }
     }
 }
