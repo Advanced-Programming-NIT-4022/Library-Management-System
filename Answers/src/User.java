@@ -37,4 +37,8 @@ public class User {
     public String getUniqueID() {
         return uniqueID;
     }
+
+    public void setUniqueID(String uniqueID) {
+        this.uniqueID = uniqueID;
+    }
 }
