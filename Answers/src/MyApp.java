@@ -154,39 +154,40 @@ public class  MyApp {
                 String title, author;
 
                 // delete lib add book from command
-                command = command.substring(13);
+                command = command.replaceFirst("lib\\sadd\\sbook\\s", "");
 
                 // find the name of the book
                 if (command.startsWith("\"")) {
-                    command = command.substring(1);
-                    title = command.substring(command.indexOf("\""));
+                    title = command.substring(1, command.indexOf("\"", 1));
 
                     // delete title of the book from command
-                    command = command.substring(command.indexOf("\""));
+                    command = command.replaceFirst("\"" + title + "\" ", "");
                 } else {
-                    title = command.substring(command.indexOf(" "));
+                    title = command.substring(0, command.indexOf(" "));
 
                     // delete title of the book from command
-                    command = command.substring(command.indexOf(" "));
+                    command = command.replaceFirst(title + " ", "");
                 }
 
                 // find the author of the book
-                if (command.startsWith("\"")) {
-                    command = command.substring(1);
-                    author = command.substring(command.indexOf("\""));
+                if (!command.contains(" ")) {
+                    author = command;
+                    command = "";
+                } else if (command.startsWith("\"")) {
+                    author = command.substring(1, command.indexOf("\"", 1));
 
                     // delete author of the book from command
-                    command = command.substring(command.indexOf("\""));
+                    command = command.replaceFirst("\"" + author + "\" ", "");
                 } else {
-                    author = command.substring(command.indexOf(" "));
+                    author = command.substring(0, command.indexOf(" "));
 
                     // delete author of the book from command
-                    command = command.substring(command.indexOf(" "));
+                    command = command.replaceFirst(author + " ", "");
                 }
 
                 // if command doesn't have description
-                if (command == null) {
-                    Book book = new Book(title, author);
+                if (command.equals("")) {
+                    Book book = new Book(title.trim(), author.trim());
                     library.addBook(book);
                     return;
                 }
@@ -195,24 +196,26 @@ public class  MyApp {
 
                 // find the desciption of the book
                 if (command.startsWith("\"")) {
-                    command = command.substring(1);
-                    description = command.substring(command.indexOf("\""));
+                    description = command.substring(1, command.indexOf("\"", 1));
 
                     // delete description of the book from command
-                    command = command.substring(command.indexOf("\""));
-                } else {
-                    description = command.substring(command.indexOf(" "));
+                    command = command.replaceFirst("\"" + description + "\"", "");
+                } else if (command.contains(" "))
+                    throw new IllegalArgumentException(
+                            "You should use \" character to split string with space");
+                else {
+                    description = command;
 
                     // delete description of the book from command
-                    command = command.substring(command.indexOf(" "));
+                    command = "";
                 }
 
                 // if command has too many argument
-                if (command != null)
+                if (!command.equals(""))
                     throw new IllegalArgumentException(
                             "You should use \" character to split string with space");
 
-                Book book = new Book(title, author, description);
+                Book book = new Book(title.trim(), author.trim(), description.trim());
                 library.addBook(book);
             } else
                 throw new NoPermissionException("You don't have permission to add books!");
@@ -231,7 +234,7 @@ public class  MyApp {
                     System.out.printf("Enter password for %s: ", adminUser.getName());
                     String password = input.nextLine();
                     if (adminUser.verify(password)) {
-                        System.out.printf("Hello %s!You logged in successfully.%n", adminUser.getName());
+                        System.out.printf("Hello %s! You logged in successfully.%n", adminUser.getName());
                         return;
                     } else
                         System.out.println("Invalid password. Try again.");
