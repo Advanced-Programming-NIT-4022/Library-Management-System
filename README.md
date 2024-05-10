@@ -1,6 +1,6 @@
-# Library Management System
+# Answers.Library Management System
 
-Welcome to our Library Management System (LMS) project! In this endeavor, we aim to implement a comprehensive library program with a user-friendly command-line interface (CLI). Our system caters to two distinct roles:
+Welcome to our Answers.Library Management System (LMS) project! In this endeavor, we aim to implement a comprehensive library program with a user-friendly command-line interface (CLI). Our system caters to two distinct roles:
 
 1. Normal Users
 2. Admins
@@ -52,16 +52,16 @@ The Rent class acts as a bridge between users and books, facilitating book renta
 - Rental ID
 - Rental date
 
-### Library
+### Answers.Library
 
-The central hub of our system, the Library class encapsulates core library functionalities:
-- Library name
+The central hub of our system, the Answers.Library class encapsulates core library functionalities:
+- Answers.Library name
 - Capacity
 - Operating hours
 - Book repository
 - User and rental registries
 
-Methodologies like book rental, return, addition, and removal of members and books are seamlessly handled within the Library class.
+Methodologies like book rental, return, addition, and removal of members and books are seamlessly handled within the Answers.Library class.
 
 ## Command-Line Interface (CLI)
 
@@ -82,4 +82,4 @@ To start using our system, simply run the main class `MyApp` and follow the prom
 
 ## Conclusion
 
-Thank you for choosing our Library Management System. We're excited to provide you with an efficient and user-friendly platform for all your library needs. Happy reading!
+Thank you for choosing our Answers.Library Management System. We're excited to provide you with an efficient and user-friendly platform for all your library needs. Happy reading!
