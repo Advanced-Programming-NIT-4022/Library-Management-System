@@ -1,6 +1,5 @@
 // this class simulates the users
 // and it is superclass for NormalUser and Admin
-import java.util.UUID;
 
 public class User {
     private String name;
