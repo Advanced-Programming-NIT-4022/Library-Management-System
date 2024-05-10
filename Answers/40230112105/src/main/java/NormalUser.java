@@ -7,7 +7,7 @@ class NormalUser extends User{
     String id;
     Timestamp time = new Timestamp(System.currentTimeMillis());
     public void addMember(String phoneNumber, String name) {
-        if (numberCheck(getPhoneNumber())) {
+        if (numberCheck(getPhoneNumber(), "student")) {
             Connect.getConnect("INSERT INTO student (name, registration, phonenumber) VALUES ('"+getName()+"','"+time+"','"+getPhoneNumber()+"')");
 
             try{
@@ -22,10 +22,5 @@ class NormalUser extends User{
         } else {
             System.out.println("You entered a duplicate number!!!");
         }
-
-
-
     }
-
-
 }

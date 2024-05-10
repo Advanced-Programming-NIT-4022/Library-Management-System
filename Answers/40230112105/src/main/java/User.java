@@ -52,9 +52,9 @@ public class User{
         return id;
     }
 
-    public boolean numberCheck(String phonenumber) {
+    public boolean numberCheck(String phonenumber, String table) {
         String[] number= new String[1000];
-        ResultSet rs = Connect.getConnectExecute("SELECT * FROM student");
+        ResultSet rs = Connect.getConnectExecute("SELECT * FROM " + table);
         int i = 0;
         try {
             while(rs.next()) {
@@ -73,12 +73,12 @@ public class User{
         return  true;
     }
 
-    public void removeMember(String id) {
+    public void removeMember(String id, String table) {
         try {
-            ResultSet rs = Connect.getConnectExecute("SELECT id FROM student WHERE id = '"+ id +"'");
+            ResultSet rs = Connect.getConnectExecute("SELECT id FROM " +table+ " WHERE id = '"+ id +"'");
             if(rs.next()){
-                Connect.getConnect("DELETE FROM student WHERE id = '"+ id +"'");
-                System.out.println("The user account has been deleted");
+                Connect.getConnect("DELETE FROM "+ table +" WHERE id = '"+ id +"'");
+                System.out.println("The account has been deleted");
             } else {
                 System.out.println("There is no id like this!!!");
             }

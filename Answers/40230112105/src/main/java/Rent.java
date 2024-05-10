@@ -30,6 +30,7 @@ public class Rent {
         ResultSet rs = Connect.getConnectExecute("SELECT availability FROM book WHERE bookid = '" +id+ "'");
         try {
             if(rs.next()){
+
                 if(!rs.getBoolean("availability")) {
                     Connect.getConnect("UPDATE book SET availability = 'true' WHERE bookid = '" +id+ "'");
                     Connect.getConnect("DELETE FROM rent WHERE bookid = '" +id+ "'");

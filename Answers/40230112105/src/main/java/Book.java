@@ -56,7 +56,7 @@ public class Book {
         try {
             Connect.getConnect("INSERT INTO book (title, author, availability, description)" +
                     "VALUES ('"+ title +"','"+ author + "','true','"+ subtitle +"')");
-            System.out.println("The book successfully was added");
+            System.out.println("The book was successfully added");
         } catch (Exception exp) {
             exp.printStackTrace();
         }
