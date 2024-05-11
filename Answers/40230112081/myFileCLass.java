@@ -355,20 +355,38 @@ public class myFileCLass {
         return bookIds;
     }
 
-    public void change_status_inFileRent(String _id){ // just for book & reduce existence for rent
-        int f = getIdFromFileBook().indexOf(_id);
+    public void change_status_inFileRent(String book_id){ // just for book & reduce existence for rent
+        int f = getIdFromFileBook().indexOf(book_id);
         String new_query;
         int currentExistence = Integer.valueOf(getExistsFromFileBook().get(f));
         if(currentExistence > 1){
             currentExistence--;
-            new_query = _id + "," + getTitlesFromFileBook().get(f) + "," + getAuthorsFromFileBook().get(f)+
+            new_query = book_id + "," + getTitlesFromFileBook().get(f) + "," + getAuthorsFromFileBook().get(f)+
                         "," + getDescriptionsFromFileBook().get(f) + "," + "available," + String.valueOf(currentExistence);
             editLineInFile(lines_of_file().get(f), new_query);
         }
         else {
             currentExistence--;
-            new_query = _id + "," + getTitlesFromFileBook().get(f) + "," + getAuthorsFromFileBook().get(f)+
+            new_query = book_id+ "," + getTitlesFromFileBook().get(f) + "," + getAuthorsFromFileBook().get(f)+
                     "," + getDescriptionsFromFileBook().get(f) + "," + "in-rent," + String.valueOf(currentExistence);
+            editLineInFile(lines_of_file().get(f), new_query);
+        }
+    }
+
+    public void change_status_inFileReturnCase(String book_id){
+        int f = getIdFromFileBook().indexOf(book_id);
+        String new_query;
+        int currentExistence = Integer.valueOf(getExistsFromFileBook().get(f));
+        if(currentExistence > 0){
+            currentExistence++;
+            new_query = book_id + "," + getTitlesFromFileBook().get(f) + "," + getAuthorsFromFileBook().get(f)+
+                    "," + getDescriptionsFromFileBook().get(f) + "," + "available," + String.valueOf(currentExistence);
+            editLineInFile(lines_of_file().get(f), new_query);
+        }
+        else if(currentExistence == 0){
+            currentExistence++;
+            new_query = book_id+","+ getTitlesFromFileBook().get(f) + "," + getAuthorsFromFileBook().get(f)+
+                    "," + getDescriptionsFromFileBook().get(f) + "," + "available," + String.valueOf(currentExistence);
             editLineInFile(lines_of_file().get(f), new_query);
         }
     }
