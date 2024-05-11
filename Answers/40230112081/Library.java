@@ -193,6 +193,9 @@ public class Library {
                 continue;
             }
         }
+        User u = new User(user, adminsFileHandle.getIDInFile().get(flag), adminsFileHandle.getPhoneNumbersInFile().get(flag)
+        , "admin", pass);
+        adminUserPanel(u);
 
     }
     public void show_helpMenuNormalUser(){
@@ -218,6 +221,31 @@ public class Library {
             }
         }
     }
+    public void show_helpMenuAdmins(){
+        Scanner scn = new Scanner(System.in);
+        String cmd;
+        System.out.println("to add book : lib add book_title book_author book_desc");
+        System.out.println("to remove user : lib remove user_id user_name user_phone");
+        System.out.println("to remove book : lib remove book_title book_author book_desc");
+        System.out.println("to remove rent : lib remove rent_date user_id book_id");
+        System.out.println("to promote normal user : user promote user_id user_name user_phone");
+        System.out.println("to show user : user show user_id");
+        System.out.println("to show books : lib show books (-A : all books , -E : only available books , -R : in-rent books)");
+        System.out.println("to show rents : lib show rents");
+        System.out.println("to exit your panel : enter panel");
+        System.out.println("***Attention*** : avoid to enter space more than one , avoid to enter any character, Each command must be space separated");
+        System.out.println("for entering space in each field : use underline character '_' ");
+        System.out.println("to back to your panel from this menu : just enter back");
+        while (true){
+            cmd = scn.nextLine();
+            if (Objects.equals(cmd, "back")){
+                break;
+            }
+            else{
+                System.out.println("Just enter back. :-|");
+            }
+        }
+    }
     public void normalUserPanel(User u){
         cal = Calendar.getInstance();
         simpleDate = new SimpleDateFormat("dd/MMMM/yyyy");
@@ -230,6 +258,7 @@ public class Library {
         Scanner scn = new Scanner(System.in);
         System.out.println("*******************************************************************");
         System.out.println("Welcome to your panel " + u.getUser_name() + " :");
+        System.out.println("Library is open in :" + this.oprHours);
         while (true) {
             System.out.println("Print help to get help with your commands :(Normal user privileges)");
             System.out.print(">>>");
@@ -443,7 +472,22 @@ public class Library {
 
     }
 
-    public void adminUserPanel(){
+    public void adminUserPanel(User u){
+        System.out.println("Welcome " + u.getUser_name());
+        System.out.println("This is your admin panel.");
+        String cmd;
+        v = new Verifications();
+        Scanner scn = new Scanner(System.in);
+        int flag;
+        while (true){
+            System.out.println("Enter command (With Space ,Just one space, Please avoid to enter extra characters)");
+            System.out.println("Enter help to ");
+            System.out.print(">>>");
+            cmd = scn.nextLine();
+            if(Objects.equals(cmd, "help") || Objects.equals(cmd, "Help")){
+                show_helpMenuAdmins();
+            }
+        }
 
     }
 
