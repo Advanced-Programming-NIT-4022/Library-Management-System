@@ -355,7 +355,25 @@ public class myFileCLass {
         return bookIds;
     }
 
-
+    public void change_status_inFileRent(String _id){ // just for book & reduce existence for rent
+        int f = getIdFromFileBook().indexOf(_id);
+        String new_query;
+        String new_status;
+        if(Objects.equals(getStatsFromFileBook().get(f), "available")){
+            new_status = "in-rent";
+        }
+        else{
+            System.out.println("Actually book is in rent, Access denied.");
+            return;
+        }
+        String t,a,d,e;
+        t = getTitlesFromFileBook().get(f);
+        a = getAuthorsFromFileBook().get(f);
+        d = getDescriptionsFromFileBook().get(f);
+        e = String.valueOf(Integer.valueOf(getExistsFromFileBook().get(f)) - 1);
+        new_query = _id + "," + t + "," + a + "," + d + "," + new_status + "," + e;
+        editLineInFile(lines_of_file().get(f), new_query);
+    }
 
 
 }
