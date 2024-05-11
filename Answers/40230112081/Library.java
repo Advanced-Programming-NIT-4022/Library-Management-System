@@ -396,10 +396,16 @@ public class Library {
                 }
                 else if(Objects.equals(list.get(1), "return")){
                     // lib return book_title your_id
+                    int flag;
                     String bookId = list.get(2), user_id = list.get(3);
                     // edit booksFile : repository // change status if 0 existence or increment existence
                     // edit rentals
                     if(rentalFileHandle.getRentalsUserID().contains(user_id) && rentalFileHandle.getRentalsBookID().contains(bookId)){
+                        flag = rentalFileHandle.getRentalsUserID().indexOf(user_id);
+                        String new_query = "";
+                        String line = rentalFileHandle.lines_of_file().get(flag);
+                        rentalFileHandle.editLineInFile(line, new_query);
+                        booksFileHandle.change_status_inFileReturnCase(bookId);
 
                     }else{
                         System.out.println("No such rental details are available. :-|");
