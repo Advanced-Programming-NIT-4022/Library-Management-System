@@ -139,6 +139,25 @@ public class Library {
         normalUserPanel(u);
 
     }
+    public boolean isLibOpen(){
+        String[] hoursParts = this.oprHours.split("-");
+        cal = Calendar.getInstance();
+        simpleDate = new SimpleDateFormat("hh:mm");
+        String date = simpleDate.format(cal.getTime());
+        char c = hoursParts[1].charAt(0);
+        int vclose = Integer.valueOf(c) - Integer.valueOf('0');
+        int close =  vclose + 12;
+        char s = hoursParts[0].charAt(0);
+        int vopen =Integer.valueOf(s) - Integer.valueOf('0');
+        int start = vopen;
+        String[] current = date.split(":");
+        if(Integer.valueOf(current[0]) >= start && Integer.valueOf(current[0]) < close){
+            return true;
+        }
+
+
+        return false;
+    }
     public void login_AdminUsers(){
         String phone, pass, id, user;
         v = new Verifications();
@@ -389,7 +408,8 @@ public class Library {
                     else{
                         for(int i = 0;i < booksFileHandle.getStatsFromFileBook().size();i++){
                             if(Objects.equals(booksFileHandle.getStatsFromFileBook().get(i),"available")){
-                                System.out.println(booksFileHandle.getTitlesFromFileBook().get(i));
+                                System.out.println(booksFileHandle.getIdFromFileBook().get(i)+
+                                        ", "+booksFileHandle.getTitlesFromFileBook().get(i));
                             }
                         }
                     }
