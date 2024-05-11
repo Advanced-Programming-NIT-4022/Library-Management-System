@@ -1,13 +1,15 @@
 import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
+import java.text.SimpleDateFormat;
+import java.text.Format;
 
 public class Library {
     private String libName;
     private int libCap;
     private String oprHours;
+
+    public Calendar cal;
+    public SimpleDateFormat simpleDate;
 
     // repos & registries
     public myFileCLass usersFileHandle;
@@ -183,6 +185,8 @@ public class Library {
         System.out.println("to Edit your username : user edit usr current_usr new_usr");
         System.out.println("to Edit your password : user edit pss current_pss new_pss");
         System.out.println("to Return a book : lib return book_title your_id");
+        System.out.println("to Show available books :lib show books");
+        System.out.println("to show your info/profile :user show profile");
         System.out.println("to logout& close : enter close/exit");
         System.out.println("to get back to your panel : Enter back");
         while (true){
@@ -196,6 +200,9 @@ public class Library {
         }
     }
     public void normalUserPanel(User u){
+        cal = Calendar.getInstance();
+        simpleDate = new SimpleDateFormat("dd/MMMM/yyyy");
+        String date = simpleDate.format(cal.getTime());
         v = new Verifications();
         String cmd;
         String p1,p2, u1,u2, ps1,ps2;
@@ -228,7 +235,7 @@ public class Library {
                         int i = booksFileHandle.getAuthorsFromFileBook().indexOf(auth);
                         String new_exst = String.valueOf(Integer.valueOf(booksFileHandle.getExistsFromFileBook().get(i))+1);
                         query = booksFileHandle.getIdFromFileBook().get(i) + "," +booksFileHandle.getTitlesFromFileBook().get(i)+","+
-                                booksFileHandle.getAuthorsFromFileBook()+","+booksFileHandle.getDescriptionsFromFileBook().get(i)+","+
+                                booksFileHandle.getAuthorsFromFileBook().get(i)+","+booksFileHandle.getDescriptionsFromFileBook().get(i)+","+
                                 "available,"+new_exst;
                         booksFileHandle.editLineInFile(booksFileHandle.lines_of_file().get(i), query);
                     }
@@ -242,7 +249,33 @@ public class Library {
                     }
                 }
                 else if(Objects.equals(list.get(1), "rent")){
-                    // rent a book
+                    // availability
+                    // reduce in existence
+                    // add to rentals
+                    // rent : date,userID,bookID
+                    String title = list.get(3);
+                    String user_ID = list.get(2);
+                    int i = booksFileHandle.getTitlesFromFileBook().indexOf(title);
+                    if(i != -1){
+                        if(Objects.equals(booksFileHandle.getStatsFromFileBook().get(i), "in-rent")){
+                            System.out.println("this book "+title+" is actually in rent try another books.");
+                            System.out.println("To show available books try show books command.");
+                        }
+                        else{
+                            if(usersFileHandle.getIDInFile().contains(user_ID)){
+                                query = date + "," + user_ID + "," + booksFileHandle.getIdFromFileBook().get(i);
+                                booksFileHandle.change_status_inFileRent(booksFileHandle.getIdFromFileBook().get(i));
+                                rentalFileHandle.add_to_file(query);
+                            }
+                            else{
+                                System.out.println("Wrong ID, there is no id in repository like that. :-|");
+                            }
+                        }
+                    }
+                    else{
+                        System.out.println("This book with this title is not available in book repository. :-|");
+                        System.out.println("Try command with appropriate query. :-)");
+                    }
                 }
                 else if(Objects.equals(list.get(1), "edit")){
                     // edit your info
@@ -346,6 +379,23 @@ public class Library {
                     // return a book
 
                 }
+                else if(Objects.equals(list.get(1), "show")){
+                    if(Objects.equals(list.get(2), "profile") || Objects.equals(list.get(2), "Profile")){
+                        System.out.println("User_id : " + u.getUserID());
+                        System.out.println("User_name : "+u.getUser_name());
+                        System.out.println("User_phone : "+u.getPhonenumber());
+                        System.out.println("Access level : "+u.getRole());
+                    }
+                    else{
+                        for(String status : booksFileHandle.getStatsFromFileBook()){
+                            if(Objects.equals(status, "available")){
+                                int f = booksFileHandle.getStatsFromFileBook().indexOf(status);
+                                System.out.println(booksFileHandle.getTitlesFromFileBook().get(f));
+                            }
+                        }
+                    }
+                }
+
                 else{
                     System.out.println("Wrong format :-|");
                 }
