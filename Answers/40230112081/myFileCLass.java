@@ -251,8 +251,7 @@ public class myFileCLass {
             f1 = str.indexOf(",");
             f2 = str.indexOf(",", f1+1);
             f3 = str.indexOf(",", f2+1);
-            authors.add(str.substring(f2+1, f3));
-        }
+            authors.add(str.substring(f2+1, f3));}
         return authors;
     }
     public ArrayList<String> getDescriptionsFromFileBook(){
@@ -299,7 +298,7 @@ public class myFileCLass {
             f3 = str.indexOf(",", f2+1);
             f4 = str.indexOf(",", f3+1);
             f5 = str.indexOf(",", f4+1);
-            exists.add(str.substring(f5));
+            exists.add(str.substring(f5+1));
         }
         return exists;
     }
