@@ -203,7 +203,7 @@ public class Library {
         System.out.println("to Edit your phonenumber : user edit ph current_ph new_ph");
         System.out.println("to Edit your username : user edit usr current_usr new_usr");
         System.out.println("to Edit your password : user edit pss current_pss new_pss");
-        System.out.println("to Return a book : lib return book_title your_id");
+        System.out.println("to Return a book : lib return book_id your_id");
         System.out.println("to Show available books :lib show books");
         System.out.println("to show your info/profile :user show profile");
         System.out.println("to logout& close : enter close/exit");
@@ -395,7 +395,16 @@ public class Library {
                     }
                 }
                 else if(Objects.equals(list.get(1), "return")){
-                    // return a book
+                    // lib return book_title your_id
+                    String bookId = list.get(2), user_id = list.get(3);
+                    // edit booksFile : repository // change status if 0 existence or increment existence
+                    // edit rentals
+                    if(rentalFileHandle.getRentalsUserID().contains(user_id) && rentalFileHandle.getRentalsBookID().contains(bookId)){
+
+                    }else{
+                        System.out.println("No such rental details are available. :-|");
+                    }
+
 
                 }
                 else if(Objects.equals(list.get(1), "show")){
@@ -409,7 +418,7 @@ public class Library {
                         for(int i = 0;i < booksFileHandle.getStatsFromFileBook().size();i++){
                             if(Objects.equals(booksFileHandle.getStatsFromFileBook().get(i),"available")){
                                 System.out.println(booksFileHandle.getIdFromFileBook().get(i)+
-                                        ", "+booksFileHandle.getTitlesFromFileBook().get(i));
+                                        ", "+booksFileHandle.getTitlesFromFileBook().get(i)+" exst : " + booksFileHandle.getExistsFromFileBook().get(i));
                             }
                         }
                     }
