@@ -180,7 +180,7 @@ public class Library {
         String cmd;
         Scanner scn = new Scanner(System.in);
         System.out.println("to add a book to library : lib add title author description(nonSpace description & brief)");
-        System.out.println("to Rent a book from library : lib rent your_id Book_title");
+        System.out.println("to Rent a book from library : lib rent your_id Book_id");
         System.out.println("to Edit your phonenumber : user edit ph current_ph new_ph");
         System.out.println("to Edit your username : user edit usr current_usr new_usr");
         System.out.println("to Edit your password : user edit pss current_pss new_pss");
@@ -253,12 +253,12 @@ public class Library {
                     // reduce in existence
                     // add to rentals
                     // rent : date,userID,bookID
-                    String title = list.get(3);
+                    String id = list.get(3);
                     String user_ID = list.get(2);
-                    int i = booksFileHandle.getTitlesFromFileBook().indexOf(title);
+                    int i = booksFileHandle.getIdFromFileBook().indexOf(id);
                     if(i != -1){
                         if(Objects.equals(booksFileHandle.getStatsFromFileBook().get(i), "in-rent")){
-                            System.out.println("this book "+title+" is actually in rent try another books.");
+                            System.out.println("this book "+id+" is actually in rent try another books.");
                             System.out.println("To show available books try show books command.");
                         }
                         else{
@@ -387,10 +387,9 @@ public class Library {
                         System.out.println("Access level : "+u.getRole());
                     }
                     else{
-                        for(String status : booksFileHandle.getStatsFromFileBook()){
-                            if(Objects.equals(status, "available")){
-                                int f = booksFileHandle.getStatsFromFileBook().indexOf(status);
-                                System.out.println(booksFileHandle.getTitlesFromFileBook().get(f));
+                        for(int i = 0;i < booksFileHandle.getStatsFromFileBook().size();i++){
+                            if(Objects.equals(booksFileHandle.getStatsFromFileBook().get(i),"available")){
+                                System.out.println(booksFileHandle.getTitlesFromFileBook().get(i));
                             }
                         }
                     }
