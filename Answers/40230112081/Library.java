@@ -304,19 +304,28 @@ public class Library {
                     String id = list.get(3);
                     String user_ID = list.get(2);
                     int i = booksFileHandle.getIdFromFileBook().indexOf(id);
+                    int f;
                     if(i != -1){
-                        if(Objects.equals(booksFileHandle.getStatsFromFileBook().get(i), "in-rent")){
-                            System.out.println("this book "+id+" is actually in rent try another books.");
-                            System.out.println("To show available books try show books command.");
-                        }
-                        else{
-                            if(usersFileHandle.getIDInFile().contains(user_ID)){
-                                query = date + "," + user_ID + "," + booksFileHandle.getIdFromFileBook().get(i);
-                                booksFileHandle.change_status_inFileRent(booksFileHandle.getIdFromFileBook().get(i));
-                                rentalFileHandle.add_to_file(query);
+                        if(rentalFileHandle.getRentalsUserID().contains(user_ID)){
+                            f = rentalFileHandle.getRentalsUserID().indexOf(user_ID);
+                            if(!Objects.equals(rentalFileHandle.getRentalsBookID().get(f), id)){
+                                if(Objects.equals(booksFileHandle.getStatsFromFileBook().get(i), "in-rent")){
+                                    System.out.println("this book "+id+" is actually in rent try another books.");
+                                    System.out.println("To show available books try show books command.");
+                                }
+                                else{
+                                    if(usersFileHandle.getIDInFile().contains(user_ID)){
+                                        query = date + "," + user_ID + "," + booksFileHandle.getIdFromFileBook().get(i);
+                                        booksFileHandle.change_status_inFileRent(booksFileHandle.getIdFromFileBook().get(i));
+                                        rentalFileHandle.add_to_file(query);
+                                    }
+                                    else{
+                                        System.out.println("Wrong ID, there is no id in repository like that. :-|");
+                                    }
+                                }
                             }
                             else{
-                                System.out.println("Wrong ID, there is no id in repository like that. :-|");
+                                System.out.println("there is rent just like the rent, try another book.");
                             }
                         }
                     }
@@ -502,7 +511,7 @@ public class Library {
                         }
                     }
                     else if(Objects.equals(list.get(2), "rents")){
-                        for(String line : usersFileHandle.lines_of_file()){
+                        for(String line : rentalFileHandle.lines_of_file()){
                             System.out.println(line);
                         }
                     }
