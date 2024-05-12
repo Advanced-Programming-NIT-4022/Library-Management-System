@@ -391,6 +391,34 @@ public class myFileCLass {
         }
     }
 
+    public void show_booksFile(String type){
+        int flag;
+        if(Objects.equals(type, "-A")){
+            for(String line : lines_of_file()){
+                System.out.println(line);
+            }
+        }
+        else if(Objects.equals(type, "-E")){ // existed books
+            for(String line : getStatsFromFileBook()){
+                if(Objects.equals(line, "available")){
+                    flag = getStatsFromFileBook().indexOf(line);
+                    System.out.println(lines_of_file().get(flag));
+                }
+            }
+        }
+        else if(Objects.equals(type, "-R")){ // existed books
+            for(String line : getStatsFromFileBook()){
+                if(Objects.equals(line, "in-rent")){
+                    flag = getStatsFromFileBook().indexOf(line);
+                    System.out.println(lines_of_file().get(flag));
+                }
+            }
+        }
+        else{
+            System.out.println("Nothing to show. :-| ");
+        }
+
+    }
 
 }
 
