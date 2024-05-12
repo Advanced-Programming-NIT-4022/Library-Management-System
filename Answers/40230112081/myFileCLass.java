@@ -97,12 +97,12 @@ public class myFileCLass {
             BufferedReader reader = new BufferedReader(new FileReader(f));
             String line;
             StringBuilder fileContent = new StringBuilder();
-
+            //ArrayList<String> file_content = new ArrayList<>();
             // Read each line and replace if it matches
             while ((line = reader.readLine()) != null) {
                 if (line.equals(lineToEdit)) {
                     fileContent.append(newLine).append("\n");
-                } else {
+                } else if(!line.equals(lineToEdit)){
                     fileContent.append(line).append("\n");
                 }
             }
@@ -115,6 +115,7 @@ public class myFileCLass {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        deleteEmptyLine();
 
     }
     public int set_id(){
@@ -399,18 +400,16 @@ public class myFileCLass {
             }
         }
         else if(Objects.equals(type, "-E")){ // existed books
-            for(String line : getStatsFromFileBook()){
-                if(Objects.equals(line, "available")){
-                    flag = getStatsFromFileBook().indexOf(line);
-                    System.out.println(lines_of_file().get(flag));
+            for(int i = 0;i < getStatsFromFileBook().size();i++){
+                if(Objects.equals(getStatsFromFileBook().get(i), "available")){
+                    System.out.println(lines_of_file().get(i));
                 }
             }
         }
         else if(Objects.equals(type, "-R")){ // existed books
-            for(String line : getStatsFromFileBook()){
-                if(Objects.equals(line, "in-rent")){
-                    flag = getStatsFromFileBook().indexOf(line);
-                    System.out.println(lines_of_file().get(flag));
+            for(int i = 0;i < getStatsFromFileBook().size();i++){
+                if(Objects.equals(getStatsFromFileBook().get(i), "in-rent")){
+                    System.out.println(lines_of_file().get(i));
                 }
             }
         }
@@ -419,6 +418,41 @@ public class myFileCLass {
         }
 
     }
+
+    public void deleteEmptyLine(){
+        File temp;
+        String line;
+        try {
+            f = new File(dir);
+            temp = new File("temp.txt");
+
+            BufferedReader reader = new BufferedReader(new FileReader(f));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(temp));
+            while((line = reader.readLine()) != null){
+                if(!line.trim().isEmpty()){
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+            reader.close();
+            writer.close();
+
+            if(!f.delete()){
+                System.out.println("Could not to delete");
+                return;
+            }
+            if(temp.renameTo(f)){
+                //System.out.println("Could not to rename");
+                return;
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
 
