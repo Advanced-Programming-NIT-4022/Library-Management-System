@@ -475,10 +475,12 @@ public class Library {
     public void adminUserPanel(User u){
         System.out.println("Welcome " + u.getUser_name());
         System.out.println("This is your admin panel.");
+        ArrayList<String> list = new ArrayList<>();
         String cmd;
         v = new Verifications();
         Scanner scn = new Scanner(System.in);
         int flag;
+        String type;
         while (true){
             System.out.println("Enter command (With Space ,Just one space, Please avoid to enter extra characters)");
             System.out.println("Enter help to ");
@@ -486,6 +488,34 @@ public class Library {
             cmd = scn.nextLine();
             if(Objects.equals(cmd, "help") || Objects.equals(cmd, "Help")){
                 show_helpMenuAdmins();
+            }
+            else if((cmd.contains("lib") || cmd.contains("user")) && (!cmd.contains("  ") || !cmd.contains("*"))){
+                list = v.get_SectionsPanelQuery(cmd);
+                if(Objects.equals(list.get(1), "show") || Objects.equals(list.get(1), "Show")){
+                    if(Objects.equals(list.get(2), "books")){
+                        type = list.get(3);
+                        booksFileHandle.show_booksFile(type);
+                    }
+                    else if(Objects.equals(list.get(2), "users")){
+                        for(String line : usersFileHandle.lines_of_file()){
+                            System.out.println(line);
+                        }
+                    }
+                    else if(Objects.equals(list.get(2), "rents")){
+                        for(String line : usersFileHandle.lines_of_file()){
+                            System.out.println(line);
+                        }
+                    }
+                    else{
+                        System.out.println("Try command in correct way.");
+                    }
+                }
+            }
+            else if(Objects.equals(cmd, "exit")){
+                break;
+            }
+            else{
+                System.out.println("wrong command. try again :-|");
             }
         }
 
