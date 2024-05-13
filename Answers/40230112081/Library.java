@@ -330,17 +330,17 @@ public class Library {
     public void show_helpMenuAdmins(){
         Scanner scn = new Scanner(System.in);
         String cmd;
-        System.out.println("to add book : lib add book_title book_author book_desc");
-        System.out.println("to edit normal user : lib edit (ph/pss/usr) current new_one (usr : username, pss:password, ph : phonenumber");
+        System.out.println("to add book : lib add book_title book_author book_desc"); // done
+        System.out.println("to edit normal user : lib edit (ph/pss/usr) current new_one (usr : username, pss:password, ph : phonenumber"); // done
         System.out.println("to remove user : lib remove user user_id user_name user_phone"); // done
         System.out.println("to remove book : lib remove book book_title book_author book_desc"); // done
-        System.out.println("to remove rent : lib remove rental_date user_id book_id");
+        System.out.println("to remove rent : lib remove rental_date user_id book_id (Attention : enter date in day/Month/year , use month full_name)");
         System.out.println("to promote normal user : user promote user_id user_name user_phone"); // done
         System.out.println("to show users : lib show users");  // done
         System.out.println("to show books : lib show books (-A : all books , -E : only available books , -R : in-rent books)"); // done
         System.out.println("to show rents : lib show rents"); // done
         System.out.println("to exit your panel : back to your panel"); // done
-        System.out.println("to edit your profile :lib edit admin");
+        System.out.println("to edit your profile :lib edit admin"); // done
         System.out.println("***Attention*** : avoid to enter space more than one , avoid to enter any character, Each command must be space separated");
         System.out.println("for entering space in each field : use underline character '_' ");
         System.out.println("to back to your panel from this menu : just enter back");
@@ -617,6 +617,7 @@ public class Library {
         String cmd;
         v = new Verifications();
         Scanner scn = new Scanner(System.in);
+        String date;
         int flag;
         String userID, userName, userPhone;
         String book_t;
@@ -624,7 +625,7 @@ public class Library {
         String type;
         while (true){
             System.out.println("Enter command (With Space ,Just one space, Please avoid to enter extra characters)");
-            System.out.println("Enter help to ");
+            System.out.println("Enter help to see help menu. ");
             System.out.print(">>>");
             cmd = scn.nextLine();
             if(Objects.equals(cmd, "help") || Objects.equals(cmd, "Help")){
@@ -633,27 +634,31 @@ public class Library {
             else if((cmd.contains("lib") || cmd.contains("user")) && (!cmd.contains("  ") || !cmd.contains("*"))){
                 list = v.get_SectionsPanelQuery(cmd);
                 if(Objects.equals(list.get(1), "show") || Objects.equals(list.get(1), "Show")){
-                    if(Objects.equals(list.get(2), "books")){
-                        try {
-                            type = list.get(3);
-                            booksFileHandle.show_booksFile(type);
+                    try {
+                        if(Objects.equals(list.get(2), "books")){
+                            try {
+                                type = list.get(3);
+                                booksFileHandle.show_booksFile(type);
+                            }
+                            catch (Exception e){
+                                System.out.println("Missing Argument,");
+                            }
                         }
-                        catch (Exception e){
-                            System.out.println("Missing Argument,");
+                        else if(Objects.equals(list.get(2), "users")){
+                            for(String line : usersFileHandle.lines_of_file()){
+                                System.out.println(line);
+                            }
                         }
-                    }
-                    else if(Objects.equals(list.get(2), "users")){
-                        for(String line : usersFileHandle.lines_of_file()){
-                            System.out.println(line);
+                        else if(Objects.equals(list.get(2), "rents")){
+                            for(String line : rentalFileHandle.lines_of_file()){
+                                System.out.println(line);
+                            }
                         }
-                    }
-                    else if(Objects.equals(list.get(2), "rents")){
-                        for(String line : rentalFileHandle.lines_of_file()){
-                            System.out.println(line);
+                        else{
+                            System.out.println("Try command in correct way.");
                         }
-                    }
-                    else{
-                        System.out.println("Try command in correct way.");
+                    } catch (Exception e){
+                        System.out.println("Missing args. :-|");
                     }
                 }
                 else if(Objects.equals(list.get(1), "promote") || Objects.equals(list.get(1), "Promote")){
@@ -679,29 +684,66 @@ public class Library {
                     }
                 }
                 else if(Objects.equals(list.get(1), "remove") || Objects.equals(list.get(1), "Remove")){ // remove whole with no change
-                    if(Objects.equals(list.get(2), "user")){
-                        // to remove user : lib remove user user_id user_name user_phone
-                        userID = list.get(3);
-                        flag = usersFileHandle.getIDInFile().indexOf(userID);
-                        if(flag == -1){
-                            System.out.println("This id is not in user repository.");
+                    try {
+                        if(Objects.equals(list.get(2), "user")){
+                            try {
+                                // to remove user : lib remove user user_id user_name user_phone
+                                userID = list.get(3);
+                                flag = usersFileHandle.getIDInFile().indexOf(userID);
+                                if(flag == -1){
+                                    System.out.println("This user_id is not in user repository.");
+                                }
+                                else{
+                                    usersFileHandle.editLineInFile(usersFileHandle.lines_of_file().get(flag), "");
+                                    rentalFileHandle.removeRents(userID);
+                                }
+                            }catch (Exception e){
+                                System.out.println("Missing args. :-|");
+                            }
+                        }
+                        else if(Objects.equals(list.get(2), "book")){
+                            try {
+                                book_t = list.get(3);
+                                flag = booksFileHandle.getTitlesFromFileBook().indexOf(book_t);
+                                if(flag != -1){
+                                    booksFileHandle.editLineInFile(booksFileHandle.lines_of_file().get(flag), "");
+                                }
+                                else{
+                                    System.out.println("There is no book such this book in books repository");
+                                }
+                            }catch (Exception e){
+                                System.out.println("Missing args. :-|");
+                            }
+                        }
+                        else if(Objects.equals(list.get(2), "rent")){
+                            try{
+                                date = list.get(3);
+                                userID = list.get(4);
+                                book_t = list.get(5);
+                                if(!v.dateValidation(date) || !v.userIdValidator(userID)){
+                                    System.out.println("Wrong date/id format try again.");
+                                }
+                                else{
+                                    query = date + "," + userID + "," + book_t;
+                                    if(rentalFileHandle.removeRentByQuery(query)){
+                                        System.out.println("Done ! :-)");
+                                    }
+                                    else{
+                                        System.out.println("There is no rent like that.");
+                                    }
+                                }
+                                //query = date + "," + userID + "," + book_t;
+
+                            }catch (Exception e){
+                                System.out.println("Missing args. :-|");
+                            }
                         }
                         else{
-                            usersFileHandle.editLineInFile(usersFileHandle.lines_of_file().get(flag), "");
+                            System.out.println("Missing arguments. ");
                         }
                     }
-                    else if(Objects.equals(list.get(2), "book")){
-                        book_t = list.get(3);
-                        flag = booksFileHandle.getTitlesFromFileBook().indexOf(book_t);
-                        if(flag != -1){
-                            booksFileHandle.editLineInFile(booksFileHandle.lines_of_file().get(flag), "");
-                        }
-                        else{
-                            System.out.println("There is no book such this book in books repository");
-                        }
-                    }
-                    else{
-                        System.out.println("Missing arguments. ");
+                    catch (Exception e){
+                        System.out.println("Missing Args, Try command in correct way.");
                     }
                 }
                 else if(Objects.equals(list.get(1), "edit") || Objects.equals(list.get(1), "Edit")){
