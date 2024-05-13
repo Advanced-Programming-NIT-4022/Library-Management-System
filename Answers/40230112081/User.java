@@ -21,4 +21,8 @@ public class User {
     public String getPhonenumber() { return this.phonenumber; }
     public String getRole() { return this.role; }
     public String getPassword() { return this.password; }
+
+    public void set_new_username(String new_user){
+        this.user_name = new_user;
+    }
 }
