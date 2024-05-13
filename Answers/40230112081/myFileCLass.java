@@ -419,6 +419,13 @@ public class myFileCLass {
 
     }
 
+    public String getDate_fromSingleLine(String line){ // rentals
+        String date;
+        int f1 = line.indexOf(",");
+        date = line.substring(0, f1);
+        return date;
+    }
+
     public void deleteEmptyLine(){
         File temp;
         String line;
@@ -453,7 +460,23 @@ public class myFileCLass {
         }
     }
 
+    public void  removeRents(String userID){ // remove all rents with this userID in case of remove user for admin
+        for(String line : lines_of_file()){
+            if(line.contains(userID)){
+                editLineInFile(line, "");
+            }
+        }
+    }
 
+    public boolean removeRentByQuery(String query){ // remove rent by query = date+userID+bookID
+        for(String line : lines_of_file()){
+            if(Objects.equals(line, query)){
+                editLineInFile(line, "");
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 
