@@ -1,6 +1,7 @@
 public class Manual {
-    public static void print() {
-        System.out.println("All of commands are :\n");
+    public static void printNormalUser() {
+        // command who am I
+        System.out.println("whoami: show who are you");
 
         // command log in
         System.out.println("lib login <userid> : Log in to your account");
@@ -20,6 +21,11 @@ public class Manual {
         // command exit
         System.out.println("lib exit : exit the program");
 
+        // command return book
+        System.out.println("lib return <bookName> : Return a rented book to the library.");
+    }
+
+    public static void printAdmin() {
         // command add book
         System.out.println("lib add book <name> <author> <subtitle[optional]> : " +
                 "Add a new book to the library.");
@@ -35,8 +41,5 @@ public class Manual {
         // command rent for member
         System.out.println("lib rent <bookName> <memberName> <memberID>" +
                 " : Rent a book for a specific member.");
-
-        // command return book
-        System.out.println("lib return <bookName> : Return a rented book to the library.");
     }
 }
