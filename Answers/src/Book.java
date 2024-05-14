@@ -21,7 +21,7 @@ public class Book {
     }
 
     public void uniqueIDUpdate() {
-        final String SQL_COMMAND = "SELECT BookID FROM BOOKS WHERE Title = ? AND Author = ?";
+        final String SQL_COMMAND = "SELECT BookID FROM books WHERE Title = ? AND Author = ?";
 
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
                 MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
