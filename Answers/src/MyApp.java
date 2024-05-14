@@ -1,5 +1,4 @@
 // main class for handling the CLI
-
 import javax.naming.NoPermissionException;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -86,7 +85,7 @@ public class  MyApp {
         // welcome to library
         System.out.printf("Welcome to %s library.%n", library.getName());
         System.out.println("For more information enter command <lib man>");
-        System.out.println("\nEnter your command:");
+        System.out.println("Enter your command:");
 
         while (true) {
             String command = null;
@@ -153,9 +152,19 @@ public class  MyApp {
     }
 
     public static void CLI(String command) throws IllegalArgumentException, NoPermissionException {
+        if (command.equals("whoami"))
+            if (library.getUser() == null)
+                System.out.println("No one one has logged in yet.");
+            else
+                System.out.println(library.getUser());
         // command lib man
-        if (command.matches("lib\\sman"))
-            Manual.print();
+        else if (command.matches("lib\\sman")) {
+            System.out.println("You can use these commands :\n");
+            if (library.getUser() instanceof Admin)
+                Manual.printAdmin();
+
+            Manual.printNormalUser();
+        }
         // command lib get hrs
         else if (command.matches("lib\\sget\\shrs"))
             System.out.print(library.getOperatingHours());
@@ -218,7 +227,10 @@ public class  MyApp {
                 // if command doesn't have description
                 if (command.equals("")) {
                     Book book = new Book(title.trim(), author.trim());
-                    library.addBook(book);
+                    int bookID = library.addBook(book);
+                    if (bookID != 0)
+                        System.out.printf("Book %s with ID = %d added to library.%n", book.getTitle(),
+                                bookID);
                     return;
                 }
 
@@ -246,7 +258,10 @@ public class  MyApp {
                             "You should use \" character to split string with space");
 
                 Book book = new Book(title.trim(), author.trim(), description.trim());
-                library.addBook(book);
+                int bookID = library.addBook(book);
+                if (bookID != 0)
+                    System.out.printf("Book %s with ID = %d added to library.%n", book.getTitle(),
+                            bookID);
             } else
                 throw new NoPermissionException("You don't have permission to add books!");
         } else if (command.matches("lib return \\w*")) {
