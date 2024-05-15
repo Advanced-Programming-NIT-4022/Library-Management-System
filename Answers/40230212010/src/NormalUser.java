@@ -1,9 +1,9 @@
 public class NormalUser extends User {
-    
+
     private String registrationDate;
 
-    public NormalUser(String name,int UniqueID,int phoneNumber,String registrationDate) {
-        super( name, UniqueID, phoneNumber);
+    public NormalUser(String name,int phoneNumber,String registrationDate) {
+        super( name,  phoneNumber);
         this.registrationDate=registrationDate;
     }
 

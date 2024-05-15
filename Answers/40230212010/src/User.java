@@ -9,7 +9,7 @@ public  class User {
     private List<NormalUser> normalUsersList;
 
 
-    public User(String name,int UniqueID,int phoneNumber) {
+    public User(String name,int phoneNumber) {
         this.name = name;
         this.UniqueID = ++count;
         this.phoneNumber = phoneNumber;
@@ -31,6 +31,13 @@ public  class User {
         }
         }
     }
-    
+    public void addAdmin(String name, int phoneNumber, String password){
+        Admin newAdmin = new Admin(name, phoneNumber, password);
+        adminsList.add(newAdmin);
+    }
+    public void addNormalUser(String name,int phoneNumber,String registrationDate){
+        NormalUser newNormalUser = new NormalUser(name, phoneNumber, registrationDate);
+        normalUsersList.add(newNormalUser);
+    }
         
 }
