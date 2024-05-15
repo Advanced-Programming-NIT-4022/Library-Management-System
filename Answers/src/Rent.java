@@ -1,31 +1,44 @@
 // this class for simulates renting
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.sql.*;
 
-public class Rent {
+public class Rent implements Updatable {
     private Book book;
     private NormalUser person;
-    private String rentalID;
-    private LocalDate rentalDate;
-    private LocalTime rentalTime;
+    private int rentalID;
+    private Timestamp rentalTimestamp;
 
     public Rent(Book book, NormalUser person) {
         this.book = book;
         this.person = person;
-        this.rentalDate = LocalDate.now();
-        this.rentalTime = LocalTime.now();
-        this.rentalID = CreateID();
+        this.rentalTimestamp = new Timestamp(System.currentTimeMillis());
     }
 
-    private String CreateID() {
-        String result = String.valueOf(rentalTime.getSecond());
-        result += String.valueOf(rentalTime.getMinute());
-        result += String.valueOf(rentalTime.getHour());
-        result += String.valueOf(rentalDate.getDayOfYear());
-        result += String.valueOf(rentalDate.getYear());
-        return result;
+    public Rent(Book book, NormalUser person, Timestamp rentalTimestamp) {
+        this.book = book;
+        this.person = person;
+        this.rentalTimestamp = rentalTimestamp;
     }
 
+    public void update() {
+        final String SQL_COMMAND = "SELECT RentalID FROM rents WHERE UserID = ? AND BookID = ?" +
+                "AND ReturnDate = NULL;";
+
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
+                MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
+             PreparedStatement updateRent = connection.prepareStatement(SQL_COMMAND)) {
+
+            updateRent.setInt(1, this.person.getUniqueID());
+            updateRent.setInt(2, this.book.getUniqueID());
+
+            ResultSet resultSet = updateRent.executeQuery();
+            if (resultSet.next())
+                this.rentalID = resultSet.getInt("RentalID");
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            System.err.print("Connection to database failed! Terminating...");
+            System.exit(1);
+        }
+    }
     public Book getBook() {
         return book;
     }
@@ -34,15 +47,11 @@ public class Rent {
         return person;
     }
 
-    public String getRentalID() {
+    public int getRentalID() {
         return rentalID;
     }
 
-    public LocalDate getRentalDate() {
-        return rentalDate;
-    }
-
-    public LocalTime getRentalTime() {
-        return rentalTime;
+    public Timestamp getRentalTimestamp() {
+        return rentalTimestamp;
     }
 }
