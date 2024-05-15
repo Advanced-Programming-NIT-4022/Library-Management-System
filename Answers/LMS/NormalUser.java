@@ -8,9 +8,6 @@ public class NormalUser extends User {
         super("NormalUserName", "NormalUserID", "NormalPhoneNumber");
         
         try{
-            boolean isName = userNameFile.createNewFile();
-            boolean isID = userIDFile.createNewFile();
-            boolean isPhone = phoneNumberFile.createNewFile();
             boolean isDate = dateUserFile.createNewFile();
 
         }catch(IOException e){

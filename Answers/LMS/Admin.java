@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class Admin extends User{
@@ -8,9 +7,6 @@ public class Admin extends User{
         super("AdminUserName", "AdminUserID", "AdminPhoneNumber");
         
         try{
-            boolean isName = userNameFile.createNewFile();
-            boolean isID = userIDFile.createNewFile();
-            boolean isPhone = phoneNumberFile.createNewFile();
             boolean isPass = passAdminsFile.createNewFile();
 
         }catch(IOException e){

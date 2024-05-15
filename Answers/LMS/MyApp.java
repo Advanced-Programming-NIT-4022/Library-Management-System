@@ -150,7 +150,7 @@ public class MyApp {
         while(check){
             System.out.print("\nEnter Your Operate: ");
             String command = cmdScanner.nextLine();
-            if(command.equals(null) || command.length()<3){
+            if(command.equals(null) || command.length()<3 || command.equals("")){
                 System.out.println(RED_BOLD + "Wrong Input !" + RESET);
                 continue;
             }
@@ -316,7 +316,7 @@ public class MyApp {
                         command = command.replace(tmpOrder + ' ' , "");
                         File ownerPass = new File("ownerInfo\\ownerPass.txt");
                         try{
-                            Scanner tmpScanner = new Scanner(ownerInfo);
+                            Scanner tmpScanner = new Scanner(ownerPass);
                             if(tmpScanner.nextLine().equals(command)){
                                 Scanner addingAddmin = new Scanner(System.in);
 

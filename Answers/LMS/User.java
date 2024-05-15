@@ -1,16 +1,19 @@
 import java.io.File;
+import java.io.IOException;
 
 public class User {
-    String userName;
-    File userNameFile = new File(userName+".txt");
-    String userID;
-    File userIDFile = new File(userID+".txt");
-    String phoneNumber;
-    File phoneNumberFile = new File(phoneNumber+".txt");
-
     public User(String userName , String userID , String phoneNumber){
-        this.userName = userName;
-        this.userID = userID;
-        this.phoneNumber = phoneNumber;
+        
+        try {
+            File phoneNumberFile = new File(phoneNumber+".txt");
+            File userIDFile = new File(userID+".txt");
+            File userNameFile = new File(userName+".txt");
+
+            boolean isCreated = userNameFile.createNewFile();
+            isCreated = userIDFile.createNewFile();
+            isCreated = phoneNumberFile.createNewFile();
+        } catch (IOException e) {
+            System.out.println("error 404!\npage not found! " + e);
+        }
     }
 }
