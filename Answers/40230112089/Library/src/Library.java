@@ -360,7 +360,7 @@ public class Library {
                 if (commandSegs[1].equals("-h") && commandSegs.length == 2) {
                     showAllCommand();
                 } else if (commandSegs[1].equals("add")) {
-                    if (commandSegs.length == 5 && commandSegs[2].equals("book") && commandSegs[3].matches("[a-zA-Z0-9_]+(/[a-zA-Z0-9_]+)?") && commandSegs[4].matches("[a-zA-Z_]+(/[a-zA-Z_]+)?")) {
+                    if (commandSegs.length == 5 && commandSegs[2].equals("book") && commandSegs[3].matches("^[a-zA-Z0-9\\/]*$") && commandSegs[4].matches("^[a-zA-Z0-9\\/]*$")) {
 
                         addBook(commandSegs[3].replace("/", " "), commandSegs[4].replace("/", " "));
 
