@@ -5,7 +5,7 @@ public class Book {
     private String author;
     private String description;
     private int uniqueID; // unique id automatically generate in database
-    public boolean availabilityStatus = true;
+    private boolean availabilityStatus = true;
 
     // two arguments constructor
     public Book(String title, String author) {
@@ -20,8 +20,9 @@ public class Book {
         this.description = description;
     }
 
-    public void uniqueIDUpdate() {
-        final String SQL_COMMAND = "SELECT BookID FROM books WHERE Title = ? AND Author = ?";
+    public void update() {
+        final String SQL_COMMAND = "SELECT BookID, AvailabilityStatus FROM books WHERE Title = ? " +
+                "AND Author = ?";
 
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
                 MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
@@ -31,8 +32,10 @@ public class Book {
             selectID.setString(2, this.author);
 
             ResultSet resultSet = selectID.executeQuery();
-            if (resultSet.next())
+            if (resultSet.next()) {
                 this.uniqueID = resultSet.getInt("BookID");
+                this.availabilityStatus = resultSet.getBoolean("AvailabilityStatus");
+            }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             System.err.print("Connection to database failed! Terminating...");
@@ -40,6 +43,23 @@ public class Book {
         }
     }
 
+    public void getStatus(boolean availabilityStatus) {
+        final String SQL_COMMAND = "UPDATE books SET AvailabilityStatus = ? WHERE BookID = ?;";
+
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL, MyApp.DB_USERNAME,
+                MyApp.DB_PASSWORD);
+             PreparedStatement changeStatusCommand = connection.prepareStatement(SQL_COMMAND)){
+
+            changeStatusCommand.setBoolean(1, availabilityStatus);
+            changeStatusCommand.setInt(2, this.uniqueID);
+            changeStatusCommand.executeUpdate();
+
+            this.availabilityStatus = false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.print("Connection to database failed! Terminating...");
+        }
+    }
     public String getTitle() {
         return title;
     }
