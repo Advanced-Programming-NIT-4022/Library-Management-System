@@ -3,12 +3,14 @@ import java.util.UUID;
 
 public class Admin implements Serializable {
     private String fullName;
-    private final String ID;
+    private String ID;
     private String phoneNumber;
     private String password;
+    static int currentID = 0;
     public Admin(String fullName, String phoneNumber, String password){
+        currentID ++;
         this.fullName = fullName;
-        this.ID = UUID.randomUUID().toString();
+        this.ID = String.valueOf(currentID);
         this.phoneNumber = phoneNumber;
         this.password = password;
     }

@@ -6,13 +6,16 @@ import java.time.format.DateTimeFormatter;
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     private String fullName;
-    private  final String ID;
+    private String ID;
     private String phoneNumber;
     private String date_of_registration;
+    static int currentID = 0;
+
 
     public User(String fullName, String phoneNumber){
+        currentID++;
         this.fullName = fullName;
-        this.ID = UUID.randomUUID().toString();
+        this.ID = String.valueOf(currentID);
         this.phoneNumber = phoneNumber;
         this.date_of_registration = getFormattedDate();
     }

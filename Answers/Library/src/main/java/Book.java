@@ -3,14 +3,16 @@ import java.io.Serializable;
 
 public class Book implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final String bookID;
+    private String bookID;
     private String title;
     private String author;
     private boolean availability;
     private String description;
+    static int currentID = 0;
 
     public Book(String title, String author, String description) {
-        this.bookID = UUID.randomUUID().toString();
+        currentID ++;
+        this.bookID = String.valueOf(currentID);
         this.title = title;
         this.author = author;
         this.description = description;

@@ -8,11 +8,13 @@ public class Library {
      private final List<Book> books = new ArrayList<>();
      private final List<Admin> admins = new ArrayList<>();
      private final List<User> users = new ArrayList<>();
+     private final List<Rent> rents = new ArrayList<>();
 
 
      private static final String Book_FILE_NAME = "Books.dat";
      private static final String Admin_FILE_NAME = "Admins.dat";
      private static final String User_FILE_NAME = "Users.dat";
+     private static final String Rent_FILE_NAME = "Rents.dat";
 
 
      private String libName = "NIT";
@@ -28,6 +30,7 @@ public class Library {
           loadBooks();
           loadAdmins();
           loadUsers();
+          loadRents();
      }
      public void addBook(String title, String author, String description){
           if (capacity > 0){
@@ -54,11 +57,30 @@ public class Library {
                     System.out.println(title + " book is not available now!");
           }
      }
-     public void returnBook() {
-          Scanner scanner = new Scanner(System.in);
-          while (true) {
-               System.out.println("Please enter the title of the book you want to return:");
-               String title = scanner.nextLine();
+     public void rentSpecificBook(String bookName,String memberName,String memberID){
+          int x=0,y=0;
+          boolean bookFound =false;
+          boolean userFound =false;
+          for (int i = 0; i < books.size(); i++) {
+               if (books.get(i).getTitle().equalsIgnoreCase(bookName)){
+                    x = i;
+               bookFound = true;
+               }
+
+          }
+          for (int i = 0; i < users.size(); i++) {
+               if (users.get(i).getID().equalsIgnoreCase(memberID)) {
+                    y = i;
+                    userFound = true;
+               }
+          }
+          if (bookFound && userFound){
+          createRent(books.get(x),users.get(y));
+     } else {
+               System.out.println("Error renting book!");
+          }
+     }
+     public void returnBook(String title) {
                boolean found = false;
                for (int i = 0; i < books.size(); i++) {
                     if (books.get(i).getTitle().equalsIgnoreCase(title)){
@@ -70,19 +92,8 @@ public class Library {
                     }
                }
                if (!found) {
-                    System.out.println("Book not found. Would you like to:");
-                    System.out.println("1. Try again");
-                    System.out.println("2. Cancel operation");
-                    System.out.print("Enter option (1 or 2): ");
-                    String option = scanner.nextLine();
-                    if ("2".equals(option)) {
-                         System.out.println("Operation cancelled.");
-                         break;
-                    }
-               } else {
-                    break;
+                    System.out.println("error returning book!");
                }
-          }
      }
 
      public void getAvailableBooks(){
@@ -203,4 +214,56 @@ public class Library {
                }
           }
      }
+
+     //----------------------------------------------------------------------------------------------------------
+     //Rents registries
+
+     public void createRent(Book book,User user){
+          rents.add(new Rent(book,user));
+          rentBook(book.getTitle());
+          saveRents();
+     }
+     public void removeRent(String ID){
+          boolean found = false;
+          for (int i = 0; i < rents.size(); i++) {
+               if (rents.get(i).getRentalID().equalsIgnoreCase(ID)){
+                    rents.remove(rents.get(i));
+                    saveRents();
+                    found = true;
+                    break;
+               }
+          }
+          if (!found){
+               System.out.println("Error returning book!");
+          }
+     }
+     public void showRents(){
+          for (int i = 0; i < rents.size(); i++) {
+               System.out.println(rents.get(i).toString());
+          }
+     }
+
+     private void saveRents(){
+          try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(Rent_FILE_NAME))){
+               oos.writeObject(rents);
+          } catch (IOException e) {
+               System.out.println("Error saving rents: " + e.getMessage());
+          }
+     }
+
+     @SuppressWarnings("unchecked")
+     private void loadRents(){
+          File file = new File(Rent_FILE_NAME);
+          if (file.exists()){
+               try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(Rent_FILE_NAME))){
+                    Object object = ois.readObject();
+                    if (object instanceof List) {
+                         rents.addAll((List<Rent>) object);
+                    }
+               } catch (IOException | ClassNotFoundException e) {
+                    System.out.println("Error loading rents: " + e.getMessage());
+               }
+          }
+     }
+
 }

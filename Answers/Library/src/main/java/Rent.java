@@ -15,15 +15,28 @@ public class Rent implements Serializable {
         this.book = book;
         this.user = user;
         this.rentalID = UUID.randomUUID().toString();
-        this.rentalDate = getRentalDate();
-        this.returnDate = getReturnDate();
+        this.rentalDate = createRentalDate();
+        this.returnDate = createReturnDate();
     }
-    public static String getRentalDate() {
+
+    public String getRentalID() {
+        return rentalID;
+    }
+
+    public String getRentalDate() {
+        return rentalDate;
+    }
+
+    public String getReturnDate() {
+        return returnDate;
+    }
+
+    public static String createRentalDate() {
         LocalDate date = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         return date.format(formatter);
     }
-    public static String getReturnDate() {
+    public static String createReturnDate() {
         LocalDate date = LocalDate.now();
         Period period = Period.ofDays(20);
         LocalDate rentalDate = date.plus(period);
