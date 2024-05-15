@@ -3,6 +3,7 @@ import javax.sql.rowset.JdbcRowSet;
 import javax.sql.rowset.RowSetProvider;
 import java.io.FileNotFoundException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Formatter;
 
 public class Library {
@@ -57,7 +58,7 @@ public class Library {
     // add normal user
     // return the unique ID of the user
     public int addUser(NormalUser user) {
-        final String SQL_COMMAND = "INSERT INTO Users (Name, PhoneNumber, UserType," +
+        final String SQL_COMMAND = "INSERT INTO users (Name, PhoneNumber, UserType," +
                 " RegisterTimestamp) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
@@ -76,15 +77,16 @@ public class Library {
             return 0;
         }
 
-        user.uniqueIDUpdate();
+        user.update();
         return user.getUniqueID();
     }
 
     // add admin user
     // return the unique ID of the user
     public int addUser(User admin, String password) {
-        final String SQL_COMMAND = "INSERT INTO Users (Name, PhoneNumber, UserType, Password) "
+        final String SQL_COMMAND = "INSERT INTO users (Name, PhoneNumber, UserType, Password) "
                 + "VALUES (?, ?, ?, ?)";
+
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
                 MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
              PreparedStatement insertUser = connection.prepareStatement(SQL_COMMAND)) {
@@ -102,7 +104,7 @@ public class Library {
         }
 
         // get the unique id from database
-        admin.uniqueIDUpdate();
+        admin.update();
         return admin.getUniqueID();
     }
 
@@ -110,7 +112,10 @@ public class Library {
         if (user == null || user instanceof NormalUser)
             throw new NoPermissionException("You don't have permission to remove members!");
 
-        for (int i = 0; i < 3; i++) {
+        if (userID < this.user.getUniqueID())
+            throw new NoPermissionException("You don't have permission to remove this member!");
+
+        for (int i = 0;; i++) {
             System.out.print("Enter your password: ");
             String password = MyApp.input.nextLine();
             if (((Admin) user).verify(password))
@@ -121,7 +126,7 @@ public class Library {
                 System.out.println("Invalid password. Try again.");
         }
 
-        final String SQL_COMMAND = "DELETE FROM Users WHERE UserID = ?";
+        final String SQL_COMMAND = "DELETE FROM users WHERE UserID = ?";
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
                 MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
              PreparedStatement deleteUser = connection.prepareStatement(SQL_COMMAND)) {
@@ -136,32 +141,36 @@ public class Library {
     }
 
     // add book
-    public void addBook(Book book) {
+    public int addBook(Book book) {
         final String SQL_COMMAND = "INSERT INTO books (BookID, Title, Author, Description) " +
                 "VALUES (?, ?, ?, ?)";
+
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
                 MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
             PreparedStatement insertBook = connection.prepareStatement(SQL_COMMAND)) {
 
-            insertBook.setString(1, book.getUniqueBookID());
+            insertBook.setInt(1, book.getUniqueID());
             insertBook.setString(2, book.getTitle());
             insertBook.setString(3, book.getAuthor());
             insertBook.setString(4, book.getDescription());
 
             insertBook.executeUpdate();
-
-            // prompt
-            System.out.printf("Book <%s> was successfully saved!%n", book.getTitle());
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             System.err.print("Connection to database failed!");
+            return 0;
         }
+
+        // get the unique id from database
+        book.update();
+
+        return book.getUniqueID();
     }
 
     // login to library
     public User login(String userID) {
         User user = null;
-        final String SQL_COMMAND = "SELECT * FROM Users WHERE UserID = ?";
+            final String SQL_COMMAND = "SELECT * FROM users WHERE UserID = ?";
 
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
                 MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
@@ -182,11 +191,11 @@ public class Library {
             if (resultSet.getString("UserType").equals("admin")) {
                 String password = resultSet.getString("Password");
                 user = new Admin(name, phoneNumber, password);
-                user.uniqueIDUpdate();
+                user.update();
             } else {
                 Timestamp registerTimestamp = resultSet.getTimestamp("RegisterTimestamp");
                 user = new NormalUser(name, phoneNumber, registerTimestamp);
-                user.uniqueIDUpdate();
+                user.update();
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -199,6 +208,7 @@ public class Library {
     public void getAvailableBooks() {
         final String SQl_COMMAND = "SELECT BookID, Title, Author, Description " +
                 "FROM books WHERE AvailabilityStatus = 1";
+
         // connect to database books and query database
         try (JdbcRowSet rowSet = RowSetProvider.newFactory().createJdbcRowSet()) {
 
@@ -235,6 +245,58 @@ public class Library {
             e.printStackTrace();
             System.err.print("Connection to database failed! Terminating...");
             System.exit(1);
+        }
+    }
+
+    // search books by name
+    public ArrayList<Book> searchBook(String bookName) {
+        final String SQL_COMMAND = "SELECT * FROM books WHERE Title = ? AND AvailabilityStatus = ?";
+        ArrayList<Book> resultBooks = new ArrayList<>();
+
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL, MyApp.DB_USERNAME,
+                MyApp.DB_PASSWORD);
+             PreparedStatement searchStatement = connection.prepareStatement(SQL_COMMAND)) {
+
+            searchStatement.setString(1, bookName);
+            searchStatement.setBoolean(2, true);
+
+            ResultSet resultSet = searchStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Book book = new Book(bookName, resultSet.getString("Author"),
+                        resultSet.getString("Description"));
+                book.update();
+                resultBooks.add(book);
+            }
+
+            return resultBooks;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.print("Connection to database failed!");
+            return null;
+        }
+    }
+
+    // add rent to library
+    public int addRent(Rent rent) {
+        final String SQL_COMMAND = "INSERT INTO rents (UserID, BookID, RentalDate) VALUES (?, ?, ?);";
+
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL, MyApp.DB_USERNAME,
+                MyApp.DB_PASSWORD);
+             PreparedStatement addRentCommand = connection.prepareStatement(SQL_COMMAND)){
+
+            addRentCommand.setInt(1, rent.getPerson().getUniqueID());
+            addRentCommand.setInt(2, rent.getBook().getUniqueID());
+            addRentCommand.setTimestamp(3, rent.getRentalTimestamp());
+            addRentCommand.executeUpdate();
+
+            rent.update();
+            rent.getBook().getStatus(false);
+            return rent.getRentalID();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.print("Connection to database failed!");
+            return 0;
         }
     }
 }
