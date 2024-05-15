@@ -1,6 +1,6 @@
 public class Rent {
     private static int count=0;
-    private final String rentID ;
+    private final int rentID ;
     private String rentalDate;
     private Book book;
     private NormalUser user;
@@ -8,7 +8,7 @@ public class Rent {
         this.rentalDate = rentalDate;
         this.book = book;
         this.user = user;
-        this.rentID=++i;
+        this.rentID=++count;
     }
     
 

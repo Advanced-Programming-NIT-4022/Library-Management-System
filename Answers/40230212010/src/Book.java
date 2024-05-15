@@ -1,6 +1,7 @@
+
 public class Book {
     private static int i=0;
-    private final int bookID;
+    private final String bookID;
     private String title;
     private String description;
     private String author;
@@ -9,7 +10,18 @@ public class Book {
         this.author=author;
         this.title=title;
         this.description=description;
-        this.bookID=++i;
+        i++;
+        this.bookID=String.valueOf(i);
         this.isAvailable=true;
     }
+ 
+    public String getBookID() {
+        return bookID;
+    }
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+    
+ 
+    
 }
