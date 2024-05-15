@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidParameterException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -110,6 +111,8 @@ public class  MyApp {
                 System.out.printf("command <%s> %s%n", command.trim(), "Not Found.");
             } catch (NoPermissionException e) {
                 System.out.printf("%s%n", e.getMessage());
+            } catch (InputMismatchException e) {
+                System.out.printf("Invalid input. proccess cancled...");
             }
         }
     }
@@ -151,7 +154,8 @@ public class  MyApp {
         return true;
     }
 
-    public static void CLI(String command) throws IllegalArgumentException, NoPermissionException {
+    public static void CLI(String command) throws IllegalArgumentException, NoPermissionException,
+            InputMismatchException {
         if (command.equals("whoami"))
             if (library.getUser() == null)
                 System.out.println("No one one has logged in yet.");
@@ -337,6 +341,59 @@ public class  MyApp {
             } // end if (library.user instanceof Admin)
             else
                 throw new NoPermissionException("You don't have permission to add members!");
+        } else if (command.matches("lib\\srent\\s.+")) {
+            if (library.getUser() == null)
+                System.out.println("You should first login to rent a book.");
+            else if (library.getUser() instanceof Admin)
+                System.out.println("You are admin!You can't rent a book:)");
+            else {
+                String bookName = command.substring(8).trim();
+                if (bookName.startsWith("\""))
+                    bookName = bookName.substring(1, bookName.length() - 1);
+
+                ArrayList<Book> books = library.searchBook(bookName);
+                Rent rent;
+                if (books.size() == 0) {
+                    System.out.printf("book %s not found or not available!%n", bookName);
+                    return;
+                } else if (books.size() == 1)
+                    rent = new Rent(books.get(0), (NormalUser) library.getUser());
+                else {
+                    System.out.println("Which book do you want?");
+
+                    // show selections
+                    int numberOfRows = 1;
+                    for (Book book : books) {
+                        System.out.printf("%d. ID = %d, Author = %d", numberOfRows,
+                                book.getUniqueID(), book.getAuthor());
+                        numberOfRows++;
+                    }
+
+                    // select choice
+                    int choice = 1;
+                    for (int i = 0; i < 3; i++) {
+                        System.out.print(">>>");
+                        choice = input.nextInt();
+                        if (choice > numberOfRows) {
+                            if (i == 2) {
+                                System.out.println("3 invalid choice...");
+                                return;
+                            }
+                            System.out.printf("Invalid choice. please try again.");
+                        }
+                        else
+                            break;
+                    }
+
+                    // create rent class
+                    rent = new Rent(books.get(choice - 1), (NormalUser) library.getUser());
+                }
+                int rentalID = library.addRent(rent);
+                if (rentalID == 0)
+                    return;
+                System.out.println("You rented this book successfully.");
+                System.out.printf("rental ID = %d%n", rentalID);
+            }
         } else if (command.matches("lib\\sexit")) {
             //command lib exit
             System.out.print("Bye.");
