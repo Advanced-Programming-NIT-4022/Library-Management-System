@@ -364,7 +364,7 @@ public class Library {
 
                         addBook(commandSegs[3].replace("/", " "), commandSegs[4].replace("/", " "));
 
-                    } else if (commandSegs.length == 6 && commandSegs[2].equals("user") && commandSegs[3].matches("[a-zA-Z0-9_]+(/[a-zA-Z0-9_]+)?") && commandSegs[4].matches("09[0-9]{9}")) {
+                    } else if (commandSegs.length == 6 && commandSegs[2].equals("user") && commandSegs[3].matches("^[a-zA-Z0-9\\/]*$") && commandSegs[4].matches("09[0-9]{9}")) {
                         addUser(commandSegs[3].replace("/", " "), commandSegs[4], commandSegs[5]);
                     } else {
                         System.out.println("Wrong try again");
