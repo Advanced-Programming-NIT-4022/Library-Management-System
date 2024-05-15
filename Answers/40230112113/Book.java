@@ -30,8 +30,16 @@ public class Book
     {
         return IsAvailable;
     }
+    public Boolean setIsAvailable(Boolean newIsAvailable)
+    {
+        return IsAvailable=newIsAvailable;
+    }
     public int getBookID()
     {
         return BookID;
+    }
+    public String toString()
+    {
+        return "Title: "+Title+"Description: "+Description+"Author: "+Author+"BookID: "+BookID;
     }
 }

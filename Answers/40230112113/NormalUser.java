@@ -15,7 +15,7 @@ public class NormalUser extends User
         super(name, ID, number);
         this.Userdate=Userdate;
     }
-    public String gerUserDate()
+    public String getUserDate()
     {
         return Userdate;
     }

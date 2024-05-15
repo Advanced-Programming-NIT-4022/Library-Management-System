@@ -6,7 +6,7 @@ public class User
     public User(String name , int ID , int number)
     {
         this.name=name;
-        this.ID=ID;
+        this.ID=ID++;
         this.number=number;
     }
 
@@ -22,4 +22,10 @@ public class User
     {
         return ID;
     }
+    //I had to search so many times to find this cool thing here :>
+    //I'm doing this so that i can work with arraylist easily
+    /*public String toString()
+    {
+        return name+ID+number;
+    }*/
 }

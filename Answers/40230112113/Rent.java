@@ -33,4 +33,8 @@ public class Rent
     {
         return Rentdate;
     }
+    public String toString()
+    {
+        return RentID+Rentdate;
+    }
 }

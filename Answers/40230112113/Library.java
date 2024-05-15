@@ -33,6 +33,9 @@ public class Library
         this.users=new ArrayList<User>();
         this.rents=new ArrayList<Rent>();
     }
+    int BookID=1;
+    int UserID=1;
+    int RentID=1;
     public String getWorkinghours()
     {
         return Workinghours;
@@ -40,8 +43,12 @@ public class Library
 
     public void addbook()
     {
-
-        Book book = new     
+        String title=sc.nextLine();
+        String description=sc.nextLine();
+        String author=sc.nextLine();
+        Boolean availability=sc.nextBoolean();
+        Book newbook = new Book(title, description, availability, author, BookID++);
+        books.add(newbook);
     }
 
     public void showbooks()
@@ -65,18 +72,42 @@ public class Library
 
     }
 
+    public void Removebook()
+    {
+        String booktitle=sc.nextLine();
+        int a = books.indexOf(booktitle);
+        books.remove(a);
+    }
 
 
 
     //***************** checking system******************//
-    public Boolean CheckPassword()
+    public Boolean CheckPassword(String password, Admin admin)
     {
-        
+        boolean hm=false;
+        for (User i : users)
+        {
+            if (password.equals(admin.getPassword()))
+            {
+                hm=true;
+                break;
+            }
+        }
+        return hm;
     }
 
-    public Boolean CheckName()
+    public Boolean CheckName(String name)
     {
-        Admin admin = ;
+        boolean hm=false;
+        for (User i : users)
+        {
+            if (name.equalsIgnoreCase(i.getName()))
+            {
+                hm=true;
+                break;
+            }
+        }
+        return hm;
     }
 
     public Boolean Checknumber(String num)
