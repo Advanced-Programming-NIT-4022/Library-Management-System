@@ -1,6 +1,6 @@
 public  class User {
     private String name;
-    private int UniqueID;
+    private final int UniqueID;
     private int phoneNumber;
     public User(String name,int UniqueID,int phoneNumber) {
         this.name = name;
