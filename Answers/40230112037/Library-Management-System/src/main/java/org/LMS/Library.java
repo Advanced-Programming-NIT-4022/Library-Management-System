@@ -75,9 +75,9 @@ public class Library {
 
     void addBook(Book book) throws SQLException {
         preparedStatement = connection.prepareStatement("INSERT INTO Books (title,author,description) VALUES (?, ?, ?)");
-        preparedStatement.setString(1, book.title);
-        preparedStatement.setString(2, book.author);
-        preparedStatement.setString(3, book.description);
+        preparedStatement.setString(1, book.getTitle());
+        preparedStatement.setString(2, book.getAuthor());
+        preparedStatement.setString(3, book.getTitle());
         preparedStatement.executeUpdate();
     }
 
