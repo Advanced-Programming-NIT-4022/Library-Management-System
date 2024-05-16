@@ -12,6 +12,8 @@ public class CLI extends Commands {
                 case 2:
                     normalUserClearance(currentID);
                     break;
+                case 3:
+                    break;
                 default:
                     stay = false;
                     break;

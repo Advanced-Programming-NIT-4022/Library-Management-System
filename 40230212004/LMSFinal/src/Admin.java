@@ -21,12 +21,12 @@ public class Admin {
     }
 
     public int sign_in_admin() {
-        Scanner sc = new Scanner(System.in);
-        Scanner bc = new Scanner(System.in);
         String password = "";
         int id = 0;
         do {
             try {
+                Scanner sc = new Scanner(System.in);
+                Scanner bc = new Scanner(System.in);
                 System.out.println("Please enter your ID :");
                 id = sc.nextInt();
                 System.out.println("Please enter your password :");

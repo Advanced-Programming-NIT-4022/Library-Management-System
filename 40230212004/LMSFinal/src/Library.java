@@ -6,12 +6,12 @@ public class Library {
     private String libraryName;
     private int capacity;
     private HashMap<String,String> operatingHours = new HashMap<>();
-    static HashMap<Integer,Integer> rentalID_bookID = new HashMap<>();
-    static HashMap<Integer, Integer> rentalID_userID = new HashMap<>();
-    static HashMap<Integer, LocalDateTime> rentalID_date = new HashMap<>();
-    HashMap<Integer,Integer> permanentRentalID_bookID = new HashMap<>();
-    HashMap<Integer, Integer> permanentRentalID_userID = new HashMap<>();
-    HashMap<Integer, LocalDateTime> permanentRentalID_date = new HashMap<>();
+    public static HashMap<Integer,Integer> rentalID_bookID = new HashMap<>();
+    public static HashMap<Integer, Integer> rentalID_userID = new HashMap<>();
+    public static HashMap<Integer, LocalDateTime> rentalID_date = new HashMap<>();
+    public static HashMap<Integer,Integer> permanentRentalID_bookID = new HashMap<>();
+    public static HashMap<Integer, Integer> permanentRentalID_userID = new HashMap<>();
+    public static HashMap<Integer, LocalDateTime> permanentRentalID_date = new HashMap<>();
     public int getKey(int value , HashMap<Integer,Integer> map) {
         int ID = 0;
         for (int i : map.keySet()) {
@@ -22,10 +22,10 @@ public class Library {
         return ID;
     }
     public String getHours() {
-        Scanner sc = new Scanner(System.in);
         String hours = "";
         do {
             try {
+                Scanner sc = new Scanner(System.in);
                 hours = sc.nextLine();
             }catch (Exception e) {
                 System.out.println("Error illegal enrty.");
@@ -34,11 +34,11 @@ public class Library {
         return hours;
     }
     public void setLibraryName() {
-        Scanner sc = new Scanner(System.in);
         String name = "";
         System.out.println("Please enter the name of the library :");
         do{
             try {
+                Scanner sc = new Scanner(System.in);
                 name = sc.nextLine();
             }catch (Exception e) {
                 System.out.println("Please enter the name of the library :");
@@ -50,11 +50,11 @@ public class Library {
         System.out.println("Library name : " + libraryName);
     }
     public void setCapacity() {
-        Scanner sc = new Scanner(System.in);
         int capacty = -1;
         System.out.println("Please enter the capacity of the library :");
         do{
             try {
+                Scanner sc = new Scanner(System.in);
                 capacty = sc.nextInt();
             }catch (Exception e) {
                 System.out.println("Please enter the capacity of the library :");
@@ -92,7 +92,7 @@ public class Library {
     public void show_rental_history() {
         System.out.println("Rent ID | User ID | book ID | Date");
         System.out.println("----------------------------------");
-        for (int rid : rentalID_userID.keySet()) {
+        for (int rid : permanentRentalID_userID.keySet()) {
             System.out.println(rid + " | " + permanentRentalID_userID.get(rid) + " | " + permanentRentalID_bookID.get(rid) + " | " + permanentRentalID_date.get(rid));
             System.out.println("----------------------------------");
         }

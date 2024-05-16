@@ -11,12 +11,12 @@ public class Book {
     private static HashMap<Integer,String> bookID_description = new HashMap<>();
     private static HashMap<Integer,availability> bookID_availability = new HashMap<>();
     public void add_book(int newbookID) {
-        Scanner sc = new Scanner(System.in);
         String title = "";
         String author = "";
         String description = "";
         do{
             try {
+                Scanner sc = new Scanner(System.in);
                 System.out.println("Please enter the name of the book.");
                 title = sc.nextLine();
                 System.out.println("Please enter the name of the author.");
@@ -34,11 +34,11 @@ public class Book {
         System.out.println("Book added successfully.");
     }
     public void remove_book() {
-        Scanner sc = new Scanner(System.in);
         int bookID = 0;
         do {
             System.out.println("Please enter ID of the book.");
             try {
+                Scanner sc = new Scanner(System.in);
                 bookID = sc.nextInt();
             }catch (Exception e) {
                 System.out.println("Error : Illegal entry.");

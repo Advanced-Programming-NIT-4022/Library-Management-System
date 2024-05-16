@@ -7,10 +7,10 @@ public class Rent extends Library {
     Book book = new Book();
     User user = new User();
     public void rent(int userID) {
-        Scanner sc = new Scanner(System.in);
         String bookname = "";
         do{
             try {
+                Scanner sc = new Scanner(System.in);
                 System.out.println("Please enter the name of the book.");
                 bookname = sc.nextLine();
             }catch (Exception e) {
@@ -24,6 +24,7 @@ public class Rent extends Library {
             int bookID = 0;
             do {
                 try {
+                    Scanner sc = new Scanner(System.in);
                     bookID = sc.nextInt();
                 }catch (Exception e) {
                     System.out.println("Please enter a valid book ID :");
@@ -45,14 +46,14 @@ public class Rent extends Library {
     public void rentForSb(String bookname) {
         if (book.checkIfAvailable(bookname)) {
             System.out.println("Please enter the ID of the desired book and the ID of the other member :");
-            Scanner sc = new Scanner(System.in);
-            Scanner bc = new Scanner(System.in);
             ArrayList<Integer> availablBookID = new ArrayList<>();
             availablBookID = book.availableIDs(bookname);
             int bookID = 0;
             int userID = 0;
             do {
                 try {
+                    Scanner sc = new Scanner(System.in);
+                    Scanner bc = new Scanner(System.in);
                     System.out.println("Book ID :");
                     bookID = sc.nextInt();
                     System.out.println("User ID :");
@@ -75,7 +76,6 @@ public class Rent extends Library {
     }
     public void returnBook(int userID) {
         System.out.println("Which book do you wish to return?");
-        Scanner sc = new Scanner(System.in);
         if (rentalID_userID.containsValue(userID)) {
             int rentID = getKey(userID,rentalID_userID);
             System.out.println("Rental ID | Book ID | Name | Date\n---------------------------------");
@@ -89,6 +89,7 @@ public class Rent extends Library {
             int selected = 0;
             do {
                 try {
+                    Scanner sc = new Scanner(System.in);
                     selected = sc.nextInt();
                 }catch (Exception e) {
                     System.out.println("Error : Illegal entry.");
