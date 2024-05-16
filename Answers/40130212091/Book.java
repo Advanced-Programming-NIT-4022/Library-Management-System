@@ -1,9 +1,9 @@
 
 public class Book extends Library {
-    int bookID;
-    String title, author;
-    boolean availabilityStatus;
-    String description;
+    private int bookID;
+    private String title, author;
+    private boolean availabilityStatus;
+    private String description;
 
     private int i = 100;
 
@@ -15,4 +15,26 @@ public class Book extends Library {
         this.bookID = ++i;
 
     }
+
+    public String getTitle(){
+        return title;
+    }
+
+    public String getAuthor(){
+        return author;
+    }
+
+    public boolean getAvailabilityStatus(){
+        return availabilityStatus;
+    }
+
+    public void setAvailabilityStatus(boolean c){
+        availabilityStatus = c;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+
 }

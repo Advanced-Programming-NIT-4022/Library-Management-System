@@ -6,48 +6,62 @@ public class Library{
 
     private String operatingHours = "8:00 _ 21:00";
 
-    String[] bookRepository;
 
     private ArrayList<Book> bookList = new ArrayList<>();
-    private  ArrayList<User> userList = new ArrayList<>();
+    private  ArrayList<NormalUser> userList = new ArrayList<>();
     private ArrayList<Rent> rentList = new ArrayList<>();
 
 
     public String getHours() {
         return operatingHours;
     }
+    public String getLibraryName(){
+        return libraryName;
+    }
 
-    public void addBook(String name, String Id, String subtitle){
-        Book book = new Book(name, Id, subtitle);
+    public int getCapacity(){
+        return capacity;
+    }
+
+    public void addBook(String name, String author, String subtitle){
+        Book book = new Book(name, author, subtitle);
         bookList.add(book);
     }
 
-    public void addMember(String name, String password){
-        Admin admin = new Admin(name, password);
-        userList.add(admin);
+    public void addMember(String name, String phoneNumber){
+        NormalUser normalUser = new NormalUser( name,  phoneNumber);
+        userList.add(normalUser);
     }
 
-    public void rentBook(String bookName){
-        for (int i = 0; i < bookList.size(); i++){
-            if (bookList.get(i).title == bookName){
-                if (bookList.get(i).availabilityStatus){
-                    Rent rent = new Rent(bookName);
-                    rentList.add(rent);
-                    return;
+    public void rentBook(String bookName, String userName){
+        for (int i = 0; i < userList.size(); i++){
+            if (userList.get(i).getName() == userName){
+                for (int j = 0; j < bookList.size(); j++){
+                    if (bookList.get(j).getTitle() == bookName){
+                        if (bookList.get(j).getAvailabilityStatus()){
+                            Rent rent = new Rent(userList.get(i), bookList.get(j));
+                            rentList.add(rent);
+                            System.out.println("successful");
+                            return;
+                        }
+                        else {
+                            System.out.println("Book Is Unavailable");
+                            return;
+                        }
+                    }
                 }
-                else {
-                    System.out.println("Book Is Unavailable");
-                    return;
-                }
+                System.out.println("book not found");
+                return;
             }
         }
-        System.out.println("book not found");
+        System.out.println("user not found");
     }
 
     public void removeMember(String memberId){
         for (int i = 0; i < userList.size(); i++){
-            if (userList.get(i).Id == memberId){
+            if (userList.get(i).getId() == memberId){
                 userList.remove(i);
+                System.out.println("successful");
                 return;
             }
         }
@@ -56,23 +70,26 @@ public class Library{
 
     public void returnBook(String bookName){
         for (int i = 0; i < bookList.size(); i++){
-            if(bookList.get(i).title == bookName){
-                bookList.get(i).availabilityStatus = true;
-            }
-        }
-        for (int i = 0; i < rentList.size(); i++){
-            if (rentList.get(i).bookObject == bookName){
-                rentList.remove(i);
-                return;
+            if(bookList.get(i).getTitle() == bookName){
+                bookList.get(i).setAvailabilityStatus(true);
+                for (int j = 0; j < rentList.size(); j++){
+                    if (rentList.get(j).getBookObject().getTitle() == bookName){
+                        rentList.remove(j);
+                        System.out.println("successful");
+                        return;
+                    }
+                }
+                System.out.println("book not found");
             }
         }
         System.out.println("book not found");
     }
 
+
     public void availableBooks(){
         for (int i = 0; i < bookList.size(); i++){
-            if(bookList.get(i).availabilityStatus){
-                System.out.println(bookList.get(i).title + "\n");
+            if(bookList.get(i).getAvailabilityStatus()){
+                System.out.println(bookList.get(i).getTitle() + "\n");
             }
         }
     }

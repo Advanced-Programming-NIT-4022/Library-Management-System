@@ -2,83 +2,69 @@
 import java.util.Scanner;
 
 public class MyApp {
-    public static void main(String[] args) {
-        // create library object
-        Library library = new Library();
 
+    public static void main(String[] args)  {
+        Library library = new Library();
+        System.out.println("Hello welcome to " + library.getLibraryName());
+        System.out.println("capacity : " + library.getCapacity());
+        System.out.println("enter a command");
 
         Scanner command = new Scanner(System.in);
-        String input = command.nextLine();
-        String[] order = input.split(" ");
-        int i = 0;
-        while(true){
-            if(order[i] == "lib"){
-                i++;
-                if(order[i] == "add"){
-                    i++;
-                    if(order[i] == "book"){
-                        i++;
-                        library.addBook(order[i], order[i + 1], order[i + 2]);
+        String input;
+        while(true) {
+            System.out.println("~~~  ");
+            input = command.nextLine();
+            if (input.equalsIgnoreCase("exit")){
+                break;
+            }
+            commandLine(input.split(" "));
+        }
+        command.close();
+    }
+
+    public static void commandLine(String[] order){
+        Library library = new Library();
+        try {
+            if (order[1].equals("lib")) {
+                if (order[2].equals("add")) {
+                    if (order[3].equals("book")) {
+                        library.addBook(order[4], order[4], order[5]);
+                    } else if (order[3].equals("member")) {
+                        library.addMember(order[4], order[5]);
                     }
-                    else if(order[i] == "member"){
-                        i++;
-                        library.addMember(order[i], order[i + 1]);
-                    }
-                    else {
-                        try {
-                            throw new Exception("Enter a correct command");
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-                else if(order[i] == "rent"){
-                    i++;
-                    library.rentBook(order[i]);
-                }
-                else if(order[i] == "get"){
-                    i++;
-                    if(order[i] == "hrs"){
+                } else if (order[2].equals("rent")) {
+                    library.rentBook(order[4], order[5]);
+                } else if (order[2].equals("get")) {
+                    if (order[3].equals("hrs")) {
                         System.out.println(library.getHours());
-                    }
-                    else if(order[i].equals("available")){
-                        i++;
-                        if (order[i].equals("books")){
+                    } else if (order[3].equals("available")) {
+                        if (order[4].equals("books")) {
                             library.availableBooks();
-                        }else {
-                            System.out.println("enter a correct command");
                         }
                     }
-                    else{
-                        System.out.println("enter a correct command");
+                } else if (order[2] == "remove") {
+                    if (order[3] == "member") {
+                        library.removeMember(order[4]);
                     }
-                } else if (order[i] == "remove") {
-                    i++;
-                    if (order[i] == "member"){
-                        i++;
-                        library.removeMember(order[i]);
-                    }
-                    else{
-                        System.out.println("Enter a correct command");
-                    }
-                } else if (order[i] == "return") {
-                    i++;
-                    library.returnBook(order[i]);
-                } else{
-                    try {
-                        throw new Exception("Enter a correct command");
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+                } else if (order[2].equals("return")) {
+                    library.returnBook(order[4]);
+                }
+                else if (order[2].equals("help")){
+                    System.out.println("lib add book <name> <author> <subtitle>: Add a new book to the library.\n" +
+                            "lib get hrs: Retrieve library operating hours.\n" +
+                            "lib rent <bookName>: Rent a book from the library.\n" +
+                            "lib add member <studentID> <password>: Add a new member to the library (admin privilege required).\n" +
+                            "lib rent <bookName> <memberName> <memberID>: Rent a book for a specific member.\n" +
+                            "lib get available books: View available books for rental.\n" +
+                            "lib remove member <memberID>: Remove a member from the library (admin privilege required).\n" +
+                            "lib return <bookName>: Return a rented book to the library.\n"+
+                            "lib add admin <AdminName> <PhoneNumber>: Add a new admin to the library\n" +
+                            ">>> ");
                 }
             }
-            else {
-                try {
-                    throw new Exception("Enter a correct command");
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("enter a correct command");
         }
     }
 }
