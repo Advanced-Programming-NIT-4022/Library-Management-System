@@ -3,8 +3,8 @@ import java.time.LocalDate;
 
 public class Rent {
     private static int firstId = 1;
-    private static Book book;
-    private static NormalUser normalUser;
+    private static String bookname;
+    private static String normalUsername;
     private static String RentalId;
     private static LocalDate RentalDate;
 
@@ -14,18 +14,17 @@ public class Rent {
         return (ID);
     }
 
-    public Rent(Book book, NormalUser normalUser,String RentalId,LocalDate RentalDate){
-        this.book = book;
-        this.normalUser = normalUser;
+    public Rent(String bookname, String normalUsername,String RentalId){
+        this.bookname = bookname;
+        this.normalUsername = normalUsername;
         this.RentalId = idgenerator();
-        this.RentalDate = RentalDate;
         }
 
-    public static Book getBook(){
-        return book;
+    public static String getBookname(){
+        return bookname;
     }
-    public static NormalUser getNormalUser(){
-        return normalUser;
+    public static String getNormalUsername(){
+        return normalUsername;
     }
     public static String getRentalId(){
         return RentalId;

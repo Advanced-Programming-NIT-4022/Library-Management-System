@@ -31,7 +31,7 @@ public class Library {
         }
     }
     public void adduser(NormalUser normalUser){
-        UserRegistery.put(NormalUser.getId(), normalUser);
+        UserRegistery.put(NormalUser.getName(), normalUser);
         System.out.println("The user " + NormalUser.getName() + "has been added to the library.");
     }
     public void removebook(Book book){
@@ -43,24 +43,25 @@ public class Library {
             System.out.println("we didnt find the book.");
         }
     }
-    public void removeuser(NormalUser normalUser){
-        if (UserRegistery.containsValue(normalUser)){
-            UserRegistery.remove(normalUser);
+    public void removeuser(String normalUsername){
+        if (UserRegistery.containsValue(normalUsername)){
+            UserRegistery.remove(normalUsername);
             System.out.println("User removed from the library.");
         }
         else{
             System.out.println("user not found.");
         }
     }
-    public void rentbook(NormalUser normalUser, Book book, String RentalId){
-        Rent newrent = new Rent(book, normalUser, RentalId, Rent.getRentalDate());
+    public void rentbook(String bookname, String normalUsername, String RentalId){
+        Rent newrent = new Rent(Rent.getBookname(), Rent.getNormalUsername(), Rent.getRentalId());
         RentalRegistery.add(newrent);
         System.out.println("book added sucssesfully.");
     }
-    public void returnbook(NormalUser normalUser, Book book){
+    public void returnbook(String bookname){
         for (int i = 0; i<RentalRegistery.size(); i++){
-            Rent r = RentalRegistery.get(i);
-            if (r.getBook().equals(book) && r.getNormalUser().equals(normalUser)){
+            Rent r =RentalRegistery.get(i);
+
+            if (r.getBookname().equals(bookname)){
                 RentalRegistery.remove(r);
                 System.out.println("Book has been returned sucssesfully.");
             }
@@ -72,9 +73,11 @@ public class Library {
     public static String getname(){
         return name;
     }
+
     public static int getcapacity(){
         return capacity;
     }
+
     public static ArrayList<Book> getbookRepository(){
         return bookRepository;
     }

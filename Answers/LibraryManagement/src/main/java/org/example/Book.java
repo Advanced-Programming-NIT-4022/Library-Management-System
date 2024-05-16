@@ -2,13 +2,13 @@ package org.example;
 
 public class Book {
     private static int firstId = 1;
-    private String Id;
+    private static String Id;
     private static String Title;
     private static String Author;
     private static Boolean status;
     private static String Description;
 
-    public Book(String Id, String Title, String Author, boolean status, String Description){
+    public Book(String Title, String Author, String Description){
         this.Id = idgenerator();
         this.Title = Title;
         this.Author = Author;
@@ -26,7 +26,7 @@ public class Book {
         firstId+=firstId;
         return(ID);
     }
-    public String getId() {
+    public static String getId() {
         return Id;
     }
 
@@ -42,4 +42,7 @@ public class Book {
         return status;
     }
 
+    public static String getDescription(){
+        return Description;
+    }
 }
