@@ -1,46 +1,54 @@
 package org.example;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-public class Library {
-    private String LibraryName;
-    private int capacity;
-    private int operatingHours;
-    private List<Book>bookRepo;
-    private List<User>userRegistries;
-    private List<Rent>rentalRegistries;
-    public Library (String LibraryName,int capacity, int operatingHours)
-    {
-        this.LibraryName= LibraryName;
-        this.capacity= capacity;
-        this.operatingHours= operatingHours;
-        this.bookRepo= new ArrayList<>();
-        this.userRegistries= new ArrayList<>();
-        this.rentalRegistries= new ArrayList<>();
+public class Rent {
+    public void setBook(Book book) {
+        this.book = book;
     }
-    public void addBook(Book book)
-    {
-        bookRepo.add(book);
+
+    public void setNormalUser(NormalUser normalUser) {
+        this.normalUser = normalUser;
     }
-    public void addUser(User user)
-    {
-        userRegistries.add(user);
+
+    public void setRentalID(int rentalID) {
+        this.rentalID = rentalID;
     }
-    public void rentBook(Book book, NormalUser user, int rentalID, Date rentalDate)
-    {
-        Rent rent = new Rent(book, user, rentalID, rentalDate);
-        rentalRegistries.add(rent);
-        book.setAvailability_status(false);
+
+    public void setRentalDate(Date rentalDate) {
+        this.rentalDate = rentalDate;
     }
-    public void returnBook(Book book)
-    {
-        book.setAvailability_status(true);
+
+    private Book book;
+    private NormalUser normalUser;
+    private int rentalID;
+
+    public Book getBook() {
+        return book;
     }
-    public void removeUser (User user)
-    {
-        userRegistries.remove(user);
+
+    public NormalUser getNormalUser() {
+        return normalUser;
     }
+
+    public int getRentalID() {
+        return rentalID;
+    }
+
+    public Date getRentalDate() {
+        return rentalDate;
+    }
+
+    private Date rentalDate;
+    public Rent (Book book, NormalUser normalUser, int rentalID, Date rentalDate)
+    {
+        this.book = book;
+        this.normalUser= normalUser;
+        this.rentalID = rentalID;
+        this.rentalDate= rentalDate;
+    }
+
+
+
 
 }
