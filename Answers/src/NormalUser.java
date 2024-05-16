@@ -15,6 +15,29 @@ public class NormalUser extends User implements Updatable {
         this.registerTimestamp = new Timestamp(System.currentTimeMillis());
     }
 
+    public NormalUser(int userID, String name) throws Exception {
+        super(userID, name);
+        final String SQL_COMMAND = "SELECT RegisterTimeStamp FROM users WHERE UserID = ? " +
+                "AND UserType = 'normal';";
+
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL, MyApp.DB_USERNAME,
+                MyApp.DB_PASSWORD);
+             PreparedStatement selectUser = connection.prepareStatement(SQL_COMMAND)){
+
+            selectUser.setInt(1, userID);
+            ResultSet resultSet = selectUser.executeQuery();
+
+            if (resultSet.next()) {
+                registerTimestamp = resultSet.getTimestamp("RegisterTimeStamp");
+            } else
+                throw new Exception("User with ID = " + userID + "is not a normal user.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.print("Connection to database failed! Terminating...");
+            System.exit(1);
+        }
+    }
+
     public Timestamp getRegisterTimestamp() {
         return registerTimestamp;
     }
@@ -47,6 +70,7 @@ public class NormalUser extends User implements Updatable {
     public void update() {
         super.update();
         final String SQL_COMMAND = "SELECT * FROM rents WHERE UserID = ? AND ReturnDate IS NULL;";
+        rentBooks.clear();
 
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL, MyApp.DB_USERNAME,
                 MyApp.DB_PASSWORD);
