@@ -15,7 +15,7 @@ public class User extends UniqueID {
     {
         this.Name = name;
         this.PhoneNumber = phoneNumber;
-        this.IDUser = getUniqueID();
+        this.IDUser = getUniqueIDString();
     }
     public ArrayList<String> getPeople() { return people; }
     public void setPeople(ArrayList<String> people) { this.people = people; }
@@ -52,34 +52,30 @@ public class User extends UniqueID {
         } catch (IOException e){
             System.out.println("Wrong");
         }
-        book.getTotal().clear();
     }
     public void ReadFileBook(String filepath)
     {
+        ArrayList<String> test = new ArrayList<>();
+        book.getTotal().clear();
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath));
             String line;
-            book.getTotal().clear();
             while ((line = bufferedReader.readLine()) != null)
             {
-                book.getTotal().add(line);
+                test.add(line);
             }
             bufferedReader.close();
         } catch (IOException r){
             System.out.println("An error occurred.");
         }
-        book.setTotal(book.getTotal());
+        book.setTotal(test);
     }
-    public void AddBook()
+    public void AddBook(String name , String author , String des)
     {
-        ReadFileBook("Book.txt");
-        System.out.println("Enter the name of the book");
-        Scanner scanner = new Scanner(System.in);
-        book.setTitle(scanner.nextLine());
-        System.out.println("Enter the author of the book");
-        book.setAuthor(scanner.nextLine());
-        System.out.println("Write a description of the book in one line");
-        book.setDescription(scanner.nextLine());
+        book.setIDBook(String.valueOf(getUniqueIDInt() + 1));
+        book.setTitle(name);
+        book.setAuthor(author);
+        book.setDescription(des);
         book.setAvailabilityStatus(true);
         for (int i = 0; i < book.getTotal().size(); i++)
         {
@@ -91,20 +87,19 @@ public class User extends UniqueID {
             }
             else
             {
-                setUniqueID(FindBigID(book.getTotal()));
-                book.getTotal().add(getUniqueIDINT() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
+//                setUniqueID(FindBigID(book.getTotal()));
+                book.getTotal().add(book.getIDBook() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
                 System.out.println("The book has been successfully added");
-                System.out.println("Your Unique ID is : " + getUniqueIDINT());
+                System.out.println("Your Unique ID is : " + getUniqueIDInt());
                 break;
             }
         }
         if (book.getTotal().isEmpty()) {
             setUniqueID(1);
-            book.getTotal().add(getUniqueIDINT() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
+            book.getTotal().add(book.getIDBook() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
             System.out.println("The book has been successfully added");
-            System.out.println("Your Unique ID is : " + getUniqueIDINT());
+            System.out.println("Your Unique ID is : " + book.getIDBook());
         }
-        WriteFileBook("Book.txt");
     }
     public void SearchBook(String sentence)
     {
@@ -202,7 +197,6 @@ public class User extends UniqueID {
             book.getTotal().add(s);
         }
     }
-
 }
 class NormalUser extends User {
 

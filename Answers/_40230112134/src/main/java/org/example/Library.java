@@ -7,13 +7,14 @@ public class Library {
     NormalUser normalUser = new NormalUser();
     Admin admin = new Admin();
     User user = new User();
+    int BookCapacity = 0 , UserCapacity = 0;
     private final String LibraryName;
     private final String OperatingHours;
     private final int CapacityBook;
     private final int CapacityUser;
     private final boolean BookRepository;
     public Library(){
-        this.LibraryName = "HOMA";
+        this.LibraryName = "(-_-)(HOMA)(-_-)";
         this.OperatingHours =  "9 a.m. - 9 p.m.";
         this.CapacityBook = 50;
         this.CapacityUser = 25;
@@ -164,109 +165,134 @@ public class Library {
 //
 //    }
     public void CLIComment() {
-        boolean flag = true;
-        while (flag) {
-            System.out.println(getLibraryName() +  "How can I help you???!!!");
-            System.out.println("1.lib add book");
-            System.out.println("2.lib get hrs");
-            System.out.println("3.lib rent book");
+        while (true) {
+            System.out.println(getLibraryName() +  "       How can I help you???!!!");
+            System.out.println("lib add book <name> <author> <subtitle>");
+            System.out.println("lib get hrs");
+            System.out.println("lib rent <bookName>");
             System.out.println("4.lib get available books");
             System.out.println("5.lib return book");
             System.out.println("6.lib get available members");
             System.out.println("7.lib remove member");
             System.out.println("8.lib add member");
-            System.out.println("9.exit");
+            System.out.println("lib exit");
             System.out.println("Enter your comment:");
             Scanner scanner = new Scanner(System.in);
-            int comment = scanner.nextInt();
-            int BookCapacity = 0 , UserCapacity = 0;
-            switch (comment)
-            {
-                case 1:
-                    if (BookCapacity <= getCapacityBook())
-                    {
-                        BookCapacity++;
-                        user.AddBook();
-                    }
-                    else
-                    {
-                        System.out.println("Sorry, we don't have room for books.");
-                        System.out.println("Try something else.");
-                    }
-                    CLIComment();
-                    break;
-                case 2:
-                    System.out.println(getOperatingHours());
-                    CLIComment();
-                    break;
-                case 3:
-                    Rent rent = new Rent();
-                    ChapFileBook();
-                    System.out.println("Enter your ID you want to rent: ");
-                    String testId =  scanner.nextLine();
-                    rent.Rent(testId);
-                    CLIComment();
-                    break;
-                case 4:
-                    boolean bb = getBookRepository();
-                    if (!bb)
-                    {
-                        System.out.println("we do not have book");
-                    }
-                    CLIComment();
-                    break;
-                case 5:
-
-                    CLIComment();
-                    break;
-                case 6:
-                    ChapFileUser();
-                    CLIComment();
-                    break;
-                case 7:
-                    String temp1 = scanner.nextLine();
-                    if (Objects.equals(temp1, admin.getPassword()))
-                    {
-                        ChapFileUser();
-                        System.out.println("Enter your ID you want delete : ");
-                        String testid = scanner.nextLine();
-                        DeleteNormalUser(testid);
-                    }
-                    else
-                    {
-                        System.out.println("Sorry,Try something else.");
-                    }
-                    CLIComment();
-                    break;
-                case 8:
-                    if (UserCapacity < getCapacityUser())
-                    {
-                        UserCapacity++;
-                        String temp = scanner.nextLine();
-                        if (Objects.equals(temp, admin.getPassword()))
-                        {
-                            AddNormalUser();
-                        }
-                        else
-                        {
-                            System.out.println("Sorry,Try something else.");
-                        }
-                    }
-                    else
-                    {
-                        System.out.println("Sorry, we don't have room for User");
-                        System.out.println("Try something else.");
-                    }
-                    CLIComment();
-                    break;
-                case 9:
-                    System.out.println("Bye Bye");
-                    flag = false;
-                    break;
-                default:
-                    System.out.println("Try again");
-                    break;
+            String comment = scanner.nextLine();
+            String[] list = comment.split(" ");
+            user.ReadFileBook("Book.txt");
+            if (Objects.equals(list[1], "add") && Objects.equals(list[2], "book")) {
+                if (BookCapacity <= getCapacityBook())
+                {
+                    BookCapacity++;
+                    user.AddBook(list[3] , list[4] , list[5]);
+                }
+                else
+                {
+                    System.out.println("Sorry, we don't have room for books.");
+                    System.out.println("Try something else.");
+                }
             }
+            else if (Objects.equals(list[1], "get") && Objects.equals(list[2], "hrs")) {
+                System.out.println("**************************");
+                System.out.println(getOperatingHours());
+                System.out.println("**************************");
+            }
+            else if (Objects.equals(list[1], "exit")) {
+                System.exit(0);
+            }
+            else if (Objects.equals(list[1], "rent") && list.length <= 3) {
+                Rent rent = new Rent();
+                rent.RentBook(list[2]);
+            }
+            user.WriteFileBook("Book.txt");
+//            switch (comment)
+//            {
+//                case "lib add book":
+//                    if (BookCapacity <= getCapacityBook())
+//                    {
+//                        BookCapacity++;
+//                        user.AddBook();
+//                    }
+//                    else
+//                    {
+//                        System.out.println("Sorry, we don't have room for books.");
+//                        System.out.println("Try something else.");
+//                    }
+//                    CLIComment();
+//                    break;
+//                case 2:
+//                    System.out.println(getOperatingHours());
+//                    CLIComment();
+//                    break;
+//                case 3:
+//                    Rent rent = new Rent();
+//                    ChapFileBook();
+//                    System.out.println("Enter your ID you want to rent: ");
+//                    String testId =  scanner.nextLine();
+//                    rent.RentBook(testId);
+//                    CLIComment();
+//                    break;
+//                case 4:
+//                    boolean bb = getBookRepository();
+//                    if (!bb)
+//                    {
+//                        System.out.println("we do not have any books");
+//                    }
+//                    CLIComment();
+//                    break;
+//                case 5:
+//
+//                    CLIComment();
+//                    break;
+//                case 6:
+//                    ChapFileUser();
+//                    CLIComment();
+//                    break;
+//                case 7:
+//                    String temp1 = scanner.nextLine();
+//                    if (Objects.equals(temp1, admin.getPassword()))
+//                    {
+//                        ChapFileUser();
+//                        System.out.println("Enter your ID you want delete : ");
+//                        String testid = scanner.nextLine();
+//                        DeleteNormalUser(testid);
+//                    }
+//                    else
+//                    {
+//                        System.out.println("Sorry,Try something else.");
+//                    }
+//                    CLIComment();
+//                    break;
+//                case 8:
+//                    if (UserCapacity < getCapacityUser())
+//                    {
+//                        UserCapacity++;
+//                        String temp = scanner.nextLine();
+//                        if (Objects.equals(temp, admin.getPassword()))
+//                        {
+//                            AddNormalUser();
+//                        }
+//                        else
+//                        {
+//                            System.out.println("Sorry,Try something else.");
+//                        }
+//                    }
+//                    else
+//                    {
+//                        System.out.println("Sorry, we don't have room for User");
+//                        System.out.println("Try something else.");
+//                    }
+//                    CLIComment();
+//                    break;
+//                case 9:
+//                    System.out.println("Bye Bye");
+//                    System.exit(0);
+//                    break;
+//                default:
+//                    System.out.println("Try again");
+//                    break;
+//            }
         }
     }
 }
