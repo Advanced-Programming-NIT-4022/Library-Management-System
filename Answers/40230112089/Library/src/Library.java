@@ -179,6 +179,38 @@ public class Library {
         }
     }
 
+
+    public void showMyRentedBooks(int userId,String password){
+        boolean exist =false;
+        if (!checkUserId(userId)){
+            System.out.println("wrong userId");
+            return ;
+        }
+        for (int i = 0; i < this.userArray.size(); i++) {
+            if (this.userArray.get(i).userId ==  userId && this.userArray.get(i).password.equals(password)){
+                exist=true;
+                for (int j = 0; j < this.rentArray.size(); j++) {
+                    if (this.rentArray.get(i).user.userId == userId) {
+                        if (j==0) {
+                            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                        }
+                            System.out.println("Book name    : " + this.rentArray.get(i).book.bookName);
+                            System.out.println("Book id      : " + this.rentArray.get(i).book.bookId);
+                            System.out.println("Book author  : " + this.rentArray.get(i).book.bookAuthor);
+                            System.out.println("Availability : " + this.rentArray.get(i).book.isAvailable);
+                            System.out.println("description : " + this.rentArray.get(i).book.description);
+                            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+
+                    }else{
+                        System.out.println("there is no rented book for this id");
+                    }
+                }
+            }
+        }
+        if (!exist) {
+            System.out.println("wrong password");
+        }
+    }
     public void getAvailableBooks(){
         if (this.bookArray.isEmpty()) {
             System.out.println("Book list is empty");
@@ -240,10 +272,10 @@ public class Library {
         return result;
     }
 
-    public boolean checkAdminUserId(int userId) {
+    public boolean checkAdminUserId(int adminId) {
         boolean result = false;
         for (int i = 0; i < this.adminArray.size(); i++) {
-            if (this.adminArray.get(i).userId == userId) {
+            if (this.adminArray.get(i).userId == adminId) {
                 result = true;
             }
         }
@@ -572,6 +604,7 @@ public class Library {
         System.out.println("lib show all user");
         System.out.println("lib show all admin");
         System.out.println("lib show all rent");
+        System.out.println("lib show all my rented books <userID> <password>");
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         System.out.println("Rent & Return : ");
         System.out.println("lib rent book <userID> <bookID> ");
@@ -635,16 +668,20 @@ public class Library {
                     } else {
                         System.out.println("Wrong try again");
                     }
-                } else if (commandSegs[1].equals("show") && commandSegs[2].equals("all") && commandSegs.length == 4) {
-                    if (commandSegs[3].equals("book")) {
+                } else if (commandSegs[1].equals("show") && commandSegs[2].equals("all")) {
+                    if (commandSegs[3].equals("book")&& commandSegs.length == 4) {
                         showAllBook();
 
-                    } else if (commandSegs[3].equals("user")) {
+                    } else if (commandSegs[3].equals("user") && commandSegs.length == 4) {
                         showAllUser();
-                    } else if (commandSegs[3].equals("admin")) {
+                    } else if (commandSegs[3].equals("admin") && commandSegs.length == 4) {
                         showAllAdmin();
-                    }else if (commandSegs[3].equals("rent")) {
+                    }else if (commandSegs[3].equals("rent") && commandSegs.length == 4) {
                         showAllRent();
+                    }
+                    else if (commandSegs[3].equals("my")&& commandSegs[4].equals("rented")&&commandSegs[5].equals("books")&&commandSegs[6].matches("[0-9]+")&&commandSegs[7].matches("^[a-zA-Z0-9\\/]*$")&&commandSegs.length == 8){
+                        showMyRentedBooks(Integer.parseInt(commandSegs[6]),commandSegs[7]);
+
                     } else {
                         System.out.println("Wrong try again");
                     }
