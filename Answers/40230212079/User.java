@@ -1,9 +1,9 @@
 public class User {
     private String name;
-    private int ID;
+    private String ID;
     private String phonnumber;
 
-    public User(String name, int ID, String phonnumber) {
+    public User(String name, String ID, String phonnumber) {
         this.setName(name);
         this.ID = ID;
         this.setName(phonnumber);
@@ -25,10 +25,10 @@ public class User {
         this.phonnumber = phonnumber;
     }
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
-    public void setID(int ID){
+    public void setID(String ID){
         this.ID=ID;
     }
 }
