@@ -22,16 +22,16 @@ public class User {
         this.ID = ID;
     }
 
-    public int getPhoneNum() {
+    public String getPhoneNum() {
         return phoneNum;
     }
 
-    public void setPhoneNum(int phoneNum) {
+    public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
     }
 
-    private int phoneNum;
-    public User(String name, int ID, int PhoneNum) {
+    private String phoneNum;
+    public User(String name, int ID, String PhoneNum) {
         this.name = name;
         this.ID = ID;
         this.phoneNum = phoneNum;

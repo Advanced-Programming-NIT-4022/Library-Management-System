@@ -13,7 +13,7 @@ public class NormalUser extends User{
         this.registrationDate = registrationDate;
     }
 
-    public NormalUser(String name, int ID, int phoneNum, Date registrationDate)
+    public NormalUser(String name, int ID, String phoneNum, Date registrationDate)
     {
         super(name,ID,phoneNum);
         this.registrationDate= registrationDate;

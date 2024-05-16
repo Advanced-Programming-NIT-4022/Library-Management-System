@@ -5,10 +5,34 @@ import java.util.Date;
 import java.util.List;
 
 public class Library {
+    public String getLibraryName() {
+        return LibraryName;
+    }
+
+    public void setLibraryName(String libraryName) {
+        LibraryName = libraryName;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getOperatingHours() {
+        return operatingHours;
+    }
+
+    public void setOperatingHours(int operatingHours) {
+        this.operatingHours = operatingHours;
+    }
+
     private String LibraryName;
     private int capacity;
     private int operatingHours;
-    private List<Book>bookRepo;
+    private ArrayList<Book>bookRepo;
     private List<User>userRegistries;
     private List<Rent>rentalRegistries;
     public Library (String LibraryName,int capacity, int operatingHours)
