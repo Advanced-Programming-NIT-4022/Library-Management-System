@@ -31,4 +31,11 @@ public class Library {
         return new Library(name, connection);
     }
 
+    ArrayList<Book> resultSetToBookArrayList(ResultSet resultSet) throws SQLException {
+        ArrayList<Book> result = new ArrayList<>();
+        while (resultSet.next()) {
+            result.add(new Book(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getBoolean(5)));
+        }
+        return result;
+    }
 }
