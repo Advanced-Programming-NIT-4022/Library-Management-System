@@ -1,4 +1,5 @@
 // main class for handling the CLI
+
 import javax.naming.NoPermissionException;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidParameterException;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -169,20 +169,56 @@ public class  MyApp {
 
             Manual.printNormalUser();
         }
+        else if (command.matches("lib\\sget\\srented\\sbooks")) {
+            if (library.getUser() == null)
+                throw new NoPermissionException("You should first login.");
+            else if (library.getUser() instanceof Admin)
+                throw new NoPermissionException("You are admin!You can't rent a book:)");
+
+            ArrayList<Book> books = ((NormalUser) library.getUser()).getRentBooks();
+
+            if (books.size() == 1)
+                System.out.println("Your rented book is :");
+            else
+                System.out.println("Your rented books are: ");
+
+            int numberOfRows = 1;
+            for (Book book : books) {
+                System.out.printf("%d.%s", numberOfRows++, book.getTitle());
+                System.out.println();
+            }
+        }
         // command lib get hrs
         else if (command.matches("lib\\sget\\shrs"))
             System.out.print(library.getOperatingHours());
         else if (command.matches("lib\\sget\\savailable\\sbooks"))
             library.getAvailableBooks();
         // command lib remove member
-        else if (command.matches("lib\\sremove\\smember\\s\\d{7,}")) {
-            // get user id from command
-            int userID = Integer.parseInt(command.substring(18));
-
-            if (library.removeUser(userID) == 0)
-                throw new IllegalArgumentException("User with " + userID + " not found!");
-
-            System.out.printf("Account with ID = %d deleted successfully.%n", userID);
+        else if (command.matches("lib\\slogin\\s\\d+")) {
+            //command lib login
+            if (library.getUser() != null)
+                throw new NoPermissionException("Another account is still logged in! " +
+                        "Log out and try again.");
+            String[] temp = command.split("\\s");
+            library.setUser(library.login(temp[2]));
+            if (library.getUser() == null)
+                throw new InvalidParameterException();
+            else if (library.getUser() instanceof NormalUser)
+                System.out.printf("Hello %s!You logged in successfully.%n", library.getUser().getName());
+            else {
+                Admin adminUser = (Admin) library.getUser();
+                for (int i = 0; i < 3; i++) {
+                    System.out.printf("Enter password for %s: ", adminUser.getName());
+                    String password = input.nextLine();
+                    if (adminUser.verify(password)) {
+                        System.out.printf("Hello %s! You logged in successfully.%n", adminUser.getName());
+                        return;
+                    } else
+                        System.out.println("Invalid password. Try again.");
+                }
+                library.setUser(null);
+                throw new IllegalArgumentException("3 incorrect password attempts...");
+            }
         } else if (command.matches("lib\\slogout")) {
             if (library.getUser() == null)
                 System.out.println("No one has logged in yet");
@@ -190,6 +226,207 @@ public class  MyApp {
                 System.out.printf("%s logged out successfully.%n", library.getUser().getName());
                 library.setUser(null);
             }
+        } else if (command.matches("lib\\sreturn\\s.+")) {
+            // return a book
+            String bookName = command.substring(11);
+            ArrayList<Book> books = ((NormalUser) library.getUser()).getRentBooks();
+            boolean hasBook = false;
+            int bookID = 0;
+            for (Book book : books)
+                if (book.getTitle().equals(bookName)) {
+                    hasBook = true;
+                    bookID = book.getUniqueID();
+                }
+            if (hasBook) {
+                library.returnBook(bookID);
+                System.out.printf("Book <%s> returned to library.%n", bookName);
+            } else
+                System.out.println("You didn't rent this book:)");
+        } else if (command.matches("lib\\srent\\s\"?[^\"]*\"?\\s\"?[^\"]*\"?\\s\\d{7,}")) {
+            if (library.getUser() == null)
+                throw new NoPermissionException("You should first login.");
+            else if (library.getUser() instanceof NormalUser)
+                throw new NoPermissionException("You don't have permission to rent a book for " +
+                        "another person.");
+            else
+                for (int i = 0; i < 3; i++) {
+                    System.out.printf("Enter password for %s: ", library.getUser().getName());
+                    String password = input.nextLine();
+                    if (((Admin) library.getUser()).verify(password))
+                        break;
+                    else if (i == 2) {
+                        System.out.println("3 incorrect password attempts...");
+                        library.setUser(null);
+                        return;
+                    } else
+                        System.out.println("Invalid password. Try again.");
+                }
+            command = command.substring(9);
+
+            String[] temp = new String[2];
+            for (int i = 0; i < 2; i++) {
+                if (command.startsWith("\"")) {
+                    command = command.substring(1);
+                    temp[i] = command.substring(0, command.indexOf("\""));
+                    command = command.replaceFirst(temp[i] + "\" ", "");
+                } else {
+                    temp[i] = command.substring(0, command.indexOf(" "));
+                    command = command.replaceFirst(temp[i] + " ", "");
+                }
+            }
+
+            String bookName = temp[0], memberName = temp[1];
+            int memberID = Integer.parseInt(command);
+
+            // get books with this name
+            ArrayList<Book> books = library.searchBook(bookName);
+
+            if (books.size() == 0) {
+                System.out.printf("book %s not found or not available!%n", bookName);
+                return;
+            }
+
+            Rent rent = null;
+            NormalUser user = null;
+
+            try {
+                user = new NormalUser(memberID, memberName);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return;
+            }
+
+            if (books.size() == 1)
+                rent = new Rent(books.get(0), user);
+            else if (user.getRentBooks().size() >= 5) {
+                System.out.println("You have already rented 5 books and you can no longer " +
+                        "rent a book");
+                return;
+            } else {
+                System.out.println("Which book?");
+
+                // show selections
+                int numberOfRows = 1;
+                for (Book book : books) {
+                    System.out.printf("%d. ID = %d, Author = %d", numberOfRows,
+                            book.getUniqueID(), book.getAuthor());
+                    numberOfRows++;
+                }
+
+                // select choice
+                int choice = 1;
+                for (int i = 0; i < 3; i++) {
+                    if (library.getUser() == null)
+                        System.out.print(">>> ");
+                    else if (library.getUser() instanceof Admin)
+                        System.out.print("Admin> ");
+                    else
+                        System.out.printf("%s> ", library.getUser().getName());
+                    choice = input.nextInt();
+                    if (choice > numberOfRows) {
+                        if (i == 2) {
+                            System.out.println("3 invalid choice...");
+                            return;
+                        }
+                        System.out.print("Invalid choice. please try again.");
+                    } else
+                        break;
+                }
+
+                // create rent class
+                rent = new Rent(books.get(choice - 1), user);
+
+            }
+            int rentalID = user.rentBook(rent);
+            if (rentalID == 0)
+                return;
+            System.out.printf("Book %s was rented for %s successfully.", bookName, user.getName());
+            System.out.printf("rental ID = %d%n", rentalID);
+        } else if (command.matches("lib\\sadd\\smember\\s\"?[^\"]*\"?\\s\\+?[\\d-]+\\s?[^(\"\\s)]*")) {
+            // commadn lib add member
+            // if he didn't admin user yet throw exception
+            if (library.getUser() instanceof Admin) {
+                for (int i = 0; i < 3; i++) {
+                    System.out.printf("Enter password for %s: ", library.getUser().getName());
+                    String password = input.nextLine();
+                    if (((Admin) library.getUser()).verify(password))
+                        break;
+                    else if (i == 2) {
+                        System.out.println("3 incorrect password attempts...");
+                        library.setUser(null);
+                        return;
+                    } else
+                        System.out.println("Invalid password. Try again.");
+                }
+
+                String name, phoneNumber;
+                int userID;
+
+                String[] temp1 = command.split("\"");
+                if (temp1.length == 3) {
+                    name = temp1[1].trim();
+
+                    String[] temp2 = temp1[2].trim().split("\\s");
+                    phoneNumber = temp2[0].trim();
+                    User user;
+                    if (temp2.length == 2) {
+                        user = new Admin(name, phoneNumber, temp2[1].trim());
+                        userID = library.addUser(user, temp2[1].trim());
+                    } else {
+                        user = new NormalUser(name, phoneNumber);
+                        userID = library.addUser((NormalUser) user);
+                    }
+                } else {
+                    String[] temp = command.split("\\s");
+
+                    if (temp.length > 6)
+                        throw new IllegalArgumentException(
+                                "You should use \" character to split string with space");
+
+                    name = temp[3].trim();
+                    phoneNumber = temp[4].trim();
+
+                    User user;
+                    if (temp.length == 6) {
+                        user = new Admin(name, phoneNumber, temp[5].trim());
+                        userID = library.addUser(user, temp[5].trim());
+                    } else {
+                        user = new NormalUser(name, phoneNumber);
+                        userID = library.addUser((NormalUser) user);
+                    }
+                }
+
+                // prompt the user
+                System.out.printf("User %s with ID = %d added to library.%n", name, userID);
+            } // end if (library.user instanceof Admin)
+            else
+                throw new NoPermissionException("You don't have permission to add members!");
+        } else if (command.matches("lib\\sremove\\smember\\s\\d{7,}")) {
+            if (library.getUser() == null)
+                throw new NoPermissionException("You should first login.");
+            else if (library.getUser() instanceof NormalUser)
+                throw new NoPermissionException("You don't have permission to remove members.");
+            else
+                for (int i = 0; i < 3; i++) {
+                    System.out.printf("Enter password for %s: ", library.getUser().getName());
+                    String password = input.nextLine();
+                    if (((Admin) library.getUser()).verify(password))
+                        break;
+                    else if (i == 2) {
+                        System.out.println("3 incorrect password attempts...");
+                        library.setUser(null);
+                        return;
+                    } else
+                        System.out.println("Invalid password. Try again.");
+                }
+
+            // get user id from command
+            int userID = Integer.parseInt(command.substring(18));
+
+            if (library.removeUser(userID) == 0)
+                throw new IllegalArgumentException("User with " + userID + " not found!");
+
+            System.out.printf("Account with ID = %d deleted successfully.%n", userID);
         } else if (command.matches("lib\\sadd\\sbook\\s\"?[^\"]*\"?\\s\"?[^\"]*\"?\\s?(\"?[^\"]*\"?)?")) {
             // command lib add book
             // if he didn't admin user yet throw exception
@@ -268,94 +505,6 @@ public class  MyApp {
                             bookID);
             } else
                 throw new NoPermissionException("You don't have permission to add books!");
-        } else if (command.matches("lib\\sreturn\\s.+")) {
-            // return a book
-            String bookName = command.substring(11);
-            ArrayList<Book> books = ((NormalUser) library.getUser()).getRentBooks();
-            boolean hasBook = false;
-            int bookID = 0;
-            for (Book book:books)
-                if (book.getTitle().equals(bookName)) {
-                    hasBook = true;
-                    bookID = book.getUniqueID();
-                }
-            if (hasBook) {
-                library.returnBook(bookID);
-                System.out.printf("Book <%s> returned to library.%n", bookName);
-            }
-            else
-                System.out.println("You didn't rent this book:)");
-        } else if (command.matches("lib\\slogin\\s\\d+")) {
-            //command lib login
-            if (library.getUser() != null)
-                throw new NoPermissionException("Another account is still logged in! " +
-                        "Log out and try again.");
-            String[] temp = command.split("\\s");
-            library.setUser(library.login(temp[2]));
-            if (library.getUser() == null)
-                throw new InvalidParameterException();
-            else if (library.getUser() instanceof NormalUser)
-                System.out.printf("Hello %s!You logged in successfully.%n", library.getUser().getName());
-            else {
-                Admin adminUser = (Admin) library.getUser();
-                for (int i = 0; i < 3; i++) {
-                    System.out.printf("Enter password for %s: ", adminUser.getName());
-                    String password = input.nextLine();
-                    if (adminUser.verify(password)) {
-                        System.out.printf("Hello %s! You logged in successfully.%n", adminUser.getName());
-                        return;
-                    } else
-                        System.out.println("Invalid password. Try again.");
-                }
-                library.setUser(null);
-                throw new IllegalArgumentException("3 incorrect password attempts...");
-            }
-        } else if (command.matches("lib\\sadd\\smember\\s\"?[^\"]*\"?\\s\\+?[\\d-]+\\s?[^(\"\\s)]*")) {
-            // commadn lib add member
-            // if he didn't admin user yet throw exception
-            if (library.getUser() instanceof Admin) {
-                String name, phoneNumber;
-                int userID;
-
-                String[] temp1 = command.split("\"");
-                if (temp1.length == 3) {
-                    name = temp1[1].trim();
-
-                    String[] temp2 = temp1[2].trim().split("\\s");
-                    phoneNumber = temp2[0].trim();
-                    User user;
-                    if (temp2.length == 2) {
-                        user = new Admin(name, phoneNumber, temp2[1].trim());
-                        userID = library.addUser(user, temp2[1].trim());
-                    } else {
-                        user = new NormalUser(name, phoneNumber);
-                        userID = library.addUser((NormalUser) user);
-                    }
-                } else {
-                    String[] temp = command.split("\\s");
-
-                    if (temp.length > 6)
-                        throw new IllegalArgumentException(
-                                "You should use \" character to split string with space");
-
-                    name = temp[3].trim();
-                    phoneNumber = temp[4].trim();
-
-                    User user;
-                    if (temp.length == 6) {
-                        user = new Admin(name, phoneNumber, temp[5].trim());
-                        userID = library.addUser(user, temp[5].trim());
-                    } else {
-                        user = new NormalUser(name, phoneNumber);
-                        userID = library.addUser((NormalUser) user);
-                    }
-                }
-
-                // prompt the user
-                System.out.printf("User %s with ID = %d added to library.%n", name, userID);
-            } // end if (library.user instanceof Admin)
-            else
-                throw new NoPermissionException("You don't have permission to add members!");
         } else if (command.matches("lib\\srent\\s.+")) {
             if (library.getUser() == null)
                 System.out.println("You should first login to rent a book.");
@@ -367,13 +516,17 @@ public class  MyApp {
                     bookName = bookName.substring(1, bookName.length() - 1);
 
                 ArrayList<Book> books = library.searchBook(bookName);
-                Rent rent;
+                Rent rent = null;
+
                 if (books.size() == 0) {
                     System.out.printf("book %s not found or not available!%n", bookName);
                     return;
                 } else if (books.size() == 1)
                     rent = new Rent(books.get(0), (NormalUser) library.getUser());
-                else {
+                else if (((NormalUser) library.getUser()).getRentBooks().size() >= 5) {
+                    System.out.println("You have already rented 5 books and you can no longer " +
+                            "rent a book");
+                } else {
                     System.out.println("Which book do you want?");
 
                     // show selections
@@ -387,16 +540,20 @@ public class  MyApp {
                     // select choice
                     int choice = 1;
                     for (int i = 0; i < 3; i++) {
-                        System.out.print(">>>");
+                        if (library.getUser() == null)
+                            System.out.print(">>> ");
+                        else if (library.getUser() instanceof Admin)
+                            System.out.print("Admin> ");
+                        else
+                            System.out.printf("%s> ", library.getUser().getName());
                         choice = input.nextInt();
                         if (choice > numberOfRows) {
                             if (i == 2) {
                                 System.out.println("3 invalid choice...");
                                 return;
                             }
-                            System.out.printf("Invalid choice. please try again.");
-                        }
-                        else
+                            System.out.print("Invalid choice. please try again.");
+                        } else
                             break;
                     }
 
