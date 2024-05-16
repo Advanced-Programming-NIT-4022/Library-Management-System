@@ -13,4 +13,20 @@ public class Book {
         this.Description = Description;
 
     }
+
+    public String getTitle() {
+        return Title;
+    }
+
+    public void setTitle(String title) {
+        Title = title;
+    }
+
+    public boolean getAvailability_status() {
+        return Availability_status;
+    }
+
+    public void setAvailability_status(boolean availability_status) {
+        Availability_status = availability_status;
+    }
 }
