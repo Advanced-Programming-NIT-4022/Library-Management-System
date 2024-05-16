@@ -4,12 +4,12 @@ public  class User {
     private static int count = 0;
     private String name;
     private final int UniqueID;
-    private int phoneNumber;
+    private String phoneNumber;
     private List<Admin> adminsList;
     private List<NormalUser> normalUsersList;
 
 
-    public User(String name,int phoneNumber) {
+    public User(String name,String phoneNumber) {
         this.name = name;
         this.UniqueID = ++count;
         this.phoneNumber = phoneNumber;
@@ -31,11 +31,11 @@ public  class User {
         }
         }
     }
-    public void addAdmin(String name, int phoneNumber, String password){
+    public void addAdmin(String name, String phoneNumber, String password){
         Admin newAdmin = new Admin(name, phoneNumber, password);
         adminsList.add(newAdmin);
     }
-    public void addNormalUser(String name,int phoneNumber,String registrationDate){
+    public void addNormalUser(String name,String phoneNumber,String registrationDate){
         NormalUser newNormalUser = new NormalUser(name, phoneNumber, registrationDate);
         normalUsersList.add(newNormalUser);
     }

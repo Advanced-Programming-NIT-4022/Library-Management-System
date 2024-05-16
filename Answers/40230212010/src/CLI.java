@@ -1,8 +1,8 @@
 
 public class CLI {
-    Libraray libraray;
+    Library libraray;
 
-    public CLI(Libraray libraray) {
+    public CLI(Library libraray) {
         this.libraray = libraray;
     }
     public void NormalCommand(){
