@@ -14,8 +14,4 @@ public class NormalUser extends User{
         this.date = -1;
     }
 
-    public void showInfo() {
-
-    }
-
 }

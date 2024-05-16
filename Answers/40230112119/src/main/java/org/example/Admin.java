@@ -51,9 +51,10 @@ public class Admin extends User{
             }
         } while (!flag);
 
-        Library m = new Library();
+        Library lib = new Library();
         int date = 2;
-        m.newNormalUser(m.getUserList(), name, uniqueID, phone, date);
+        NormalUser newUser = new NormalUser(name, uniqueID, phone, date);
+        lib.getUserList().add(newUser);
     }
 
     public void addNewAdmin(){
@@ -73,10 +74,32 @@ public class Admin extends User{
                     break;
                 }
             }
-            if (!user_found)
+            if (user_found)
                 System.out.println("No user found. Try again.");
         } while (!flag);
 
+        System.out.println("Enter a password for them: ");
+        String password = sc.nextLine();
+
+        flag = true;
+        int uniqueID = 0;
+        do {
+            Random id = new Random();
+            int tmpID = id.nextInt(9000) + 1000;
+
+            flag = true;
+
+            for(NormalUser i : lib.getUserList()) {
+                if (i.getUniqueID() == tmpID) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (flag) {
+                uniqueID = tmpID; // Update uniqueID only if ID is unique
+            }
+        } while(!flag);
 
 //        lib.getAdminList().add()
     }

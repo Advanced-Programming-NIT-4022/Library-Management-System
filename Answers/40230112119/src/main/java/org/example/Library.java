@@ -16,6 +16,7 @@ public class Library {
     public void addUserElement(NormalUser obj) {
         userList.add(obj);
     }
+    public void addAdminElement(Admin obj) { adminList.add(obj); }
 
     public Library() {
         Admin owner = new Admin("Mahta", 1234, "09036339284".toCharArray(), "1234");
@@ -61,55 +62,181 @@ public class Library {
                 }
             }
         } while (!flag);
-        Random id = new Random();
-        int uniqueID = id.nextInt(9000) + 1000;
+
+        flag = true;
+        int uniqueID = 0;
+        do {
+            Random id = new Random();
+            int tmpID = id.nextInt(9000) + 1000;
+
+            flag = true;
+
+            for(NormalUser i : userList) {
+                if (i.getUniqueID() == tmpID) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (flag) {
+                uniqueID = tmpID; // Update uniqueID only if ID is unique
+            }
+        } while(!flag);
         System.out.println("Welcome " + name + "! Here is your unique ID: " + uniqueID);
         int date = 1;
-        newNormalUser(userList, name, uniqueID, phone, date);
+        NormalUser newUser = new NormalUser(name, uniqueID, phone, date);
+        userList.add(newUser);
     }
     public void login(boolean isUser) {
         System.out.println("Welcome back! Enter your name:");
         Scanner sc = new Scanner(System.in);
         String name = sc.nextLine();
+        boolean flag = true;
+        if (isUser) {
+            do {
+                System.out.println("Enter your unique ID: ");
+                int uniqueID = sc.nextInt();
+                flag = false;
 
-    }
-    public void newNormalUser(ArrayList<NormalUser> userList, String name, int uniqueID, char[] phone, int date) {
-        int userID;
-        if (userList.isEmpty()) {
-            userID = 1;
+                for(NormalUser i : userList) {
+                    if (i.getUniqueID() == uniqueID) {
+                        if (i.getName().equalsIgnoreCase(name)) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!flag) {
+                    System.out.println("Invalid ID; Try again. ");
+                }
+            } while(!flag);
+
         }
         else {
-            User lastUser = userList.get(userList.size() - 1);
-            userID = lastUser.getUniqueID();
-            userID++;
+            do {
+                System.out.println("Enter your unique ID: ");
+                int uniqueID = sc.nextInt();
+                flag = false;
+
+                for(Admin i : adminList) {
+                    if (i.getUniqueID() == uniqueID) {
+                        if (i.getName().equalsIgnoreCase(name)) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!flag) {
+                    System.out.println("Invalid ID; Try again. ");
+                }
+            } while(!flag);
+
+            do {
+                System.out.println("Enter your password: ");
+                String password = sc.nextLine();
+                flag = false;
+
+                for(Admin i : adminList) {
+                    if (i.getPassword().equals(password)) {
+                            flag = true;
+                            break;
+                    }
+                }
+
+                if (!flag) {
+                    System.out.println("Invalid password; Try again. ");
+                }
+            } while(!flag);
         }
-        NormalUser newUser = new NormalUser(name, uniqueID, phone, date);
-        userList.add(newUser);
+
+
+
     }
+//    public void newNormalUser(ArrayList<NormalUser> userList, String name, int uniqueID, char[] phone, int date) {
+//        int userID;
+//        if (userList.isEmpty()) {
+//            userID = 1;
+//        }
+//        else {
+//            User lastUser = userList.get(userList.size() - 1);
+//            userID = lastUser.getUniqueID();
+//            userID++;
+//        }
+//        NormalUser newUser = new NormalUser(name, uniqueID, phone, date);
+//        userList.add(newUser);
+//    }
     public void homePage() {
         System.out.println("Welcome to our library! Please sign up or log in.");
         System.out.println("1- Sign Up\t\t\t2- Log In");
         Scanner sc = new Scanner(System.in);
         int choice = sc.nextInt();
-        switch(choice) {
-            case 1:
-                signup();
-                break;
-            case 2:
-                System.out.println("Choose your position.\n1- User\t\t\t2- Admin");
-                int pos = sc.nextInt();
-                boolean isUser = true;
-                switch(pos) {
-                    case 1:
-                        login(isUser);
-                        break;
-                    case 2:
-                        isUser = false;
-                        login(isUser);
-                        break;
+        sc.nextLine();
+        boolean isUser;
+//        switch(choice) {
+//            case 1:
+//                signup();
+//                break;
+//            case 2:
+//                System.out.println("Choose your position.\n1- User\t\t\t2- Admin");
+//                int pos = sc.nextInt();
+//                isUser = true;
+//                switch(pos) {
+//                    case 1:
+//                        login(isUser);
+//                        break;
+//                    case 2:
+//                        isUser = false;
+//                        login(isUser);
+//                        break;
+//                }
+//        }
+
+        User u = new User();
+        boolean flag = true;
+        outerLoop:
+        do {
+            flag = true;
+            System.out.println("What do you want to do?");
+            Scanner scs = new Scanner(System.in);
+            String command = scs.nextLine();
+            String[] cm = command.split(" ");
+            int i = 1;
+                if (cm[i].equalsIgnoreCase("add")) {
+                    if (cm[++i].equalsIgnoreCase("book")) {
+                        if (cm.length == 6) {
+                            boolean retry = u.addBook(cm);
+                            if (retry) {
+                                flag = false;
+                            }
+                            else
+                                break outerLoop;
+                        }
+                        else {
+                            System.out.println("Invalid command. What do you want to do?" +
+                                    "\n1- Try another command\t\t\t2- Exit");
+                            choice = sc.nextInt();
+                            if (choice == 1) {
+                                flag = false;
+                            } else {
+                                break outerLoop;
+                            }
+                        }
+                    } else if (cm[++i].equalsIgnoreCase("member")) {
+
+                    } else {
+                        System.out.println("Invalid command. What do you want to do?" +
+                                "\n1- Try another command\t\t\t2- Exit");
+                        choice = sc.nextInt();
+                        if (choice == 1) {
+                            flag = true;
+                            break;
+                        } else {
+                            break outerLoop;
+                        }
+                    }
                 }
-        }
-
-
+        } while(!flag);
     }
 }

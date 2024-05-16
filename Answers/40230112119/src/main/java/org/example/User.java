@@ -31,41 +31,23 @@ public class User {
     public int getUniqueID() { return uniqueID; }
     public char[] getPhone() { return phone; }
 
-    public void addBook() {
+    public boolean addBook(String[] cm) {
         Library lib = new Library();
         Scanner sc = new Scanner(System.in);
-        String title = null;
-        String author = null;
-        String desc = null;
-        boolean flag = false;
-        do {
-            boolean book_found = false;
-            System.out.println("Enter the name of the book: ");
-            String inputTitle = sc.nextLine();
-            System.out.println("Enter the author: ");
-            String inputAuthor = sc.nextLine();
-            System.out.println("Enter the description: ");
-            String inputDesc = sc.nextLine();
-            for (Book i : lib.getBooksList()) {
-                if (i.getTitle().equalsIgnoreCase(inputTitle) && i.getAuthor().equalsIgnoreCase(inputAuthor)) {
-                    book_found = true;
-                    title = inputTitle;
-                    author = inputAuthor;
-                    desc = inputDesc;
-                    break;
+        for (Book j : lib.getBooksList()) {
+            if (cm[3].equalsIgnoreCase(j.getTitle())) {
+                if (cm[4].equalsIgnoreCase(j.getAuthor())) {
+                    System.out.println("We already have that book. What do you want to do?" +
+                            "\n1- Try another command\t\t\t2- Exit");
+                    int choice = sc.nextInt();
+                    if (choice == 1) {
+                        return true;
+                    } else {
+                        break;
+                    }
                 }
             }
-            if (!book_found) {
-                System.out.println("We already have that book. Do you want to add something else?" +
-                        "\n1- Yes\t\t\t2- No");
-                int ans = sc.nextInt();
-                sc.nextLine();
-                if (ans == 1)
-                    flag = false;
-                else
-                    flag = true;
-            }
-        } while (!flag);
+        }
 
         int bookID;
         if (lib.getBooksList().isEmpty()) {
@@ -76,8 +58,9 @@ public class User {
             bookID = lastbook.getBookID();
             bookID++;
         }
-        Book newBook = new Book(bookID, title, author, desc);
+        Book newBook = new Book(bookID, cm[3], cm[4], cm[5]);
         lib.getBooksList().add(newBook);
+        return false;
     }
 
 }
