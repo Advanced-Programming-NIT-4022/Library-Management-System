@@ -2,7 +2,16 @@ import java.util.Scanner;
 
 public class MyAPP {
     public static void main(String[] args) {
-        System.out.println("Hello, welcome to merciful Aryaan library");
+        System.out.println("Hello, welcome to merciful Aryaan library\n");
+        System.out.println("You can use the following commands:\n");
+        System.out.println("- `lib add book <name> <author> <subtitle>`: Add a new book to the library.\n" +
+                "- `lib get hrs`: Retrieve library operating hours.\n" +
+                "- `lib rent <bookName>`: Rent a book from the library.\n" +
+                "- `lib add member <memberName> <password>`: Add a new member to the library.\n" +
+                "- `lib rent <bookName> <memberName> <memberPassword>`: Rent a book for a specific member.\n" +
+                "- `lib get available books`: View available books for rental.\n" +
+                "- `lib remove member <memberName>`: Remove a member from the library (admin privilege required).\n" +
+                "- `lib return <bookName>`: Return a rented book to the library.\n");
         Scanner scan = new Scanner(System.in);
         Book.copyFileOnBook();
         Admin.copyFileOnAdmin();
