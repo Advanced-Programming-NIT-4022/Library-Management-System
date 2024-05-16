@@ -59,6 +59,10 @@ public class App {
                                             Library.removeBook(hg.get(po));
                                             System.out.println("anjam shod");
                                             break;
+                                        case 8 :
+                                        Cli.getHours();
+                                        Cli.getCapacity();
+                                        break;
                                         default:
                                             break;
                                     }
@@ -103,6 +107,9 @@ public class App {
                                     case 4:
                                     Library.returnBook(uk);
                                         break;
+                                    case 5:
+                                    Cli.getCapacity();
+                                    Cli.getHours();
                                     default:
                                         break;
                                 }

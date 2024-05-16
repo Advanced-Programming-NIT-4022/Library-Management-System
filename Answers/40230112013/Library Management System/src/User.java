@@ -13,6 +13,7 @@ public class User {
         this.FamilyName = surname;
         this.PhoneNumber = phoneNumber;
         this.password = password;
+        this.Id = userId;
     }
 
     public String getName() {
