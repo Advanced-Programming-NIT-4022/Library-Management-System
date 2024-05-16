@@ -14,6 +14,7 @@ public class MyApp {
             while (true) {
 
 
+
                 if(Pattern.matches("[12]{1}" , x)){
                     if(Objects.equals(x, "1")){
                         admin.Ad();
