@@ -1,6 +1,9 @@
+import java.util.* ;
 public class Library {
     String LibName , Libpassword ;
     int LibOpenHour , LibCloseHour ;
+    Scanner input = new Scanner(System.in);
+
     public Library(String LibName, String Libpassword, int LibOpenHour, int LibCloseHour) {
         this.LibName = LibName;
         this.Libpassword = Libpassword ;
@@ -13,6 +16,11 @@ public class Library {
         System.out.println("1.Admin");
         System.out.println("2.Normal User");
         System.out.println("3.joind library");
+        int command = input.nextInt() ;
+        checkcommand();
+    }
+    public void checkcommand(){
+
     }
 
 }
