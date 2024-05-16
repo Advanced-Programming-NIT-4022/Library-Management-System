@@ -83,9 +83,10 @@ Ui x=new Ui();
                         }
                         break;
                     case "removemember":
-                           lib.rmUser(split[2], Admin);
+                        lib.rmUser(split[2], Admin);
                         break;
-
+                    case "gethrs":
+                        System.out.println(lib.getOperatingHours());
 
 
                 }

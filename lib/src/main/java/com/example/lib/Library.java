@@ -7,7 +7,13 @@ import java.util.Scanner;
 
 public class Library {
     private String libraryName;
-    private int Capacity;
+    private int Capacity=1000;
+
+    public String getOperatingHours() {
+        return operatingHours;
+    }
+
+    private String operatingHours="6Am-9Pm";
     Connection connection;
     Statement statement;
 
