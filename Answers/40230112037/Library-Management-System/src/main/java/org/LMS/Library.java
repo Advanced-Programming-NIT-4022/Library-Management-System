@@ -120,4 +120,12 @@ public class Library {
         preparedStatement = connection.prepareStatement("DELETE FROM Users WHERE id = " + id);
         return preparedStatement.executeUpdate() != 0;
     }
+
+    void RentBook(int userId, int bookId) throws SQLException {
+        preparedStatement = connection.prepareStatement("INSERT INTO Rents (userId,bookId,registrationDate) VALUES (?,?,?)");
+        preparedStatement.setInt(1, userId);
+        preparedStatement.setInt(2, bookId);
+        preparedStatement.setDate(3, new Date(System.currentTimeMillis()));
+        preparedStatement.executeUpdate();
+    }
 }
