@@ -2,12 +2,13 @@ import java.util.*;
 
 public class User {
     private static int count = 0;
-    private String name;
+    public static String name;
     private final String UniqueID;
     private String phoneNumber;
+    
+    public static  String password;
 
     public User(String name, String phoneNumber) {
-        this.name = name;
         this.UniqueID = String.valueOf( ++count);
         this.phoneNumber = phoneNumber;
 
@@ -39,6 +40,14 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
+
+    public static void setPassword(String password) {
+        User.password = password;
     }
     
 

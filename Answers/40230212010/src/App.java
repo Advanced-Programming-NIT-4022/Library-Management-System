@@ -3,15 +3,66 @@ import java.util.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
-            Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         Library library = new Library("Main Library", 1000, "9am to 5pm");
-        User user = new User("mmd","902");
 
         System.out.println("Welcome to " + library.getName() + "!");
         System.out.println("Current capacity: " + library.getCapacity());
         System.out.println("Operating hours: " + library.getOperatingHours());
+        User user = new User(null, null);
+        boolean exit = false;
+        while (!exit) {
+            System.out.println("Choose your role");
+            System.out.println("1. Admin");
+            System.out.println("2. Normal User");
+            System.out.println("3. Register");
+            System.out.println("4. exit.");
+            int choice2 = Integer.parseInt(scanner.nextLine());
+            switch (choice2) {
+                case 1:
+                    System.out.println("Enter Password:");
+                    String password = scanner.nextLine();
+                    if (password.equals(Admin.password)) {
+                        exit = true;
+                    } else {
+                        System.out.println("Wrong Password!");
+                    }
+                    break;
+                case 2:
+                    System.out.println("Enter your name:");
+                    String name = scanner.nextLine();
+                    System.out.println("Enter Password:");
+                    String pass2 = scanner.nextLine();
+                    if (name.equals(User.name)) {
+                        if (pass2.equals(User.password)) {
+                            exit = true;
+                        }
+                    }
+                    break;
+                case 3:
+                    System.out.println("Enter your name:");
+                    String name1 = scanner.nextLine();
+                    System.out.println("Enter your Phone Number:");
+                    String phoneNumber = scanner.nextLine();
+                    System.out.println("Enter Password:");
+                    String password3 = scanner.nextLine();
+                    user = new User(name1, phoneNumber);
+                    User.password = password3;
+                    exit = true;
+                    break;
+                case 4:
+                    System.out.println("thank you...");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+                    break;
+            }
+
+        }
 
         while (true) {
+
             System.out.println("\nChoose an option:");
             System.out.println("1. Add book");
             System.out.println("2. Get hours");
@@ -23,7 +74,7 @@ public class App {
             System.out.println("8. Exit");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -42,30 +93,33 @@ public class App {
                 case 3:
                     System.out.print("Enter book name: ");
                     String bookName = scanner.nextLine();
+                    
                     System.out.print("Enter student ID: ");
                     String UniqueID = scanner.nextLine();
-                    NormalUser users = library.getNormalUser(UniqueID);
-                    if (user == null) {
-                        System.out.println("User not found.");
-                    } else {
-                        library.rentBook(bookName ,user);
-                    }
+                    library.rentBook(bookName, user);
+                    // NormalUser users = library.getNormalUser(UniqueID);
+                    // if (user == null) {
+                    // System.out.println("User not found.");
+                    // } else {
+                    // library.rentBook(bookName, user);
+                    // }
                     break;
                 case 4:
-                    System.out.print("Enter student ID: ");
+                    System.out.print("Enter Admin Name: ");
                     UniqueID = scanner.nextLine();
                     System.out.print("Enter password: ");
-                    String password = scanner.nextLine();
-                    Admin admin = library.getAdmin(password);
-                    if (admin == null) {
-                        System.out.println("Invalid password.");
-                    } else {
+                    String passwordd = scanner.nextLine();
+                    
+                    if (passwordd==Admin.password) {
                         System.out.print("Enter new member name: ");
                         String newName = scanner.nextLine();
                         System.out.print("Enter new member phone number: ");
                         String phoneNumber = scanner.nextLine();
                         library.addNormalUser(newName, UniqueID, phoneNumber);
                         System.out.println("New member added successfully.");
+                    } else {
+                       
+                        System.out.println("Invalid password.");
                     }
                     break;
                 case 5:
@@ -77,7 +131,7 @@ public class App {
                 case 6:
                     System.out.print("Enter book name: ");
                     String bookToReturnName = scanner.nextLine();
-                    Book booktoReturn= library.findBookByName(bookToReturnName);
+                    Book booktoReturn = library.findBookByName(bookToReturnName);
                     library.returnBook(user, booktoReturn);
                     break;
                 case 7:
@@ -98,7 +152,8 @@ public class App {
                 default:
                     System.out.println("Invalid choice.");
             }
+
         }
-    
+
     }
 }

@@ -1,14 +1,8 @@
 public class Admin extends User{
-    private String password;
+    public static final String password="123";
     public Admin(String name,String phoneNumber,String password) {
         super( name, phoneNumber);
-        this.password=password;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
+        
     }
     
     
