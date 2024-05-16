@@ -102,6 +102,7 @@ public class MyApp {
             System.out.println("lib::removeMember::<memberID>");
             System.out.println("lib::return::<bookName>");
             System.out.println("lib::showRents");
+            System.out.println("lib::showUsers");
             System.out.println("back");
             input = scanner.nextLine();
             if ("back".equalsIgnoreCase(input)) {
@@ -141,6 +142,9 @@ public class MyApp {
                 break;
             case "showrents":
                 library.showRents();
+                break;
+            case "showusers":
+                library.showUsers();
                 break;
             default:
                 System.out.println("Invalid input! Please try again.");

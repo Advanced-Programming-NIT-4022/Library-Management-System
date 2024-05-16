@@ -152,6 +152,11 @@ public class Library {
                System.out.println("Error removing user!");
           }
      }
+     public void showUsers(){
+          for (int i = 0; i < users.size(); i++) {
+               System.out.println(users.get(i).toString());
+          }
+     }
      public boolean checkUser(String fullName,String ID){
           boolean found = false;
           for (int i = 0; i < users.size(); i++) {
