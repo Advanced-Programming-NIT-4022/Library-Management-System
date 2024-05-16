@@ -151,8 +151,10 @@ public class Library {
     }
     public String getBookIdbyName(String name) throws SQLException {
 
-            ResultSet resultSet1=statement.executeQuery("SELECT * FROM book WHERE Name='"+name+"'");
-            return resultSet1.getString("Id");
+            ResultSet resultSet1=statement.executeQuery("SELECT * FROM book WHERE Title='"+name+"'");
+            String Id=resultSet1.getString("Id");
+            resultSet1.close();
+            return Id;
 
 
     }
@@ -162,9 +164,14 @@ public class Library {
     public void rentUser(String bookName,String userId,boolean admin) throws SQLException {
         Rent rent =new Rent();
 
-        statement.executeUpdate("INSERT INTO rent (Id,userId,bookId,Datee) VALUES ('"+rent.getRentId()+"','"+userId+"','"+getBookIdbyName(bookName)+"','"+rent.getRentDate().toString()+"')");
-        statement.executeUpdate("UPDATE book SET Availabilitystatus='false' WHERE  Title='"+bookName+"'" );
+        statement.executeUpdate("INSERT INTO rent (Id,userId,bookId,Datee) VALUES ('"+rent.getRentId()+"','"+userId+"','"+bookName+"','"+rent.getRentDate().toString()+"')");
+        try{
+            statement.executeUpdate("UPDATE book SET Availabilitystatus='false' WHERE  Title='"+bookName+"'" );
 
+        }
+catch (Exception e){
+    System.out.println("book not found");
+}
         System.out.println("DONE.");
     }
 }
