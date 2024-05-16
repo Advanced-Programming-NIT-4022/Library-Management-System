@@ -82,4 +82,19 @@ public class Library {
         preparedStatement = connection.prepareStatement("DELETE FROM Books WHERE id = " + id);
         return preparedStatement.executeUpdate() != 0;
     }
+
+    User getUser(String username) throws SQLException {
+        preparedStatement = connection.prepareStatement("SELECT * FROM Users WHERE username = ?");
+        preparedStatement.setString(1, username);
+        resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            if (resultSet.getBoolean("isAdmin")) {
+                return new AdminUser(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("fullName"), resultSet.getString("phoneNumber"), resultSet.getString("password"));
+            } else {
+                return new NormalUser(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("fullName"), resultSet.getString("phoneNumber"), resultSet.getDate("registrationDate"));
+            }
+        }
+        return null;
+
+    }
 }
