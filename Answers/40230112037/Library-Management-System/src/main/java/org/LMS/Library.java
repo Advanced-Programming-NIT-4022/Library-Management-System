@@ -77,4 +77,9 @@ public class Library {
         preparedStatement.setString(4, book.description);
         preparedStatement.executeUpdate();
     }
+
+    boolean removeBook(int id) throws SQLException {
+        preparedStatement = connection.prepareStatement("DELETE FROM Books WHERE id = " + id);
+        return preparedStatement.executeUpdate() != 0;
+    }
 }
