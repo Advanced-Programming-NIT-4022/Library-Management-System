@@ -18,6 +18,9 @@ public class Manual {
         // command rent from library
         System.out.println("lib rent <bookName> : Rent a book from the library.");
 
+        // command lib get rented books
+        System.out.println("lib get rented books : shows your rented books");
+
         // command exit
         System.out.println("lib exit : exit the program");
 
