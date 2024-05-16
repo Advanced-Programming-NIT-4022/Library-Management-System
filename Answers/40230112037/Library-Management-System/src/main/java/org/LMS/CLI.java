@@ -378,6 +378,57 @@ public class CLI {
                 }
             }
         });
+        bookOptions.add("rent", arguments -> {
+            switch (arguments.length) {
+                case 0:
+                    PrintError.fewArguments();
+                    break;
+                case 1:
+                    try {
+                        library.rentBook(library.currentUser.id, Integer.parseInt(arguments[0]));
+                    } catch (SQLException e) {
+                        if (e.getErrorCode() == 1062)
+                            System.out.println("Couldn't rent book!\bBook is already rented!");
+                        else e.printStackTrace();
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number!");
+                    }
+                    break;
+                case 2:
+                    try {
+                        library.rentBook(Integer.parseInt(arguments[1]), Integer.parseInt(arguments[0]));
+                    } catch (SQLException e) {
+                        if (e.getErrorCode() == 1062)
+                            System.out.println("Couldn't rent book!\bBook is already rented!");
+                        else e.printStackTrace();
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number!");
+                    }
+                    break;
+                default:
+                    PrintError.manyArguments();
+            }
+        });
+
+        bookOptions.add("return", arguments -> {
+            switch (arguments.length) {
+                case 0:
+                    PrintError.fewArguments();
+                    break;
+                case 1:
+                    try {
+                        if (!library.returnBook(Integer.parseInt(arguments[0])))
+                            System.out.println("Book is not rented or not rented by you!");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number!");
+                    }
+                    break;
+                default:
+                    PrintError.manyArguments();
+            }
+        });
 
         OptionSelector libraryOptions = new OptionSelector();
         libraryOptions.add("book", bookOptions::select);
