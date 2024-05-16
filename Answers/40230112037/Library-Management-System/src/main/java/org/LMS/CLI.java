@@ -189,6 +189,13 @@ public class CLI {
         OptionSelector libraryOptions = new OptionSelector();
         libraryOptions.add("book", bookOptions::select);
         libraryOptions.add("user", userOptions::select);
+        libraryOptions.add("get-hrs",arguments -> {
+            if (arguments.length>0){
+                PrintError.manyArguments();
+                return;
+            }
+            System.out.println(library.getHours());
+        });
 
         normalUserMainOptions.add("lib", libraryOptions::select);
         normalUserMainOptions.add("exit", arguments -> loggedIn = false);
@@ -375,6 +382,25 @@ public class CLI {
         OptionSelector libraryOptions = new OptionSelector();
         libraryOptions.add("book", bookOptions::select);
         libraryOptions.add("user", userOptions::select);
+        libraryOptions.add("get-hrs",arguments -> {
+            if (arguments.length>0){
+                PrintError.manyArguments();
+                return;
+            }
+            System.out.println(library.getHours());
+        });
+        libraryOptions.add("set-hrs",arguments -> {
+            switch (arguments.length){
+                case 0:
+                    PrintError.fewArguments();
+                    break;
+                case 1:
+                    library.setHours(arguments[0]);
+                    break;
+                default:
+                    PrintError.manyArguments();
+            }
+        });
 
         adminUserMainOptions.add("lib", libraryOptions::select);
         adminUserMainOptions.add("exit", arguments -> loggedIn = false);
