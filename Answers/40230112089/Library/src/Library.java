@@ -174,6 +174,7 @@ public class Library {
             System.out.println("Book id      : " + this.bookArray.get(i).bookId);
             System.out.println("Book author  : " + this.bookArray.get(i).bookAuthor);
             System.out.println("Availability : " + this.bookArray.get(i).isAvailable);
+            System.out.println("description : " + this.bookArray.get(i).description);
             System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         }
     }
@@ -276,7 +277,7 @@ public class Library {
         return result ;
     }
 
-    public void addBook(String bookName, String bookAuthor) {
+    public void addBook(String bookName, String bookAuthor,String description) {
         System.out.println("enter admin or owner:");
         Scanner input = new Scanner(System.in);
         String type = input.nextLine();
@@ -292,7 +293,7 @@ public class Library {
                 return;
             }
         }
-        Book book = new Book(bookName, bookAuthor, this.booksId, true);
+        Book book = new Book(bookName, bookAuthor, this.booksId, true,description);
         this.booksId++;
         this.bookArray.add(book);
         System.out.println("Book id : " + book.bookId);
@@ -534,7 +535,7 @@ public class Library {
     public void showAllCommand() {
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         System.out.println("Book options : ");
-        System.out.println("lib add book <bookName> <bookAuthor>");
+        System.out.println("lib add book <bookName> <bookAuthor> <description>");
         System.out.println("lib remove book <bookID>");
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         System.out.println("User options : ");
@@ -581,9 +582,9 @@ public class Library {
                     deleteAccount(Integer.parseInt(commandSegs[3]),commandSegs[4]);
                 }
                 else if (commandSegs[1].equals("add")) {
-                    if (commandSegs.length == 5 && commandSegs[2].equals("book") && commandSegs[3].matches("^[a-zA-Z0-9\\/]*$") && commandSegs[4].matches("^[a-zA-Z0-9\\/]*$")) {
+                    if (commandSegs.length == 6 && commandSegs[2].equals("book") && commandSegs[3].matches("^[a-zA-Z0-9\\/]*$") && commandSegs[4].matches("^[a-zA-Z0-9\\/]*$") && commandSegs[5].matches("^[a-zA-Z0-9\\/]*$")) {
 
-                        addBook(commandSegs[3].replace("/", " "), commandSegs[4].replace("/", " "));
+                        addBook(commandSegs[3].replace("/", " "), commandSegs[4].replace("/", " "), commandSegs[5].replace("/", " "));
 
                     } else if (commandSegs.length == 6 && commandSegs[2].equals("user") && commandSegs[3].matches("^[a-zA-Z0-9\\/]*$") && commandSegs[4].matches("09[0-9]{9}") && commandSegs[5].matches("\\S+")) {
                         addUser(commandSegs[3].replace("/", " "), commandSegs[4], commandSegs[5]);
