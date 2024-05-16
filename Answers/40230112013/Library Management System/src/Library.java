@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Library {
-    private static Map<User, Rent> rentRecords;
+    private static Map<User, Rent> rentRecords = new HashMap<User, Rent>();
     static String LibraryName;
     int Capacity;
     String Operating_hours;
@@ -49,7 +49,7 @@ public class Library {
         }
     }
 
-    public void returnBook(User user) {
+    public static void returnBook(User user) {
         Rent rent = rentRecords.get(user);
         if (rent != null) {
             repository.add(rent.getBook());

@@ -1,6 +1,4 @@
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 public class Book {
     private String bookID;
@@ -61,16 +59,22 @@ public class Book {
                 ", description='" + description + '\'' +
                 '}';
     }
-    public static Book bookfinder(String n, String p ) {
+    public static List<Book> bookfinder(String t) {
         
         List<Book> me = Library.getrepo();
+        List<Book> b = new ArrayList<Book>();
         for (Book u : me) {
-            if (u.getTitle().equals(n) && u.getAuthor().equals(p)) {
+            int i=1;
+            /*if (u.getTitle().equals(n) && u.getAuthor().equals(p)) {
                 System.out.println("book found");
                 return u;
+            } */
+            if(u.toString1().contains(t)){
+                System.out.println(i +" " + u.toString1());
+                b.add(u);
+                i++;
             }
         }
-        System.out.println("book not found");
-        return null;
+        return b;
     }
 }
