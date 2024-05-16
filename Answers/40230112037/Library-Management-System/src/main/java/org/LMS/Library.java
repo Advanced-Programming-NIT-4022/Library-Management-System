@@ -106,4 +106,13 @@ public class Library {
         preparedStatement.setString(4, adminUser.password.getHashedPassword());
         preparedStatement.executeUpdate();
     }
+
+    void addNormalUser(NormalUser normalUser) throws SQLException {
+        preparedStatement = connection.prepareStatement("INSERT INTO Users (username,fullName,phoneNumber,registrationDate,isAdmin) VALUES (?,?,?,?,false)");
+        preparedStatement.setString(1, normalUser.username);
+        preparedStatement.setString(2, normalUser.fullName);
+        preparedStatement.setString(3, normalUser.phoneNumber);
+        preparedStatement.setDate(4, new Date(System.currentTimeMillis()));
+        preparedStatement.executeUpdate();
+    }
 }
