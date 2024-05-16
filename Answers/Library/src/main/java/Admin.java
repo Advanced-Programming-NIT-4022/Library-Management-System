@@ -1,7 +1,10 @@
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
 public class Admin implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String fullName;
     private String ID;
     private String phoneNumber;

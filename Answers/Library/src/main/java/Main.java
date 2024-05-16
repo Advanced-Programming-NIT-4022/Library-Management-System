@@ -14,6 +14,7 @@ public class Main {
             System.out.println("lib::getAvailableBooks");
             System.out.println("lib::removeMember::<memberID>");
             System.out.println("lib::return::<bookName>");
+            System.out.println("lib::addAdmin::<fullName>::<phoneNumber>::<newAdminPassword>");
             System.out.println("exit");
         String input;
         while (true) {
@@ -48,10 +49,29 @@ public class Main {
                 library.rentBook(bookname);
                 break;
             case "addmember":
-                //
+                System.out.println("enter users fullName: ");
+                String fullName = scanner.nextLine();
+                System.out.println("enter users phoneNumber: ");
+                String phoneNumber = scanner.nextLine();
+                library.addUser(fullName,phoneNumber);
+                break;
+            case "addadmin":
+                System.out.println("enter admins fullName: ");
+                String adminFullName = scanner.nextLine();
+                System.out.println("enter admins phoneNumber: ");
+                String adminPhoneNumber = scanner.nextLine();
+                System.out.println("enter new admins password: ");
+                String adminsPassword = scanner.nextLine();
+                library.addAdmin(adminFullName,adminPhoneNumber,adminsPassword);
                 break;
             case "specificrent":
-                //
+                System.out.println("enter bookName:");
+                String bookName =scanner.nextLine();
+                System.out.println("enter members fullName:");
+                String fullMemberName = scanner.nextLine();
+                System.out.println("enter members ID:");
+                String ID = scanner.nextLine();
+                library.rentSpecificBook(bookName,fullMemberName,ID);
                 break;
             case "getavailablebooks":
                 library.getAvailableBooks();
@@ -63,8 +83,8 @@ public class Main {
                 break;
             case "return":
                 System.out.println("enter book name:");
-                String bookName = scanner.nextLine();
-                library.returnBook(bookName);
+                String BookName = scanner.nextLine();
+                library.returnBook(BookName);
                 break;
             default:
                 System.out.println("Invalid input! Please try again.");

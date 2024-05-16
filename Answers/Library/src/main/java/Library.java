@@ -87,6 +87,7 @@ public class Library {
                          books.get(i).setAvailability(true);
                          saveBooks();
                          System.out.println("Book returned successfully.");
+                         deleteRent(title);
                          found = true;
                          break;
                     }
@@ -99,7 +100,7 @@ public class Library {
      public void getAvailableBooks(){
           for (int i = 0; i < books.size(); i++) {
                if (books.get(i).isAvailability()){
-                    System.out.println(books.get(i).getTitle());
+                    System.out.println(books.get(i).toString());
                }
           }
      }
@@ -223,18 +224,13 @@ public class Library {
           rentBook(book.getTitle());
           saveRents();
      }
-     public void removeRent(String ID){
-          boolean found = false;
+     public void deleteRent(String title){
           for (int i = 0; i < rents.size(); i++) {
-               if (rents.get(i).getRentalID().equalsIgnoreCase(ID)){
+               if (rents.get(i).getBook().getTitle().equalsIgnoreCase(title)){
                     rents.remove(rents.get(i));
                     saveRents();
-                    found = true;
                     break;
                }
-          }
-          if (!found){
-               System.out.println("Error returning book!");
           }
      }
      public void showRents(){

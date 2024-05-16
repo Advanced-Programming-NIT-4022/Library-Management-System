@@ -1,3 +1,4 @@
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -5,6 +6,7 @@ import java.time.Period;
 import java.util.UUID;
 
 public class Rent implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private Book book;
     private User user;
@@ -22,6 +24,12 @@ public class Rent implements Serializable {
     public String getRentalID() {
         return rentalID;
     }
+    public Book getBook(){
+        return book;
+    }
+    public User getUser(){
+        return user;
+    }
 
     public String getRentalDate() {
         return rentalDate;
@@ -38,7 +46,7 @@ public class Rent implements Serializable {
     }
     public static String createReturnDate() {
         LocalDate date = LocalDate.now();
-        Period period = Period.ofDays(20);
+        Period period = Period.ofDays(21);
         LocalDate rentalDate = date.plus(period);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         return rentalDate.format(formatter);

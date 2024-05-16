@@ -1,7 +1,9 @@
+import java.io.Serial;
 import java.util.UUID;
 import java.io.Serializable;
 
 public class Book implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private String bookID;
     private String title;
