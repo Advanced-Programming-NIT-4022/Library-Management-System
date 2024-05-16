@@ -6,10 +6,11 @@ import java.util.Date;
 public class Rent {
     // Attributes
     private Book book;
-    private NormalUsers normalUsersormal;
-    private String rentalID;
+    private NormalUsers normalUser;
+    private boolean returned;
     private Date rentalDate;
     // Getters & Setters
+
     public Book getBook() {
         return book;
     }
@@ -18,22 +19,22 @@ public class Rent {
         this.book = book;
     }
 
-    public NormalUsers getNormalUsersormal() {
-        return normalUsersormal;
+    public NormalUsers getNormalUser() {
+        return normalUser;
     }
 
-    public void setNormalUsersormal(NormalUsers normalUsersormal) {
-        this.normalUsersormal = normalUsersormal;
+    public void setNormalUser(NormalUsers normalUser) {
+        this.normalUser = normalUser;
     }
 
-    public String getRentalID() {
-        return rentalID;
+    public boolean isReturned() {
+        return returned;
     }
 
-    public void setRentalID(String rentalID) {
-        this.rentalID = rentalID;
+    public void setReturned(boolean returned) {
+        this.returned = returned;
     }
-
+    //***** Methods *****//
     public Date getRentalDate() {
         return rentalDate;
     }
@@ -41,5 +42,13 @@ public class Rent {
     public void setRentalDate(Date rentalDate) {
         this.rentalDate = rentalDate;
     }
+
     // Constructor
+
+    public Rent(Book book, NormalUsers normalUser, Date rentalDate) {
+        this.book = book;
+        this.normalUser = normalUser;
+        this.returned = false;
+        this.rentalDate = rentalDate;
+    }
 }

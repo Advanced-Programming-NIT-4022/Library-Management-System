@@ -1,16 +1,24 @@
 package org.example;
 
-public abstract class User {
-    private String name;
-    private String uniqueID;
-    private String phoneNumber;
+import java.util.Date;
 
-    public String getName() {
-        return name;
+public abstract class User {
+    protected String userName;
+    protected String uniqueID;
+    protected String phoneNumber;
+    //***** Constructor *****//
+    User(String name, String uniqueID, String phoneNumber){
+        this.userName = name;
+        this.uniqueID = uniqueID;
+        this.phoneNumber = phoneNumber;
+    }
+    //***** Getters & Setters *****//
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getUniqueID() {
@@ -28,15 +36,6 @@ public abstract class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
-    User(String name, String uniqueID, String phoneNumber){
-        this.name = name;
-        this.uniqueID = uniqueID;
-        this.phoneNumber = phoneNumber;
-    }
-
-    void signUp() {
-
-    }
-
+    //***** Methods *****//
+    public abstract void register(Date registrationDate);
 }

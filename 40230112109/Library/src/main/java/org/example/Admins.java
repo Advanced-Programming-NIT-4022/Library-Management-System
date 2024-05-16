@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Date;
+
 public class Admins extends User{
     // Attributes
     private String password;
@@ -17,8 +19,9 @@ public class Admins extends User{
         super(name, uniqueID, phoneNumber);
         this.password = password;
     }
+
     @Override
-    public void signUp() {
+    public void register(Date registrationDate) {
 
     }
 }

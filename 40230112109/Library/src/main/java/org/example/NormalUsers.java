@@ -10,15 +10,17 @@ public class NormalUsers extends User{
     public Date getRegistrationDate() {
         return registrationDate;
     }
-    // Constructor
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
-
-
-
+    // Constructor
     NormalUsers(String name, String uniqueID, String phoneNumber, Date registrationDate) {
         super(name, uniqueID, phoneNumber);
+        this.registrationDate = registrationDate;
+    }
+
+    @Override
+    public void register(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
 }
