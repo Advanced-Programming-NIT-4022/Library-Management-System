@@ -54,10 +54,10 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "fullName='" + fullName + '\'' +
-                ", ID='" + ID + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", date_of_registration='" + date_of_registration + '\'' +
+                "fullName='" + getFullName() + '\'' +
+                ", ID='" + getID() + '\'' +
+                ", phoneNumber='" + getPhoneNumber() + '\'' +
+                ", date_of_registration='" + getDate_of_registration() + '\'' +
                 '}';
     }
 

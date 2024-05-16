@@ -32,6 +32,9 @@ public class Library {
           loadUsers();
           loadRents();
      }
+     public boolean isAdminEmpty(){
+          return admins.isEmpty();
+     }
      public void addBook(String title, String author, String description){
           if (capacity > 0){
           books.add(new Book(title,author,description));

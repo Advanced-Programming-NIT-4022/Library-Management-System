@@ -48,9 +48,9 @@ public class Admin implements Serializable {
     @Override
     public String toString() {
         return "Admin{" +
-                "fullName='" + fullName + '\'' +
-                ", ID='" + ID + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                "fullName='" + getFullName() + '\'' +
+                ", ID='" + getID() + '\'' +
+                ", phoneNumber='" + getPhoneNumber() + '\'' +
                 // Do not include the password for security reasons
                 '}';
     }

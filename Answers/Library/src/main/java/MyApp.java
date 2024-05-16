@@ -1,18 +1,20 @@
 import java.util.Scanner;
-public class Main {
+public class MyApp {
     static Library library = new Library();
     static Scanner scanner = new Scanner(System.in);
     public static void start(){
+        if (library.isAdminEmpty())
+            library.addAdmin("Arshia mohammadzade","09031241172","1384");
         getROLE();
     }
 
     public static void getROLE(){
-        System.out.println("Please write your role:");
-        System.out.println("lib::Admin::<fullName>::<ID>::<password>");
-        System.out.println("lib::User::<fullName>::<ID>");
-        System.out.println("Exit");
         String role;
         while (true){
+            System.out.println("Please write your role:");
+            System.out.println("lib::Admin::<fullName>::<ID>::<password>");
+            System.out.println("lib::User::<fullName>::<ID>");
+            System.out.println("Exit");
             role =scanner.nextLine();
             if (role.equalsIgnoreCase("exit")){
                 System.out.println("exiting program...");
@@ -44,16 +46,16 @@ public class Main {
         }
     }
     public static void UsersMainMenu(){
-            System.out.println("Welcome to" + library.getLibName());
-            System.out.println("Please write your choice:");
+        System.out.println("Welcome to" + library.getLibName());
+        String input;
+        while (true) {
+            System.out.println("Please write your operation:");
             System.out.println("lib::getHour");
             System.out.println("lib::rent::<BookName>");
             System.out.println("lib::specificRent::<bookName>::<memberName>::<memberID>");
             System.out.println("lib::getAvailableBooks");
             System.out.println("lib::return::<bookName>");
             System.out.println("back");
-        String input;
-        while (true) {
             input = scanner.nextLine();
             if ("back".equalsIgnoreCase(input)) {
                 System.out.println("Good bye :(");
@@ -88,27 +90,28 @@ public class Main {
     }
     public static void AdminsMainMenu(){
         System.out.println("Welcome to" + library.getLibName());
-        System.out.println("Please write your choice:");
-        System.out.println("lib::addBook::<Name>::<Author>::<subtitle>");
-        System.out.println("lib::getHour");
-        System.out.println("lib::rent::<BookName>");
-        System.out.println("lib::addMember::<fullName>::<phoneNumber>");
-        System.out.println("lib::specificRent::<bookName>::<memberName>::<memberID>");
-        System.out.println("lib::getAvailableBooks");
-        System.out.println("lib::removeMember::<memberID>");
-        System.out.println("lib::return::<bookName>");
-        System.out.println("exit");
         String input;
         while (true) {
+            System.out.println("Please write your operation:");
+            System.out.println("lib::addBook::<Name>::<Author>::<subtitle>");
+            System.out.println("lib::getHour");
+            System.out.println("lib::rent::<BookName>");
+            System.out.println("lib::addMember::<fullName>::<phoneNumber>");
+            System.out.println("lib::specificRent::<bookName>::<memberName>::<memberID>");
+            System.out.println("lib::getAvailableBooks");
+            System.out.println("lib::removeMember::<memberID>");
+            System.out.println("lib::return::<bookName>");
+            System.out.println("lib::showRents");
+            System.out.println("back");
             input = scanner.nextLine();
-            if ("exit".equalsIgnoreCase(input)) {
+            if ("back".equalsIgnoreCase(input)) {
                 System.out.println("Good bye :(");
                 break;
             }
-            AdminprocessCommand(input);
+            AdminsProcessCommand(input);
         }
     }
-    public static void AdminprocessCommand(String command){
+    public static void AdminsProcessCommand(String command){
         String[] parts = command.split("::");
         String operation = parts[1];
         switch (operation.toLowerCase()){
@@ -135,6 +138,9 @@ public class Main {
                 break;
             case "return":
                 library.returnBook(parts[2]);
+                break;
+            case "showrents":
+                library.showRents();
                 break;
             default:
                 System.out.println("Invalid input! Please try again.");
