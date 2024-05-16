@@ -268,8 +268,23 @@ public class  MyApp {
                             bookID);
             } else
                 throw new NoPermissionException("You don't have permission to add books!");
-        } else if (command.matches("lib return \\w*")) {
+        } else if (command.matches("lib\\sreturn\\s.+")) {
             // return a book
+            String bookName = command.substring(11);
+            ArrayList<Book> books = ((NormalUser) library.getUser()).getRentBooks();
+            boolean hasBook = false;
+            int bookID = 0;
+            for (Book book:books)
+                if (book.getTitle().equals(bookName)) {
+                    hasBook = true;
+                    bookID = book.getUniqueID();
+                }
+            if (hasBook) {
+                library.returnBook(bookID);
+                System.out.printf("Book <%s> returned to library.%n", bookName);
+            }
+            else
+                System.out.println("You didn't rent this book:)");
         } else if (command.matches("lib\\slogin\\s\\d+")) {
             //command lib login
             if (library.getUser() != null)
@@ -388,7 +403,7 @@ public class  MyApp {
                     // create rent class
                     rent = new Rent(books.get(choice - 1), (NormalUser) library.getUser());
                 }
-                int rentalID = library.addRent(rent);
+                int rentalID = ((NormalUser) library.getUser()).rentBook(rent);
                 if (rentalID == 0)
                     return;
                 System.out.println("You rented this book successfully.");
