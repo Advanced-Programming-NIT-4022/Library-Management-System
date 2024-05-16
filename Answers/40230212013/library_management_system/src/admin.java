@@ -1,14 +1,14 @@
 public class admin extends user{
-  private double password;
-  public admin(String name, String phoneNumber)
+  private int password;
+  public admin(String name,int id, String phoneNumber, int password)
   {
-    super("Navid", "09204201533");
-    this.password = 12345;
+    super(name, id, phoneNumber);
+    this.password = password;
   }
-  public double getPassword() {
+  public int getPassword() {
     return password;
   }
-  public void setPassword(double password) {
+  public void setPassword(int password) {
     this.password = password;
   }
   
