@@ -153,8 +153,8 @@ public class Library {
         preparedStatement.executeUpdate();
     }
 
-    boolean returnBook(int rentId) throws SQLException {
-        preparedStatement = connection.prepareStatement("DELETE FROM Rents WHERE id = " + rentId + ((!(currentUser instanceof AdminUser)) ? " AND userId = " + currentUser.id : ""));
+    boolean returnBook(int bookId) throws SQLException {
+        preparedStatement = connection.prepareStatement("DELETE FROM Rents WHERE bookId = " + bookId + ((!(currentUser instanceof AdminUser)) ? " AND userId = " + currentUser.id : ""));
         return preparedStatement.executeUpdate() != 0;
     }
 }
