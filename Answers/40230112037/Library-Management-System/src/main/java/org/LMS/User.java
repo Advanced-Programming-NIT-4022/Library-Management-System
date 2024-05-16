@@ -35,11 +35,6 @@ final class NormalUser extends User {
 final class AdminUser extends User {
     Password password;
 
-    @Override
-    public String toString() {
-        return "ID:" + id + "\tFullName: " + fullName + "\tUsername: " + username + "\tPhone Number: " + phoneNumber;
-    }
-
     AdminUser(int id, String username, String fullName, String phoneNumber, String hashedPassword) {
         this.id = id;
         this.username = username;
@@ -53,6 +48,11 @@ final class AdminUser extends User {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "ID:" + id + "\tFullName: " + fullName + "\tUsername: " + username + "\tPhone Number: " + phoneNumber;
     }
 
 }

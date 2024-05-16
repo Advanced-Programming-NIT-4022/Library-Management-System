@@ -7,67 +7,9 @@ import java.util.Scanner;
 public class CLI {
     private final Scanner scanner = new Scanner(System.in);
     boolean loggedIn = false;
-    private Library library;
     OptionSelector normalUserMainOptions = new OptionSelector();
     OptionSelector adminUserMainOptions = new OptionSelector();
-
-    CLI() {
-        try {
-            library = Library.getInstance("My org.LMS.Library", "localhost", "LMS", "LMS_password");
-            System.out.println("Welcome to Library!");
-            while (true) {
-                if (!login()) break;
-            }
-        } catch (Exception e) {
-            System.out.println("Couldn't connect to database!");
-        }
-    }
-
-    private boolean login() {
-        library.currentUser = null;
-        User user = null;
-        System.out.print("Username: ");
-        String username = scanner.nextLine();
-        if (username.isBlank()) return false;
-        try {
-            user = library.getUser(username);
-        } catch (SQLException ignored) {
-
-        }
-        if (user instanceof NormalUser) {
-            loginAsNormalUser((NormalUser) user);
-        } else if (user instanceof AdminUser admin) {
-            System.out.print("Password: ");
-            if (admin.password.verifyPassword(scanner.nextLine())) {
-                loginAsAdminUser(admin);
-            } else {
-                System.out.println("Wrong password!");
-            }
-        } else {
-            System.out.println("User not found!");
-        }
-        return true;
-    }
-
-    void loginAsNormalUser(NormalUser user) {
-        library.currentUser = user;
-        loggedIn = true;
-        while (loggedIn) {
-            System.out.print(">>> ");
-            String[] args = UserInput.argumentsToArray(scanner.nextLine());
-            normalUserMainOptions.select(args);
-        }
-    }
-
-    void loginAsAdminUser(AdminUser admin) {
-        library.currentUser = admin;
-        loggedIn = true;
-        while (loggedIn) {
-            System.out.print(">>> ");
-            String[] args = UserInput.argumentsToArray(scanner.nextLine());
-            adminUserMainOptions.select(args);
-        }
-    }
+    private Library library;
 
     {
         OptionSelector userOptions = new OptionSelector();
@@ -78,7 +20,7 @@ public class CLI {
                     else loggedIn = false;
                 } catch (SQLException e) {
                     if (e.getErrorCode() == 1451)
-                        System.out.println("Couldn't remove User!\nYou have some rented books!");
+                        System.out.println("Couldn't remove User!\nUser have some rented books!");
                     else e.printStackTrace();
                 } catch (NumberFormatException e) {
                     System.out.println("Please enter a number!");
@@ -189,8 +131,8 @@ public class CLI {
         OptionSelector libraryOptions = new OptionSelector();
         libraryOptions.add("book", bookOptions::select);
         libraryOptions.add("user", userOptions::select);
-        libraryOptions.add("get-hrs",arguments -> {
-            if (arguments.length>0){
+        libraryOptions.add("get-hrs", arguments -> {
+            if (arguments.length > 0) {
                 PrintError.manyArguments();
                 return;
             }
@@ -280,11 +222,11 @@ public class CLI {
         userOptions.add("list", arguments -> {
             try {
                 System.out.println("Admins:");
-                for (AdminUser admin : library.getAdminUserList()){
+                for (AdminUser admin : library.getAdminUserList()) {
                     System.out.println(admin);
                 }
                 System.out.println("Normal Users:");
-                for (NormalUser normalUser : library.getNormalUserList()){
+                for (NormalUser normalUser : library.getNormalUserList()) {
                     System.out.println(normalUser);
                 }
             } catch (SQLException e) {
@@ -433,15 +375,15 @@ public class CLI {
         OptionSelector libraryOptions = new OptionSelector();
         libraryOptions.add("book", bookOptions::select);
         libraryOptions.add("user", userOptions::select);
-        libraryOptions.add("get-hrs",arguments -> {
-            if (arguments.length>0){
+        libraryOptions.add("get-hrs", arguments -> {
+            if (arguments.length > 0) {
                 PrintError.manyArguments();
                 return;
             }
             System.out.println(library.getHours());
         });
-        libraryOptions.add("set-hrs",arguments -> {
-            switch (arguments.length){
+        libraryOptions.add("set-hrs", arguments -> {
+            switch (arguments.length) {
                 case 0:
                     PrintError.fewArguments();
                     break;
@@ -455,5 +397,65 @@ public class CLI {
 
         adminUserMainOptions.add("lib", libraryOptions::select);
         adminUserMainOptions.add("exit", arguments -> loggedIn = false);
+        adminUserMainOptions.add("help", arguments -> {
+        });
+    }
+
+    CLI() {
+        try {
+            library = Library.getInstance("My org.LMS.Library", "localhost", "LMS", "LMS_password");
+            System.out.println("Welcome to Library!");
+            while (true) {
+                if (!login()) break;
+            }
+        } catch (Exception e) {
+            System.out.println("Couldn't connect to database!");
+        }
+    }
+
+    private boolean login() {
+        library.currentUser = null;
+        User user = null;
+        System.out.print("Username: ");
+        String username = scanner.nextLine();
+        if (username.isBlank()) return false;
+        try {
+            user = library.getUser(username);
+        } catch (SQLException ignored) {
+
+        }
+        if (user instanceof NormalUser) {
+            loginAsNormalUser((NormalUser) user);
+        } else if (user instanceof AdminUser admin) {
+            System.out.print("Password: ");
+            if (admin.password.verifyPassword(scanner.nextLine())) {
+                loginAsAdminUser(admin);
+            } else {
+                System.out.println("Wrong password!");
+            }
+        } else {
+            System.out.println("User not found!");
+        }
+        return true;
+    }
+
+    void loginAsNormalUser(NormalUser user) {
+        library.currentUser = user;
+        loggedIn = true;
+        while (loggedIn) {
+            System.out.print(">>> ");
+            String[] args = UserInput.argumentsToArray(scanner.nextLine());
+            normalUserMainOptions.select(args);
+        }
+    }
+
+    void loginAsAdminUser(AdminUser admin) {
+        library.currentUser = admin;
+        loggedIn = true;
+        while (loggedIn) {
+            System.out.print(">>> ");
+            String[] args = UserInput.argumentsToArray(scanner.nextLine());
+            adminUserMainOptions.select(args);
+        }
     }
 }

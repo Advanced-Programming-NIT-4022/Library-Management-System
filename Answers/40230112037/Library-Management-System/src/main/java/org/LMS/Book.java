@@ -1,9 +1,8 @@
 package org.LMS;
 
-// Todo : encapsulation and
 public class Book {
+    private final String title, author, description;
     private int id;
-    private String title, author, description;
 
     public Book(int id, String title, String author, String description) {
         this.id = id;

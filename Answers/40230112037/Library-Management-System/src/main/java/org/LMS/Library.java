@@ -11,20 +11,10 @@ public class Library {
     private final Statement statement;
     protected User currentUser;
     private String name;
-    private String hours="8 A.M to 18 P.M";
-
-    public String getHours() {
-        return hours;
-    }
-
-    public void setHours(String hours) {
-        this.hours = hours;
-    }
-
+    private String hours = "8 A.M to 18 P.M";
     private Integer capacity;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
-
     private Library(String name, Connection connection) throws SQLException {
         this.connection = connection;
         statement = connection.createStatement();
@@ -39,6 +29,14 @@ public class Library {
             return null;
         }
         return new Library(name, connection);
+    }
+
+    public String getHours() {
+        return hours;
+    }
+
+    public void setHours(String hours) {
+        this.hours = hours;
     }
 
     ArrayList<Book> resultSetToBookArrayList(ResultSet resultSet) throws SQLException {
