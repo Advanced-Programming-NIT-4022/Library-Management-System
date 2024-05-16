@@ -22,4 +22,9 @@ public class UserInput {
     public static String sqlLikeRegex(String searchString) {
         return searchString.replace("!", "\\!").replace("%", "\\%").replace("_", "\\_").replace("[", "\\[");
     }
+
+    public static boolean verifyPhoneNumber(String phoneNumber) {
+        Pattern pattern = Pattern.compile("09[0-9]{9}");
+        return pattern.matcher(phoneNumber).find();
+    }
 }
