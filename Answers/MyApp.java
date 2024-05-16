@@ -13,6 +13,7 @@ public class MyApp {
             // || Pattern.matches("[9][0-9]{9}", phone)
             while (true) {
 
+
                 if(Pattern.matches("[12]{1}" , x)){
                     if(Objects.equals(x, "1")){
                         admin.Ad();
