@@ -121,7 +121,7 @@ public class Library {
         return preparedStatement.executeUpdate() != 0;
     }
 
-    void RentBook(int userId, int bookId) throws SQLException {
+    void rentBook(int userId, int bookId) throws SQLException {
         preparedStatement = connection.prepareStatement("INSERT INTO Rents (userId,bookId,registrationDate) VALUES (?,?,?)");
         preparedStatement.setInt(1, userId);
         preparedStatement.setInt(2, bookId);
