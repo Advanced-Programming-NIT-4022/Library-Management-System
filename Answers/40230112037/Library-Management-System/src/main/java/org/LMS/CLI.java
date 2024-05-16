@@ -206,7 +206,10 @@ public class CLI {
                     break;
                 case 3:
                     try {
-                        // Todo : verifying
+                        if (!UserInput.verifyPhoneNumber(arguments[2])) {
+                            System.out.println("Wrong phone number!");
+                            break;
+                        }
                         library.addNormalUser(new NormalUser(arguments[0], arguments[1], arguments[2]));
                     } catch (SQLException e) {
                         System.out.println("Couldn't add User! (username is used by another user)");
@@ -274,7 +277,10 @@ public class CLI {
                     break;
                 case 3:
                     try {
-                        // Todo : verifying
+                        if (arguments[0].isEmpty()) {
+                            System.out.println("Book name can't be empty!");
+                            break;
+                        }
                         library.addBook(new Book(arguments[0], arguments[1], arguments[2]));
                     } catch (SQLException e) {
                         System.out.println("Couldn't add book!");
