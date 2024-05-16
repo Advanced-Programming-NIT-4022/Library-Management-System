@@ -179,6 +179,26 @@ public class Library {
         }
     }
 
+    public void getAvailableBooks(){
+        if (this.bookArray.isEmpty()) {
+            System.out.println("Book list is empty");
+            return;
+        }
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        for (int i = 0; i < this.bookArray.size(); i++) {
+            if (this.bookArray.get(i).isAvailable) {
+                System.out.println((i + 1) + "-");
+                System.out.println("Book name    : " + this.bookArray.get(i).bookName);
+                System.out.println("Book id      : " + this.bookArray.get(i).bookId);
+                System.out.println("Book author  : " + this.bookArray.get(i).bookAuthor);
+                System.out.println("Availability : " + this.bookArray.get(i).isAvailable);
+                System.out.println("description : " + this.bookArray.get(i).description);
+                System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            }
+        }
+
+    }
+
     public void showAllRent() {
         if (this.rentArray.isEmpty()) {
             System.out.println("Rent list is empty ");
@@ -537,6 +557,7 @@ public class Library {
         System.out.println("Book options : ");
         System.out.println("lib add book <bookName> <bookAuthor> <description>");
         System.out.println("lib remove book <bookID>");
+        System.out.println("lib get available books");
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         System.out.println("User options : ");
         System.out.println("lib add user <userName> <phoneNumber> <password>");
@@ -575,8 +596,14 @@ public class Library {
                 if (commandSegs[1].equals("-h") && commandSegs.length == 2) {
                     showAllCommand();
                 }
-                else if (commandSegs.length == 3 && commandSegs[1].equals("get") && commandSegs[2].equals("hrs")){
-                    getHours();
+                else if (commandSegs[1].equals("get")) {
+                    if (commandSegs.length == 3 && commandSegs[1].equals("get") && commandSegs[2].equals("hrs")) {
+                        getHours();
+                    }else if(commandSegs.length == 4 && commandSegs[2].equals("available") && commandSegs[3].equals("books")){
+                        getAvailableBooks();
+                    }else{
+                        System.out.println("Wrong try again");
+                    }
                 }
                 else if( commandSegs.length == 5 && commandSegs[1].equals("delete") && commandSegs[2].equals("account") && commandSegs[3].matches("[0-9]+") && commandSegs[4].matches("\\S+"))  {
                     deleteAccount(Integer.parseInt(commandSegs[3]),commandSegs[4]);
