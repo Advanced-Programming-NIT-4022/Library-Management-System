@@ -4,11 +4,11 @@ public class Rent {
     private static int count=0;
     private final String rentID ;
     private LocalDate rentalDate;
-    private LocalDate dueDate;
+    private LocalDate dueDate; 
     
     private Book book;
-    private NormalUser user;
-    public Rent(String rentalID,LocalDate rentalDate,LocalDate dueDate, Book book, NormalUser user) {
+    private User user;
+    public Rent(String rentalID,LocalDate rentalDate,LocalDate dueDate, Book book, User user) {
         this.rentalDate = rentalDate;
         this.book = book;
         this.user = user;
@@ -35,7 +35,7 @@ public class Rent {
     public void setBook(Book book) {
         this.book = book;
     }
-    public NormalUser getUser() {
+    public User getUser() {
         return user;
     }
     public void setUser(NormalUser user) {

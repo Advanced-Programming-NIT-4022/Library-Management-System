@@ -1,5 +1,5 @@
-import java.util.List;
-import java.util.Scanner;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -43,20 +43,20 @@ public class App {
                     System.out.print("Enter book name: ");
                     String bookName = scanner.nextLine();
                     System.out.print("Enter student ID: ");
-                    int UniqueID = scanner.nextInt();
-                    NormalUser users = user.getNormalUser(UniqueID);
+                    String UniqueID = scanner.nextLine();
+                    NormalUser users = library.getNormalUser(UniqueID);
                     if (user == null) {
                         System.out.println("User not found.");
                     } else {
-                        library.rentBook(bookName, user);
+                        library.rentBook(bookName ,user);
                     }
                     break;
                 case 4:
                     System.out.print("Enter student ID: ");
-                    UniqueID = scanner.nextInt();
+                    UniqueID = scanner.nextLine();
                     System.out.print("Enter password: ");
                     String password = scanner.nextLine();
-                    Admin admin = user.getAdmin(password);
+                    Admin admin = library.getAdmin(password);
                     if (admin == null) {
                         System.out.println("Invalid password.");
                     } else {
@@ -76,11 +76,12 @@ public class App {
                     break;
                 case 6:
                     System.out.print("Enter book name: ");
-                    bookName = scanner.nextLine();
-                    library.returnBook(bookName);
+                    String bookToReturnName = scanner.nextLine();
+                    Book booktoReturn= library.findBookByName(bookToReturnName);
+                    library.returnBook(user, booktoReturn);
                     break;
                 case 7:
-                    List<Book> availableBooks = library.getAvailableBooks();
+                    ArrayList<Book> availableBooks = library.getAvailableBooks();
                     if (availableBooks.isEmpty()) {
                         System.out.println("No books available.");
                     } else {

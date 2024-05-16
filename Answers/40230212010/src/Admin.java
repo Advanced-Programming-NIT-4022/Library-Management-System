@@ -1,6 +1,6 @@
 public class Admin extends User{
     private String password;
-    public Admin(String name,int phoneNumber,String password) {
+    public Admin(String name,String phoneNumber,String password) {
         super( name, phoneNumber);
         this.password=password;
     }

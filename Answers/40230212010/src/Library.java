@@ -1,13 +1,17 @@
 import java.time.LocalDate;
 import java.util.*;
+import java.lang.*;;
 
 public class Library {
+    private User user;
     private String name;
     private int capacity;
     private String operatingHours;
     private Map<String, Book> books;
     private List<User> users;
     private List<Rent> rentals;
+    private List<Admin> adminsList;
+    private List<NormalUser> normalUsersList;
 
     public Library(String name, int capacity, String operatingHours) {
         this.name = name;
@@ -16,6 +20,8 @@ public class Library {
         this.books = new HashMap<>();
         this.users = new ArrayList<>();
         this.rentals = new ArrayList<>();
+        List<User> normalUsersList = new ArrayList<User>();
+        List<Admin> admins = new ArrayList<Admin>();
     }
 
     public void addBook(String title, String description, String author) {
@@ -49,45 +55,94 @@ public class Library {
         return Availablebooks;
     }
 
-    public void rentBook(String bookName, NormalUser user) {
+    public void rentBook(String bookName, User user) {
 
         Book book = this.books.get(bookName);
 
-        // Check if book exists
         if (book == null) {
             System.out.print("book not found: " + bookName);
         }
 
-        // Check if book is available
         if (!book.isAvailable()) {
             System.out.println("Book is currently unavailable: " + bookName);
         }
 
-        // Generate a unique rental ID (consider using UUID for guaranteed uniqueness)
         String rentalID = UUID.randomUUID().toString().substring(0, 8);
 
-        // Set due date to 7 days from rental date
         LocalDate rentalDate = LocalDate.now();
         LocalDate dueDate = rentalDate.plusDays(7);
 
-        // Create and add a new Rent object
         Rent newRent = new Rent(rentalID, rentalDate, dueDate, book, user);
         rentals.add(newRent);
 
-        // Mark book as unavailable
         book.setAvailable(false);
 
         System.out.println("Book rented successfully. Your due date is: " + dueDate);
 
-        // Update book availability counts (consider using an AtomicInteger for thread
-        // safety if needed)
-        // atomicIntegerBooksRented.getAndIncrement();
-
-        // Handle other potential exceptions as needed (e.g., BookNotAvailableException,
-        // DuplicateRentalException)
-
     }
 
+    public Book findBookByName(String bookName) {
+       return books.get(bookName);
+    }
+    
+    public void removeUser(String userID) {
+        for (NormalUser user : normalUsersList) {
+            if (user.getUniqueID()== userID) {
+                normalUsersList.remove(userID);
+            }
+
+            for (Admin admin : adminsList) {
+                if (user.getUniqueID() == userID) {
+                    adminsList.remove(user.getUniqueID());
+                }
+            }
+        }
+    }
+
+    
+
+    public void addAdmin(String name, String phoneNumber, String password) {
+        Admin newAdmin = new Admin(name, phoneNumber, password);
+        adminsList.add(newAdmin);
+    }
+
+    public void addNormalUser(String name, String phoneNumber, String registrationDate) {
+        NormalUser newNormalUser = new NormalUser(name, phoneNumber, registrationDate);
+        normalUsersList.add(newNormalUser);
+    }
+
+    public NormalUser getNormalUser(String UniqueID) {
+        for (NormalUser user : normalUsersList) {
+            if (user.getUniqueID().equals(UniqueID) ) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public Admin getAdmin(String password) {
+        for (Admin admin : adminsList) {
+            if (admin.getPassword().equals(password)) {
+                return admin;
+            }
+        }
+        return null;
+    }
+
+
+    public void returnBook (User user, Book book) {
+        if (book.isAvailable()) {
+            Rent rent = new Rent(name, null, null, book, null);
+            rentals.add(rent);
+            book.setAvailable(false);
+            System.out.println("book returned successfully!");
+        }
+        else{
+            System.out.println("not available!");
+        }
+
+    }
+    
     public String getName() {
         return name;
     }
