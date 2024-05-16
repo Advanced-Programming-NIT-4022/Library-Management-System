@@ -1,6 +1,9 @@
 package com.example.lib;
 
+import java.util.Random;
+
 public class User {
+    Random rand=new Random();
     public String getName() {
         return name;
     }
@@ -28,9 +31,8 @@ public class User {
     private String name;
     private String number;
     private String Id;
-    User(String name,String Number,String Id){
+    User(String name,String Number){
         this.name=name;
         this.number=number;
-        this.Id=Id;
     }
 }
