@@ -38,4 +38,35 @@ public class Library {
         }
         return result;
     }
+
+    ArrayList<Book> listBooks() throws SQLException {
+        resultSet = statement.executeQuery("SELECT * FROM Books");
+        return resultSetToBookArrayList(resultSet);
+    }
+
+    ArrayList<Book> listBooks(Boolean available) throws SQLException {
+        resultSet = statement.executeQuery("SELECT * FROM Books WHERE isAvailable=" + available);
+        return resultSetToBookArrayList(resultSet);
+    }
+
+    ArrayList<Book> listBooks(String searchString) throws SQLException {
+        preparedStatement = connection.prepareStatement("SELECT * FROM Books WHERE title LIKE ? OR author LIKE ? OR description LIKE ?");
+        String searchExpression = '%' + UserInput.sqlLikeRegex(searchString) + '%';
+        preparedStatement.setString(1, searchExpression);
+        preparedStatement.setString(2, searchExpression);
+        preparedStatement.setString(3, searchExpression);
+        resultSet = preparedStatement.executeQuery();
+        return resultSetToBookArrayList(resultSet);
+    }
+
+    ArrayList<Book> listBooks(String searchString, boolean isAvailable) throws SQLException {
+        preparedStatement = connection.prepareStatement("SELECT * FROM Books WHERE title isAvailable=" + isAvailable + " AND (LIKE ? OR author LIKE ? OR description LIKE ?)");
+        String searchExpression = '%' + UserInput.sqlLikeRegex(searchString) + '%';
+        preparedStatement.setString(1, searchExpression);
+        preparedStatement.setString(2, searchExpression);
+        preparedStatement.setString(3, searchExpression);
+        resultSet = preparedStatement.executeQuery();
+        return resultSetToBookArrayList(resultSet);
+    }
+
 }
