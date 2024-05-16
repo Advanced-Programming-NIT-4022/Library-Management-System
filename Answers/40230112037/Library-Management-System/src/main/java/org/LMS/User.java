@@ -25,10 +25,20 @@ final class NormalUser extends User {
         this.phoneNumber = phoneNumber;
         this.registrationDate = registrationDate;
     }
+
+    @Override
+    public String toString() {
+        return "ID:" + id + "\tUsername: " + username + "\tFullName: " + fullName + "\tPhone Number: " + phoneNumber + "\tRegistration Date: " + registrationDate;
+    }
 }
 
 final class AdminUser extends User {
     Password password;
+
+    @Override
+    public String toString() {
+        return "ID:" + id + "\tFullName: " + fullName + "\tUsername: " + username + "\tPhone Number: " + phoneNumber;
+    }
 
     AdminUser(int id, String username, String fullName, String phoneNumber, String hashedPassword) {
         this.id = id;
