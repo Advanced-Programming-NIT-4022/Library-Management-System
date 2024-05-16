@@ -115,4 +115,9 @@ public class Library {
         preparedStatement.setDate(4, new Date(System.currentTimeMillis()));
         preparedStatement.executeUpdate();
     }
+
+    boolean removeUser(int id) throws SQLException {
+        preparedStatement = connection.prepareStatement("DELETE FROM Users WHERE id = " + id);
+        return preparedStatement.executeUpdate() != 0;
+    }
 }
