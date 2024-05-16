@@ -2,21 +2,30 @@ public class User
 {
     private String name;
     private int ID;
-    private int number;
-    public User(String name , int ID , int number)
+    private String number;
+    public User(String name , int ID , String number)
     {
-        this.name=name;
-        this.ID=ID++;
-        this.number=number;
+        this.setName(name);
+        this.ID=ID;
+        this.setName(number);
     }
+    //it is is better to use setter instead of "this. =" formation
 
     public String getName()
     {
         return name;
     }
-    public int getNumber()
+    public void setName(String name)
+    {
+        this.name=name;
+    }
+    public String getNumber()
     {
         return number;
+    }
+    public void setNumber(String number)
+    {
+        this.number=number;
     }
     public int getID()
     {

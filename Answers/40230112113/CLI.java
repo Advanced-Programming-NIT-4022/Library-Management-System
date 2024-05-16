@@ -11,6 +11,11 @@ public class CLI
     public static final String YELLOW = "\u001B[33m";
     public static final String PURPLE = "\u001B[35m";
     public static final String BLUE = "\u001B[34m";
+    public static final String CYAN = "\u001B[36m";
+    public static final String WHITE = "\u001B[37m";
+    public static final String BLACK = "\u001B[30m";
+
+    static boolean IsAdmin=false;
 
     static Scanner sc = new Scanner(System.in);
 
@@ -64,7 +69,13 @@ public class CLI
         }
         else if(library.CheckName(AdminName))
         {
-
+            System.out.print("password: ");
+            if(library.CheckPassword(AdminName, null))
+            {
+                System.out.println("welcome "+AdminName);
+                IsAdmin=true;
+                AllCommands();
+            }
         }
         else
         {
@@ -82,17 +93,148 @@ public class CLI
             System.out.println("WELCOME TO RAIN LIBRARY");
             First_time_us=false;
         }
-        System.out.println("Please enter your Phone Number and Student ID");
+        System.out.println("Please enter your Name and Phone Number");
         System.out.println("to go back to the main menu please enter \"exit\" ");
-        System.out.print("Phone Number: ");
-        String phonenumber = sc.nextLine();
-
-        
+        String name = sc.nextLine();
+        if(true)
+        {
+            System.out.print("Phone Number: ");
+            String phonenumber = sc.nextLine();
+            if(library.Checknumber(phonenumber))
+            {
+                System.out.println("welcome "+name);
+                IsAdmin=false;
+                AllCommands();
+            }
+        }
     }
 
 
     public void AllCommands()
     {
-
+        System.out.println("input \"lib help\" to see all the commands available");
+        System.out.print("enter the command: ");
+        String command = sc.nextLine();
+        command.replaceAll("[^a-zA-Z0-9]", "");
+        String[] splitted = command.split(" ");
+        boolean isCorrect=true;
+        while(isCorrect)
+        {
+            if(splitted[0].equals("lib"))
+            {
+                switch(splitted[1].toLowerCase())
+                {
+                    case "add":
+                    {
+                        if(IsAdmin==true)
+                        {
+                            if(splitted[2].equalsIgnoreCase("book"))
+                            {
+                                String s[]={};
+                                for(int i=5 ;i<=20 ;i++)
+                                {
+                                    s[i-5]+=splitted[i];
+                                }
+                                library.addbook(splitted[3],splitted[4],s.toString());
+                                AllCommands();
+                            }
+                            else if(splitted[2].equalsIgnoreCase("admin"))
+                            {
+                                library.addAdmin(splitted[3],splitted[4]);
+                                AllCommands();
+                            }
+                        }
+                        else
+                        {
+                            System.out.println("Permission not granted. you are not an admin. please try again.");
+                            AllCommands();
+                        }
+                    }
+                    case "get":
+                    {
+                        if(splitted[2].equalsIgnoreCase("available"))
+                        {
+                            if((splitted[3].equalsIgnoreCase("books"))||(splitted[3].equalsIgnoreCase("book")))
+                            {
+                                library.showbooks();
+                                AllCommands();
+                            }
+                            else
+                            {
+                                System.out.println("wrong entry. please try again.");
+                                AllCommands();
+                            }
+                        }
+                        else if((splitted[2].equalsIgnoreCase("hrs"))||(splitted[2].equalsIgnoreCase("hours"))||(splitted[2].equalsIgnoreCase("hour")))
+                        {
+                            library.getWorkinghours();
+                            AllCommands();
+                        }
+                        else
+                        {
+                            System.out.println("wrong entry. please try again.");
+                            AllCommands();
+                        }
+                    }
+                    case "rent":
+                    {
+                        library.Rentbook(splitted[2], splitted[3], splitted[4]);
+                        AllCommands();
+                    }
+                    case "remove":
+                    {
+                        if(splitted[2].equalsIgnoreCase("admin"))
+                        {
+                            library.RemoveAdmin(splitted[3]);
+                        }
+                        else if(splitted[2].equalsIgnoreCase("book"))
+                        {
+                            library.Removebook();
+                        }
+                        else
+                        {
+                            System.out.println("wrong entry. please try again.");
+                            AllCommands();
+                        }
+                    }
+                    case "return":
+                    {
+                        library.returnbook(splitted[2]);
+                        AllCommands();
+                    }
+                    case "help":
+                    {
+                        HelpCommand();
+                        AllCommands();
+                    }
+                    default:
+                    {
+                        System.out.println("wrong entry. please try again.");
+                        AllCommands();
+                    }
+                }
+            }
+            else if(splitted[0].equalsIgnoreCase("exit"))
+            {
+                Run();
+            }
+            else
+            {
+                System.out.println("wrong entry. please try again.");
+                AllCommands();
+            }
+        }
+    }
+    public void HelpCommand()
+    {
+        System.out.println(RED+"lib add book <name> <author> <subtitle>: Add a new book to the library."+RESET);
+        System.out.println(RED+"lib get hrs: Retrieve library operating hours."+RESET);
+        System.out.println(YELLOW+"lib remove book <bookName>: Remove a book from the library."+RESET);
+        System.out.println(GREEN+"lib add admin <name> <password>: Add a new member to the library (admin privilege required)."+RESET);
+        System.out.println(GREEN+"lib rent <name> <bookName> <memberID>: Rent a book for a specific member."+RESET);
+        System.out.println(CYAN+"lib get available books: View available books for rental."+RESET);
+        System.out.println(BLUE+"lib remove admin <adminID>: Remove a member from the library (admin privilege required)."+RESET);
+        System.out.println(PURPLE+"lib return <bookName>: Return a rented book to the library."+RESET);
+        System.out.println(PURPLE+"exit: Go back to MainMenu"+RESET);
     }
 }

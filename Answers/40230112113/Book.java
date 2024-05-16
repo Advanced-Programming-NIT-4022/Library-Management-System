@@ -18,13 +18,25 @@ public class Book
     {
         return Title;
     }
+    public void setTitle(String title)
+    {
+        this.Title=title;
+    }
     public String getDescription()
     {
         return Description;
     }
+    public void setDescription(String description)
+    {
+        this.Description=description;
+    }
     public String getAuthor()
     {
         return Author;
+    }
+    public void setAuthor(String author)
+    {
+        this.Author=author;
     }
     public Boolean getIsAvailable()
     {
@@ -38,8 +50,8 @@ public class Book
     {
         return BookID;
     }
-    public String toString()
+    /*public String toString()
     {
         return "Title: "+Title+"Description: "+Description+"Author: "+Author+"BookID: "+BookID;
-    }
+    }*/
 }

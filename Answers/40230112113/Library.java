@@ -36,20 +36,49 @@ public class Library
     int BookID=1;
     int UserID=1;
     int RentID=1;
+
     public String getWorkinghours()
     {
         return Workinghours;
     }
 
-    public void addbook()
+    public void addAdmin(String name , String password)
     {
-        String title=sc.nextLine();
-        String description=sc.nextLine();
-        String author=sc.nextLine();
+        String number="";
+        boolean check_it=false;
+        while(check_it==false)
+        {
+            System.out.println("please enter your number");
+            number=sc.nextLine();
+            check_it=Checknumber(number);
+        }
+        Admin admin = new Admin(name, UserID, number, password);
+        UserID++;
+        users.add(admin);
+    }
+
+    public void RemoveAdmin(String ID)
+    {
+        Integer id = Integer.valueOf(ID);
+        //to convert string to integer :>
+        for(User i : users)
+        {
+            if(i.getID()==id)
+            {
+                users.remove(i);
+            }
+        }
+    }
+
+    public void addbook(String title , String author , String description)
+    {
+        System.out.print("availability: ");
         Boolean availability=sc.nextBoolean();
-        Book newbook = new Book(title, description, availability, author, BookID++);
+        Book newbook = new Book(title, description, availability, author, BookID);
+        BookID++;
         books.add(newbook);
     }
+
 
     public void showbooks()
     {
@@ -62,21 +91,79 @@ public class Library
         }
     }
     
-    public void returnbook()
+    public void returnbook(String name)
     {
-
+        for (Book i : books)
+        {
+            if(i.getTitle().equalsIgnoreCase(name))
+            {
+                i.setIsAvailable(true);
+            }    
+        }
     }
 
-    public void Rentbook()
+    public void Rentbook(String name , String title , String ID)
     {
-
+        NormalUser u = null;
+        Book b = null;
+        Integer id = Integer.valueOf(ID);
+        if(CheckName(name))
+        {
+            boolean isitright=true;
+            for(User i : users)
+            {
+                
+                if(i.getName().equalsIgnoreCase(name))
+                {
+                    if(i.getID()==id)
+                    {
+                        u=(NormalUser) i;
+                        break;
+                    }
+                    else
+                    {
+                        System.out.println("incorrect id. please try again.");
+                        return;
+                    }
+                }
+            }
+            
+            for(Book i : books)
+            {
+                if((i.getTitle().equalsIgnoreCase(title)))
+                {
+                    b=i;
+                    break;
+                }
+                else
+                {
+                    System.out.println("book not found. please try again.");
+                    return;
+                }
+            }
+            Rent rent = new Rent(b, u, RentID);
+            RentID++;
+            rents.add(rent);
+            b.setIsAvailable(false);
+        }
+        else
+        {
+            System.out.println("user not found. please try again.");
+            return;
+        }
     }
 
     public void Removebook()
     {
+        System.out.print("input the book title: ");
         String booktitle=sc.nextLine();
-        int a = books.indexOf(booktitle);
-        books.remove(a);
+        for(Book i : books)
+        {
+            if(i.getTitle().equalsIgnoreCase(booktitle))
+            {
+                books.remove(i);
+            }
+        }
     }
 
 
@@ -107,6 +194,10 @@ public class Library
                 break;
             }
         }
+        if(users==null)
+        {
+            hm=true;
+        }
         return hm;
     }
 
@@ -115,18 +206,35 @@ public class Library
         Boolean haha=true;
         if ((num.length()==11)&&((num.charAt(0)=='0')&&(num.charAt(1)=='9')))
         {
-            haha=true;
+            for(int i=2;i<num.length();i++)
+            {
+                if((num.charAt(i)>'9')||(num.charAt(i)<'0'))
+                {
+                    haha=false;
+                    break;
+                }
+            }
         }
         else if ((num.length()==10)&&(num.charAt(0)=='9'))
         {
-            num=0+num;
-            haha=true;
+            //num=0+num;
+            for(int i=1;i<num.length();i++)
+            {
+                if((num.charAt(i)>'9')||(num.charAt(i)<'0'))
+                {
+                    haha=false;
+                    break;
+                }
+            }
         }
         else
         {
             System.out.println("Wrong entry. Try again.");
             haha=false;
         }
+        if(!haha)
+            System.out.println("Wrong entry. Try again.");
+
         return haha;
     }
 
