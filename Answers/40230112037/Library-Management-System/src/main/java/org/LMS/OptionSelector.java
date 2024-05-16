@@ -14,12 +14,12 @@ public class OptionSelector {
         this.options.addAll(options);
     }
 
-    void help(){
+    void help() {
         System.out.println("Available options:");
-        for(Option option : options){
+        for (Option option : options) {
             System.out.print(option.option);
-            if(option.help!=null){
-                System.out.printf(": %s",option.help);
+            if (option.help != null) {
+                System.out.printf(": %s", option.help);
             }
             System.out.println();
         }

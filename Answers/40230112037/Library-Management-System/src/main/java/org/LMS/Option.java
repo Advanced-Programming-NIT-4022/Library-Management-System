@@ -7,9 +7,9 @@ interface Func {
 }
 
 public class Option implements Func {
-    final private Func function;
     final public String option;
     final public String help;
+    final private Func function;
 
     Option(String option, Func function) {
         this.function = function;

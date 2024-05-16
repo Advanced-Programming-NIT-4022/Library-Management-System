@@ -89,7 +89,7 @@ public class CLI {
                         break;
                     case 4:
                         try {
-                            if(!UserInput.verifyPhoneNumber(arguments[2])){
+                            if (!UserInput.verifyPhoneNumber(arguments[2])) {
                                 System.out.println("Wrong phone number!");
                                 break;
                             }
@@ -102,7 +102,7 @@ public class CLI {
                         PrintError.manyArguments();
                 }
             });
-            userOptions.add("remove",arguments -> {
+            userOptions.add("remove", arguments -> {
                 switch (arguments.length) {
                     case 0:
                         PrintError.fewArguments();
@@ -113,8 +113,7 @@ public class CLI {
                                 System.out.println("User not found!");
                         } catch (SQLException e) {
                             System.out.println("Couldn't remove book!");
-                        }
-                        catch (NumberFormatException e){
+                        } catch (NumberFormatException e) {
                             System.out.println("Please enter a number!");
                         }
                         break;
@@ -123,7 +122,7 @@ public class CLI {
                 }
             });
 
-            userOptions.add("list",arguments -> {
+            userOptions.add("list", arguments -> {
 
             });
 

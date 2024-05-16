@@ -4,11 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 public class Password {
     private String hashedPassword;
-    static Password passwordByHash(String hashedPassword){
-        Password password = new Password();
-        password.hashedPassword=hashedPassword;
-        return password;
-    }
+
     Password() {
     }
 
@@ -16,12 +12,20 @@ public class Password {
         hashPassword(password);
     }
 
+    static Password passwordByHash(String hashedPassword) {
+        Password password = new Password();
+        password.hashedPassword = hashedPassword;
+        return password;
+    }
+
     void hashPassword(String password) {
         hashedPassword = DigestUtils.sha256Hex(password);
     }
-    String getHashedPassword(){
+
+    String getHashedPassword() {
         return hashedPassword;
     }
+
     boolean verifyPassword(String password) {
         return hashedPassword.equals(DigestUtils.sha256Hex(password));
     }
