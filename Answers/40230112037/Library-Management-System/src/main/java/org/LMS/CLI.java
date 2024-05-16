@@ -8,6 +8,8 @@ public class CLI {
     private final Scanner scanner = new Scanner(System.in);
     boolean loggedIn = false;
     private Library library;
+    OptionSelector normalUserMainOptions = new OptionSelector();
+    OptionSelector adminUserMainOptions = new OptionSelector();
 
     CLI() {
         try {
@@ -49,6 +51,12 @@ public class CLI {
 
     void loginAsNormalUser(NormalUser user) {
         library.currentUser = user;
+        loggedIn = true;
+        while (loggedIn) {
+            System.out.print(">>> ");
+            String[] args = UserInput.argumentsToArray(scanner.nextLine());
+            normalUserMainOptions.select(args);
+        }
     }
 
     void loginAsAdminUser(AdminUser admin) {
@@ -57,168 +65,293 @@ public class CLI {
         while (loggedIn) {
             System.out.print(">>> ");
             String[] args = UserInput.argumentsToArray(scanner.nextLine());
-
-            OptionSelector userOptions = new OptionSelector();
-            userOptions.add("add-user", arguments -> {
-                switch (arguments.length) {
-                    case 0:
-                    case 1:
-                    case 2:
-                        PrintError.fewArguments();
-                        break;
-                    case 3:
-                        try {
-                            // Todo : verifying
-                            library.addNormalUser(new NormalUser(arguments[0], arguments[1], arguments[2]));
-                        } catch (SQLException e) {
-                            System.out.println("Couldn't add User! (username is used by another user)");
-                        }
-                        break;
-                    default:
-                        PrintError.manyArguments();
-                }
-            });
-
-            userOptions.add("add-admin", arguments -> {
-                switch (arguments.length) {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                        PrintError.fewArguments();
-                        break;
-                    case 4:
-                        try {
-                            if (!UserInput.verifyPhoneNumber(arguments[2])) {
-                                System.out.println("Wrong phone number!");
-                                break;
-                            }
-                            library.addAdminUser(new AdminUser(arguments[0], arguments[1], arguments[2], new Password(arguments[3])));
-                        } catch (SQLException e) {
-                            System.out.println("Couldn't add User! (username is used by another user)");
-                        }
-                        break;
-                    default:
-                        PrintError.manyArguments();
-                }
-            });
-            userOptions.add("remove", arguments -> {
-                switch (arguments.length) {
-                    case 0:
-                        PrintError.fewArguments();
-                        break;
-                    case 1:
-                        try {
-                            if (!library.removeUser(Integer.parseInt(arguments[0])))
-                                System.out.println("User not found!");
-                        } catch (SQLException e) {
-                            System.out.println("Couldn't remove book!");
-                        } catch (NumberFormatException e) {
-                            System.out.println("Please enter a number!");
-                        }
-                        break;
-                    default:
-                        PrintError.manyArguments();
-                }
-            });
-
-            userOptions.add("list", arguments -> {
-
-            });
-
-
-            OptionSelector bookOptions = new OptionSelector();
-            bookOptions.add("add", arguments -> {
-                switch (arguments.length) {
-                    case 0:
-                    case 1:
-                    case 2:
-                        PrintError.fewArguments();
-                        break;
-                    case 3:
-                        try {
-                            // Todo : verifying
-                            library.addBook(new Book(arguments[0], arguments[1], arguments[2]));
-                        } catch (SQLException e) {
-                            System.out.println("Couldn't add book!");
-                        }
-                        break;
-                    default:
-                        PrintError.manyArguments();
-                }
-            });
-
-            bookOptions.add("remove", arguments -> {
-                switch (arguments.length) {
-                    case 0:
-                        PrintError.fewArguments();
-                        break;
-                    case 1:
-                        try {
-                            if (!library.removeBook(Integer.parseInt(arguments[0])))
-                                System.out.println("No book to remove!");
-                        } catch (SQLException e) {
-                            System.out.println("Couldn't remove book!");
-                        }
-                        break;
-                    default:
-                        PrintError.manyArguments();
-                }
-            });
-
-
-            bookOptions.add("list", arguments -> {
-
-                if (arguments.length == 0) {
-                    try {
-                        ArrayList<Book> result = library.listBooks();
-                        for (Book book : result) {
-                            System.out.println(book.toString());
-                        }
-                    } catch (SQLException ignored) {
-                    }
-                } else if (arguments.length == 1) {
-
-                    try {
-                        ArrayList<Book> result = library.listBooks(arguments[0]);
-                        for (Book book : result) {
-                            System.out.println(book.toString());
-                        }
-                    } catch (SQLException ignored) {
-                    }
-                }
-            });
-
-            bookOptions.add("show-available", arguments -> {
-                if (arguments.length == 0) {
-                    try {
-                        ArrayList<Book> result = library.listBooks(true);
-                        for (Book book : result) {
-                            System.out.println(book.toString());
-                        }
-                    } catch (SQLException ignored) {
-                    }
-                } else if (arguments.length == 1) {
-
-                    try {
-                        ArrayList<Book> result = library.listBooks(arguments[0]);
-                        for (Book book : result) {
-                            System.out.println(book.toString());
-                        }
-                    } catch (SQLException ignored) {
-                    }
-                }
-            });
-
-            OptionSelector libraryOptions = new OptionSelector();
-            libraryOptions.add("book", bookOptions::select);
-            libraryOptions.add("user", userOptions::select);
-
-            OptionSelector mainOptions = new OptionSelector();
-            mainOptions.add("lib", libraryOptions::select);
-            mainOptions.add("exit", arguments -> loggedIn = false);
-            mainOptions.select(args);
-
+            adminUserMainOptions.select(args);
         }
+    }
+
+    {
+        OptionSelector userOptions = new OptionSelector();
+        userOptions.add("remove", arguments -> {
+            if (arguments.length == 0) {
+                try {
+                    if (!library.removeUser(library.currentUser.id)) System.out.println("User not found!");
+                    else loggedIn = false;
+                } catch (SQLException e) {
+                    if (e.getErrorCode() == 1451)
+                        System.out.println("Couldn't remove User!\nYou have some rented books!");
+                    else e.printStackTrace();
+                } catch (NumberFormatException e) {
+                    System.out.println("Please enter a number!");
+                }
+            } else {
+                PrintError.manyArguments();
+            }
+        });
+
+        OptionSelector bookOptions = new OptionSelector();
+
+
+        bookOptions.add("list", arguments -> {
+
+            if (arguments.length == 0) {
+                try {
+                    ArrayList<Book> result = library.listBooks();
+                    for (Book book : result) {
+                        System.out.println(book.toString());
+                    }
+                } catch (SQLException ignored) {
+                }
+            } else if (arguments.length == 1) {
+
+                try {
+                    ArrayList<Book> result = library.listBooks(arguments[0]);
+                    for (Book book : result) {
+                        System.out.println(book.toString());
+                    }
+                } catch (SQLException ignored) {
+                }
+            }
+        });
+
+        bookOptions.add("show-available", arguments -> {
+            if (arguments.length == 0) {
+                try {
+                    ArrayList<Book> result = library.listBooks(true);
+                    for (Book book : result) {
+                        System.out.println(book.toString());
+                    }
+                } catch (SQLException ignored) {
+                }
+            } else if (arguments.length == 1) {
+
+                try {
+                    ArrayList<Book> result = library.listBooks(arguments[0]);
+                    for (Book book : result) {
+                        System.out.println(book.toString());
+                    }
+                } catch (SQLException ignored) {
+                }
+            }
+        });
+
+        bookOptions.add("show-rented", arguments -> {
+            if (arguments.length == 0) {
+                try {
+                    ArrayList<Book> result = library.listBooks(false, library.currentUser.id);
+                    for (Book book : result) {
+                        System.out.println(book.toString());
+                    }
+                } catch (SQLException ignored) {
+                }
+            } else PrintError.manyArguments();
+        });
+        bookOptions.add("rent", arguments -> {
+            switch (arguments.length) {
+                case 0:
+                    PrintError.fewArguments();
+                    break;
+                case 1:
+                    try {
+                        library.rentBook(library.currentUser.id, Integer.parseInt(arguments[0]));
+                    } catch (SQLException e) {
+                        if (e.getErrorCode() == 1062)
+                            System.out.println("Couldn't rent book!\bBook is already rented!");
+                        else e.printStackTrace();
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number!");
+                    }
+                    break;
+                default:
+                    PrintError.manyArguments();
+            }
+        });
+
+        bookOptions.add("return", arguments -> {
+            switch (arguments.length) {
+                case 0:
+                    PrintError.fewArguments();
+                    break;
+                case 1:
+                    try {
+                        if (!library.returnBook(Integer.parseInt(arguments[0])))
+                            System.out.println("Book is not rented or not rented by you!");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number!");
+                    }
+                    break;
+                default:
+                    PrintError.manyArguments();
+            }
+        });
+
+        OptionSelector libraryOptions = new OptionSelector();
+        libraryOptions.add("book", bookOptions::select);
+        libraryOptions.add("user", userOptions::select);
+
+        normalUserMainOptions.add("lib", libraryOptions::select);
+        normalUserMainOptions.add("exit", arguments -> loggedIn = false);
+        normalUserMainOptions.add("help", arguments -> System.out.println());
+    }
+
+    {
+        OptionSelector userOptions = new OptionSelector();
+        userOptions.add("add-user", arguments -> {
+            switch (arguments.length) {
+                case 0:
+                case 1:
+                case 2:
+                    PrintError.fewArguments();
+                    break;
+                case 3:
+                    try {
+                        // Todo : verifying
+                        library.addNormalUser(new NormalUser(arguments[0], arguments[1], arguments[2]));
+                    } catch (SQLException e) {
+                        System.out.println("Couldn't add User! (username is used by another user)");
+                    }
+                    break;
+                default:
+                    PrintError.manyArguments();
+            }
+        });
+
+        userOptions.add("add-admin", arguments -> {
+            switch (arguments.length) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    PrintError.fewArguments();
+                    break;
+                case 4:
+                    try {
+                        if (!UserInput.verifyPhoneNumber(arguments[2])) {
+                            System.out.println("Wrong phone number!");
+                            break;
+                        }
+                        library.addAdminUser(new AdminUser(arguments[0], arguments[1], arguments[2], new Password(arguments[3])));
+                    } catch (SQLException e) {
+                        System.out.println("Couldn't add User! (username is used by another user)");
+                    }
+                    break;
+                default:
+                    PrintError.manyArguments();
+            }
+        });
+        userOptions.add("remove", arguments -> {
+            switch (arguments.length) {
+                case 0:
+                    PrintError.fewArguments();
+                    break;
+                case 1:
+                    try {
+                        if (!library.removeUser(Integer.parseInt(arguments[0]))) System.out.println("User not found!");
+                    } catch (SQLException e) {
+                        System.out.println("Couldn't remove book!");
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number!");
+                    }
+                    break;
+                default:
+                    PrintError.manyArguments();
+            }
+        });
+
+        userOptions.add("list", arguments -> {
+
+        });
+
+
+        OptionSelector bookOptions = new OptionSelector();
+        bookOptions.add("add", arguments -> {
+            switch (arguments.length) {
+                case 0:
+                case 1:
+                case 2:
+                    PrintError.fewArguments();
+                    break;
+                case 3:
+                    try {
+                        // Todo : verifying
+                        library.addBook(new Book(arguments[0], arguments[1], arguments[2]));
+                    } catch (SQLException e) {
+                        System.out.println("Couldn't add book!");
+                    }
+                    break;
+                default:
+                    PrintError.manyArguments();
+            }
+        });
+
+        bookOptions.add("remove", arguments -> {
+            switch (arguments.length) {
+                case 0:
+                    PrintError.fewArguments();
+                    break;
+                case 1:
+                    try {
+                        if (!library.removeBook(Integer.parseInt(arguments[0])))
+                            System.out.println("No book to remove!");
+                    } catch (SQLException e) {
+                        System.out.println("Couldn't remove book!");
+                    }
+                    break;
+                default:
+                    PrintError.manyArguments();
+            }
+        });
+
+
+        bookOptions.add("list", arguments -> {
+
+            if (arguments.length == 0) {
+                try {
+                    ArrayList<Book> result = library.listBooks();
+                    for (Book book : result) {
+                        System.out.println(book.toString());
+                    }
+                } catch (SQLException ignored) {
+                }
+            } else if (arguments.length == 1) {
+
+                try {
+                    ArrayList<Book> result = library.listBooks(arguments[0]);
+                    for (Book book : result) {
+                        System.out.println(book.toString());
+                    }
+                } catch (SQLException ignored) {
+                }
+            }
+        });
+
+        bookOptions.add("show-available", arguments -> {
+            if (arguments.length == 0) {
+                try {
+                    ArrayList<Book> result = library.listBooks(true);
+                    for (Book book : result) {
+                        System.out.println(book.toString());
+                    }
+                } catch (SQLException ignored) {
+                }
+            } else if (arguments.length == 1) {
+
+                try {
+                    ArrayList<Book> result = library.listBooks(arguments[0]);
+                    for (Book book : result) {
+                        System.out.println(book.toString());
+                    }
+                } catch (SQLException ignored) {
+                }
+            }
+        });
+
+        OptionSelector libraryOptions = new OptionSelector();
+        libraryOptions.add("book", bookOptions::select);
+        libraryOptions.add("user", userOptions::select);
+
+        adminUserMainOptions.add("lib", libraryOptions::select);
+        adminUserMainOptions.add("exit", arguments -> loggedIn = false);
     }
 }
