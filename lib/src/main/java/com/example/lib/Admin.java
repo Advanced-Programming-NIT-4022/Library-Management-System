@@ -5,8 +5,14 @@ public class Admin extends User{
         return Password;
     }
     private String Password;
-    Admin(String name,String number,String Id,String Password){
-        super(name,number,Id);
+    Admin(String name,String number,String Password){
+        super(name,number);
+        super.setId(String.valueOf(rand.nextInt(99999)));
+        this.Password=Password;
+    }
+    Admin(String name,String number,String Password,String Id){
+        super(name,number);
+        super.setId(Id);
         this.Password=Password;
     }
 }

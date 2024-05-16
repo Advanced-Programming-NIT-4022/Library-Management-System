@@ -85,15 +85,22 @@ Ui x=new Ui();
                     case "removemember":
                            lib.rmUser(split[2], Admin);
                         break;
-                    case "rentbook":
-                        lib.rentBook(split[2]);
-                        break;
+
+
 
                 }
                 if(Objects.equals(split[0],"return")){
                     lib.returnBook(split[1],username);
 
                 }
+                if(Objects.equals(split[0],"rent")){
+                    if(split.length==2)
+                        lib.rentBook(split[1]);
+                    if(split.length==4){
+                        lib.rentUser(split[1],split[2],Admin);
+                    }
+                }
+
             }
             catch (Exception e){
                 System.out.println("please enter your command correctly");
