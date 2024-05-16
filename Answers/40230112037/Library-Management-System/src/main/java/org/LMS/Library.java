@@ -69,4 +69,12 @@ public class Library {
         return resultSetToBookArrayList(resultSet);
     }
 
+    void addBook(Book book) throws SQLException {
+        preparedStatement = connection.prepareStatement("INSERT INTO Books (title,author,isAvailable,description) VALUES (?, ?, ?, ?)");
+        preparedStatement.setString(1, book.title);
+        preparedStatement.setString(2, book.author);
+        preparedStatement.setBoolean(3, book.isAvailable);
+        preparedStatement.setString(4, book.description);
+        preparedStatement.executeUpdate();
+    }
 }
