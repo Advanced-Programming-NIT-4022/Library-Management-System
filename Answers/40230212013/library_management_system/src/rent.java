@@ -1,14 +1,14 @@
 public class rent {
   private book book;
   private user user;
-  private int rentId;
-  private String rentDate;
+  private int rentalId;
+  private String rentalDate;
   public rent(book book, user user)
   {
     this.book = book;
     this.user = user;
-    this.rentId = rentId;
-    this.rentDate = rentDate;
+    this.rentalId = rentalId;
+    this.rentalDate = rentalDate;
   }
   public book getBook() {
     return book;
@@ -23,16 +23,16 @@ public class rent {
     this.user = user;
   }
   public int getRentId() {
-    return rentId;
+    return rentalId;
   }
   public void setRentId(int rentId) {
-    this.rentId = rentId;
+    this.rentalId = rentalId;
   }
   public String getRentDate() {
-    return rentDate;
+    return rentalDate;
   }
   public void setRentDate(String rentDate) {
-    this.rentDate = rentDate;
+    this.rentalDate = rentalDate;
   }
   
 }

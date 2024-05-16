@@ -1,13 +1,11 @@
-import java.util.UUID;
-
 public class user {
   private String name;
-  private double id;
+  private int id;
   private String phoneNumber;
-  public user(String name, String phoneNumber)
+  public user(String name,int id, String phoneNumber)
   {
     this.name = name;
-    this.id = UUID.randomUUID().hashCode();
+    this.id = id;
     this.phoneNumber = phoneNumber;
   }
   public String getName() {
@@ -16,10 +14,10 @@ public class user {
   public void setName(String name) {
     this.name = name;
   }
-  public double getId() {
+  public int getId() {
     return id;
   }
-  public void setId(double id) {
+  public void setId(int id) {
     this.id = id;
   }
   public String getPhoneNumber() {

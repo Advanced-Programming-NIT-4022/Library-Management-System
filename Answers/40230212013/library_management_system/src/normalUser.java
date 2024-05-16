@@ -3,7 +3,7 @@ public class normalUser extends user {
 
   public normalUser(String name, int id, String phoneNumber, String signUpDate)
   {
-    super(name, phoneNumber);
+    super(name,id, phoneNumber);
     this.signUpDate = signUpDate;
   }
 
