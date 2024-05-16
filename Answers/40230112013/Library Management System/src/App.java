@@ -32,9 +32,16 @@ public class App {
                                         case 4:
                                             Cli.bfind();
                                             String h = scanner.next();
-                                            List<Book> l = Book.bookfinder(h);
+                                            List<Book> l = Book.bookfinder(h);   
+                                            int o=100;
+                                            if(l.size()==0){
+                                                System.out.println("yaft nshd ");
+                                                break;
+                                            }
                                             Cli.gh();
-                                            int o = scanner.nextInt();
+                                            while (o>l.size()) {
+                                                o = scanner.nextInt();
+                                            }
                                             o--;
                                             Cli.rentday();
                                             boolean ax = true;
@@ -48,20 +55,32 @@ public class App {
                                             break;
                                         case 6:
                                             Library.removeUser(us);
+                                            System.exit(0);
                                             break;
                                         case 7:
                                             Cli.bfind();
                                             String ui = scanner.next();
                                             List<Book> hg = Book.bookfinder(ui);
+                                            if(hg.size()==0){
+                                                System.out.println("yaft nshd ");
+                                                break;
+                                            }
                                             Cli.gh();
-                                            int po = scanner.nextInt();
-                                            po--;
+                                            int po=100;
+                                            while (po>hg.size()) {
+                                                po = scanner.nextInt();
+                                                po--;
+                                            }
+                                            
                                             Library.removeBook(hg.get(po));
                                             System.out.println("anjam shod");
                                             break;
                                         case 8 :
                                         Cli.getHours();
                                         Cli.getCapacity();
+                                        break;
+                                        case 9:
+                                        System.exit(0);
                                         break;
                                         default:
                                             break;
@@ -91,25 +110,39 @@ public class App {
                                         Book.bookfinder("o");
                                         break;
                                     case 3:
-                                        Cli.bfind();
-                                        String h = scanner.next();
-                                        List<Book> l = Book.bookfinder(h);
-                                        Cli.gh();
-                                        int o = scanner.nextInt();
-                                        o--;
-                                        Cli.rentday();
-                                        boolean ax = true;
-                                        if (ax == true) {
-                                            Library.rentBook(l.get(o), uk, scanner.nextInt());
-                                            ax = false;
-                                        }
+                                    Cli.bfind();
+                                    String h = scanner.next();
+                                    List<Book> l = Book.bookfinder(h);   
+                                    int o=100;
+                                    if(l.size()==0){
+                                        System.out.println("yaft nshd ");
                                         break;
+                                    }
+                                    Cli.gh();
+                                    while (o>l.size()) {
+                                        o = scanner.nextInt();
+                                    }
+                                    o--;
+                                    Cli.rentday();
+                                    boolean ax = true;
+                                    if (ax == true) {
+                                        Library.rentBook(l.get(o), uk, scanner.nextInt());
+                                        ax = false;
+                                    }
+                                    break;
                                     case 4:
                                     Library.returnBook(uk);
                                         break;
                                     case 5:
                                     Cli.getCapacity();
                                     Cli.getHours();
+                                    break;
+                                    case 6:
+                                    System.exit(0);
+                                    case 7:
+                                    Library.removeUser(uk);
+                                    System.exit(0);
+                                    break;
                                     default:
                                         break;
                                 }
@@ -123,7 +156,8 @@ public class App {
                         System.out.println("anjam shod");
                         break;
                     case 4:
-                        break;
+                    System.exit(0);
+                    break;
                     default:
                         System.out.println("Na motabar");
                         break;

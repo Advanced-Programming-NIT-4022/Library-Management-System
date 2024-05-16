@@ -63,14 +63,10 @@ public class Book {
         
         List<Book> me = Library.getrepo();
         List<Book> b = new ArrayList<Book>();
+        int i=1;
         for (Book u : me) {
-            int i=1;
-            /*if (u.getTitle().equals(n) && u.getAuthor().equals(p)) {
-                System.out.println("book found");
-                return u;
-            } */
             if(u.toString1().contains(t)){
-                System.out.println(i +" " + u.toString1());
+                System.out.println(i +"_" + u.toString1());
                 b.add(u);
                 i++;
             }

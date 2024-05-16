@@ -54,15 +54,15 @@ public class Library {
         if (rent != null) {
             repository.add(rent.getBook());
             rentRecords.remove(user);
-            System.out.println("The book" + rent.getBook().getTitle() + "ّFrom" + user.getName() + "taken back.");
+            System.out.println("The book " + rent.getBook().getTitle() + "ّ From " + user.getName() + " taken back.");
         } else {
             System.out.println("********************\nreturn book is faild");
         }
     }
 
     public static void showBook() {
+        int i = 1;
         for (Book x : repository) {
-            int i = 1;
             String p = x.toString1();
             System.out.println(i + "-" + p);
             i++;
@@ -70,8 +70,8 @@ public class Library {
     }
 
     public static void showUser() {
+        int i = 1;
         for (User x : users) {
-            int i = 1;
             String p = x.toString2();
             System.out.println(i + "-" + p);
             i++;

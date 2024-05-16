@@ -11,7 +11,7 @@ public class Cli {
     }
 
     public static void edame() {
-        System.out.println("*****************************\nDo you want to continue\n1.yes\n2.no");
+        System.out.println("*****************************\nDo you want to continue\n1.yes\n2.no\n***************************");
     }
 
     public static void adminList() {
@@ -20,13 +20,13 @@ public class Cli {
         System.out.println("3.see all users\n4.rent book");
         System.out.println("5.return book");
         System.out.println("6.del user");
-        System.out.println("7.del book\n8.get hours and capacity\n9.exit\n");
+        System.out.println("7.del book\n8.get hours and capacity\n9.exit\n*******************************");
     }
 
     public static void userList() {
         System.out.println("*********************************\n");
         System.out.println("1.add book\n2.search books");
-        System.out.println("3.rent book\n4.return book\n5.get hours and capacity\n6.exit\n");
+        System.out.println("3.rent book\n4.return book\n5.get hours and capacity\n6.exit\n7.del user\n*************************");
     }
 
     public static Book getBook() {
@@ -87,7 +87,7 @@ public class Cli {
             lid = s.nextLine();
             for (User cj : Library.getuser()) {
                 if (cj.getId().equals(lid)) {
-                    System.out.println("vozod dard dobare lotfan");
+                    System.out.println("The ID is duplicated, please enter again.");
                     xj = false;
                     break;
                 }
@@ -98,7 +98,7 @@ public class Cli {
     }
 
     public static User avardanuser() {
-        @SuppressWarnings("resource")
+       @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
         System.out.println("please enter name or id or phone number:");
         String userInfo = scanner.nextLine();

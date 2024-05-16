@@ -4,8 +4,6 @@ public class Admin extends User {
     }
 
     static final String Adminpass = "e";
-    public static void adminCli(){
-        System.out.println("1.add book---2.del user\n3.rent book---4.delete book\n5.add book book");
-    }
+    
 
 }
