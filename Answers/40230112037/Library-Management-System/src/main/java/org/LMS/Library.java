@@ -101,6 +101,27 @@ public class Library {
 
     }
 
+    ArrayList<AdminUser> getAdminUserList() throws SQLException {
+        preparedStatement = connection.prepareStatement("SELECT * FROM Users WHERE isAdmin = 1");
+        resultSet = preparedStatement.executeQuery();
+        ArrayList<AdminUser> retuenArrayList = new ArrayList<>();
+        while (resultSet.next()) {
+            retuenArrayList.add(new AdminUser(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("fullName"), resultSet.getString("phoneNumber"), resultSet.getString("password")));
+        }
+        return retuenArrayList;
+    }
+
+    ArrayList<NormalUser> getNormalUserList() throws SQLException {
+        preparedStatement = connection.prepareStatement("SELECT * FROM Users WHERE isAdmin = 0");
+        resultSet = preparedStatement.executeQuery();
+        ArrayList<NormalUser> retuenArrayList = new ArrayList<>();
+        while (resultSet.next()) {
+            retuenArrayList.add(new NormalUser(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("fullName"), resultSet.getString("phoneNumber"), resultSet.getDate("registrationDate")));
+        }
+        return retuenArrayList;
+    }
+
+
     void addAdminUser(AdminUser adminUser) throws SQLException {
         preparedStatement = connection.prepareStatement("INSERT INTO Users (username,fullName,phoneNumber,password,isAdmin) VALUES (?,?,?,?,true)");
         preparedStatement.setString(1, adminUser.username);
