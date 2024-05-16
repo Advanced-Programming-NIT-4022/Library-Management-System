@@ -37,5 +37,6 @@ public class OptionSelector {
             }
         }
         System.out.printf("Unknown option %s.\n", arguments[0]);
+        help();
     }
 }
