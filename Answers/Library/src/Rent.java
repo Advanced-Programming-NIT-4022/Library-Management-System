@@ -10,7 +10,7 @@ public class Rent {
     public static  void  copyRentFile() {
         try {
             ArrayList<String> rentArray = new ArrayList<>();
-            File rent = new File("C:\\Users\\MSI\\OneDrive\\Desktop\\Library\\Library-Management-System\\Answers\\Library\\src\\rent.txt");
+            File rent = new File("C:\\Users\\MSI\\OneDrive\\Desktop\\Lib\\Library-Management-System\\Answers\\Library\\src\\rent.txt");
             Scanner reader = new Scanner(rent);
             while (reader.hasNextLine()) {
                 rentArray.add(reader.nextLine());

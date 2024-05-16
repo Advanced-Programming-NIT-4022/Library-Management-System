@@ -16,7 +16,7 @@ public class NormalUsers extends User {
     }
     public static void  copyFileOnNormalUser() {
         try {
-            File normalUsers = new File("C:\\Users\\MSI\\OneDrive\\Desktop\\Library\\Library-Management-System\\Answers\\Library\\src\\normalUsers.txt");
+            File normalUsers = new File("C:\\Users\\MSI\\OneDrive\\Desktop\\Lib\\Library-Management-System\\Answers\\Library\\src\\normalUsers.txt");
             normalUsers.createNewFile();
             Scanner reader = new Scanner(normalUsers);
             while (reader.hasNextLine()) {
@@ -35,7 +35,7 @@ public class NormalUsers extends User {
     }
     public static void copyNormalUserOnFile() {
         try {
-            FileWriter writer = new FileWriter("C:\\Users\\MSI\\OneDrive\\Desktop\\Library\\Library-Management-System\\Answers\\Library\\src\\normalUsers.txt");
+            FileWriter writer = new FileWriter("C:\\Users\\MSI\\OneDrive\\Desktop\\Lib\\Library-Management-System\\Answers\\Library\\src\\normalUsers.txt");
             for (int i=0 ; i< normalUsersArray.size(); i++){
                 writer.write((normalUsersArray.get(i).name)+"#"+(normalUsersArray.get(i).password)+"#"+normalUsersArray.get(i).registeryDate+"#"+normalUsersArray.get(i).uniqueID+"#");
                 for(int j=0; j< normalUsersArray.get(i).rentBooks.split("#").length;j++){

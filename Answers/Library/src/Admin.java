@@ -15,7 +15,7 @@ public class Admin extends User{
     public static  void  copyFileOnAdmin() {
         try {
 
-            File admins = new File("C:\\Users\\MSI\\OneDrive\\Desktop\\Library\\Library-Management-System\\Answers\\Library\\src\\admins.txt");
+            File admins = new File("C:\\Users\\MSI\\OneDrive\\Desktop\\Lib\\Library-Management-System\\Answers\\Library\\src\\admins.txt");
             admins.createNewFile();
             Scanner reader = new Scanner(admins);
             while (reader.hasNextLine()) {
@@ -31,7 +31,7 @@ public class Admin extends User{
     }
     public static void copyAdminOnFile() {
         try {
-            FileWriter writer = new FileWriter("C:\\Users\\MSI\\OneDrive\\Desktop\\Library\\Library-Management-System\\Answers\\Library\\src\\admins.txt");
+            FileWriter writer = new FileWriter("C:\\Users\\MSI\\OneDrive\\Desktop\\Lib\\Library-Management-System\\Answers\\Library\\src\\admins.txt");
             for (int i=0 ; i< adminArray.size(); i++){
                 writer.write((adminArray.get(i).name)+"#"+(adminArray.get(i).password)+"\n");
                 writer.close();

@@ -18,7 +18,7 @@ public class Book {
 
     public static void  copyFileOnBook() {
         try {
-            File books = new File("C:\\Users\\MSI\\OneDrive\\Desktop\\Library\\Library-Management-System\\Answers\\Library\\src\\books.txt");
+            File books = new File("C:\\Users\\MSI\\OneDrive\\Desktop\\Lib\\Library-Management-System\\Answers\\Library\\src\\books.txt");
             books.createNewFile();
             Scanner reader = new Scanner(books);
             while (reader.hasNextLine()) {
@@ -41,7 +41,7 @@ public class Book {
     }
     public static void copyBookOnFile() {
         try {
-            FileWriter writer = new FileWriter("C:\\Users\\MSI\\OneDrive\\Desktop\\Library\\Library-Management-System\\Answers\\Library\\src\\books.txt");
+            FileWriter writer = new FileWriter("C:\\Users\\MSI\\OneDrive\\Desktop\\Lib\\Library-Management-System\\Answers\\Library\\src\\books.txt");
             for (int i=0 ; i< booksArray.size(); i++){
                 writer.write((booksArray.get(i).title)+"#"+(booksArray.get(i).author)+"#");
                 if (booksArray.get(i).availabilityStatus){
