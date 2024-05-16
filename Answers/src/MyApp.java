@@ -296,13 +296,13 @@ public class  MyApp {
                 return;
             }
 
-            if (books.size() == 1)
-                rent = new Rent(books.get(0), user);
-            else if (user.getRentBooks().size() >= 5) {
+            if (user.getRentBooks().size() >= 5) {
                 System.out.println("You have already rented 5 books and you can no longer " +
                         "rent a book");
                 return;
-            } else {
+            } if (books.size() == 1)
+                rent = new Rent(books.get(0), user);
+            else {
                 System.out.println("Which book?");
 
                 // show selections
@@ -521,12 +521,13 @@ public class  MyApp {
                 if (books.size() == 0) {
                     System.out.printf("book %s not found or not available!%n", bookName);
                     return;
-                } else if (books.size() == 1)
-                    rent = new Rent(books.get(0), (NormalUser) library.getUser());
-                else if (((NormalUser) library.getUser()).getRentBooks().size() >= 5) {
+                } else if (((NormalUser) library.getUser()).getRentBooks().size() >= 5) {
                     System.out.println("You have already rented 5 books and you can no longer " +
                             "rent a book");
-                } else {
+                    return;
+                } else if (books.size() == 1)
+                    rent = new Rent(books.get(0), (NormalUser) library.getUser());
+                else {
                     System.out.println("Which book do you want?");
 
                     // show selections
