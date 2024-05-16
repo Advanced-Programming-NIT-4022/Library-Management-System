@@ -217,6 +217,11 @@ public class Library {
         }
         return found;
     }
+    public void showAdmins(){
+        for (int i = 0; i < admins.size(); i++) {
+            System.out.println(admins.get(i).toString());
+        }
+    }
 
     private void saveAdmins(){
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(Admin_FILE_NAME))){

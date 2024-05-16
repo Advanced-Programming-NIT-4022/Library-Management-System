@@ -51,7 +51,7 @@ public class Admin implements Serializable {
                 "fullName='" + getFullName() + '\'' +
                 ", ID='" + getID() + '\'' +
                 ", phoneNumber='" + getPhoneNumber() + '\'' +
-                // Do not include the password for security reasons
+                ", password='" + getPassword() + '\'' +
                 '}';
     }
 }
