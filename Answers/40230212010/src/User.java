@@ -39,5 +39,29 @@ public  class User {
         NormalUser newNormalUser = new NormalUser(name, phoneNumber, registrationDate);
         normalUsersList.add(newNormalUser);
     }
-        
+    public NormalUser getNormalUser(int UniqueID){
+        for(NormalUser user : normalUsersList){
+            if (user.getUniqueID()==UniqueID){
+                return user;
+            }
+        }
+        return null;
+    }
+    public Admin geAdmin(String password){
+        for(Admin admin : adminsList){
+            if (admin.getPassword().equals(password)){
+                return admin;
+            }
+        }
+        return null;
+    }
+
+
+   
+    public int getUniqueID() {
+        return UniqueID;
+    }
+
+
+ 
 }

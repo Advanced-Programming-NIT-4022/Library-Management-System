@@ -14,5 +14,6 @@ public class NormalUser extends User {
     public void setRegistrationDate(String registrationDate) {
         this.registrationDate = registrationDate;
     }
+
     
 }
