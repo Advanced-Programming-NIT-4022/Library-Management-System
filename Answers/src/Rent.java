@@ -20,8 +20,8 @@ public class Rent implements Updatable {
     }
 
     public void update() {
-        final String SQL_COMMAND = "SELECT RentalID FROM rents WHERE UserID = ? AND BookID = ?" +
-                "AND ReturnDate = NULL;";
+        final String SQL_COMMAND = "SELECT RentalID FROM rents WHERE UserID = ? AND BookID = ? " +
+                "AND ReturnDate IS NULL;";
 
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
                 MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
