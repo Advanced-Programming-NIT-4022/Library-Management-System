@@ -263,7 +263,18 @@ public class CLI {
         });
 
         userOptions.add("list", arguments -> {
-
+            try {
+                System.out.println("Admins:");
+                for (AdminUser admin : library.getAdminUserList()){
+                    System.out.println(admin);
+                }
+                System.out.println("Normal Users:");
+                for (NormalUser normalUser : library.getNormalUserList()){
+                    System.out.println(normalUser);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         });
 
 
