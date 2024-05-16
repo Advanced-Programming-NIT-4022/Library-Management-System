@@ -128,6 +128,8 @@ public class UserInterface {
 
     public void libraryLobby() {
 
+        library.dataRetriever(); // Retrieve all data from database
+
         libraryPortalPass();
 
         // Library System
@@ -226,8 +228,8 @@ public class UserInterface {
             } else if (lms_exit_matcher.find()) {
                 System.out.println("\n\n\n");
                 System.out.println("Good luck ");
-                System.out.println("Hope to see you again \n Bye :D");
-                return;
+                System.out.println("Hope to see you again \n\r Bye :D");
+                System.exit(0);
             } else {
                 System.out.println("invalid command . . . try again");
                 System.out.println("Keep in mind that this error may be caused by entering the wrong command or entering the name," +

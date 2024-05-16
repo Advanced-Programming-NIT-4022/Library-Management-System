@@ -34,7 +34,7 @@ public class Library {
     }
 
 
-    ArrayList<NormalUser> normalUsers = new ArrayList<>();
+    static ArrayList<NormalUser> normalUsers = new ArrayList<>();
     protected NormalUser normalUser;
 
     public NormalUser memberExistenceChecker(String name, String phone_number) {
@@ -48,6 +48,7 @@ public class Library {
     public void addMember(String name, String phone_number) {
         this.normalUser = new NormalUser(name, idGenerator(), phone_number);
         normalUsers.add(normalUser);
+        DataBaseMethods.normalUserDataInsert(normalUsers);
     }
 
     public void rmMember(String name, String phone_number) {
@@ -56,6 +57,7 @@ public class Library {
                 normalUsers.remove(iterator);
                 System.out.println("The user with name : " + iterator.name + ", phone number : " + iterator.phone_number +
                         "and Id : " + iterator.id + "successfully deleted from the registered users");
+                DataBaseMethods.normalUserDataInsert(normalUsers);
                 return;
             }
             System.out.println("There is no user with the given information in registered user list .");
@@ -79,6 +81,7 @@ public class Library {
     public void addAmin(String name, String phone_number, String password) {
         this.admin = new Admin(name, idGenerator(), phone_number, password);
         admins.add(admin);
+        DataBaseMethods.adminDataInsert(admins);
     }
 
     public boolean passwordExistenceChecker(String password) {
@@ -94,13 +97,11 @@ public class Library {
     protected Book book;
 
     public void addBook(String title, String author, String description) {
-        book = new Book(idGenerator(), true);
-        book.author = author;
-        book.title = title;
-        book.description = description;
+        book = new Book(title, author, description, idGenerator(), true);
         book_repository.add(book);
         System.out.println("The Book " + book.title + " with author " + book.author + " and Id " +
                 book.book_id + ", successfully was added to the book depository .");
+        DataBaseMethods.bookDataInsert(book_repository);
     }
 
     public void rmBook(String title, String author) {
@@ -109,6 +110,7 @@ public class Library {
                 book_repository.remove(iterator);
                 System.out.println("The Book " + iterator.title + " with author " + iterator.author + " and Id " +
                         iterator.book_id + ", successfully deleted from the book depository .");
+                DataBaseMethods.bookDataInsert(book_repository);
                 return;
             }
         }
@@ -156,6 +158,7 @@ public class Library {
                 System.out.println("The Book with " + title + "title ," + author + "author , and " +
                         book_intended_to_rent.book_id + "ID , successfully rented by " + user_name + " with ID "
                         + renter.id);
+                DataBaseMethods.rentedBookDataInsert(rented_book_repo);
             } else {
                 System.out.println("The entered phone number or name is not registered in the system." +
                         " (Such a user does not exist in the list of registered users)");
@@ -178,6 +181,7 @@ public class Library {
                     if (Objects.equals(iterator.reserved_book_id, book_intended_to_return.book_id) && Objects.equals(iterator.reserver_user_id, returner.id)) {
                         rented_book_repo.remove(iterator);
                         book_repository.get(book_repository.indexOf(book_intended_to_return)).availability_status = true;
+                        DataBaseMethods.rentedBookDataInsert(rented_book_repo);
                         return;
                     }
 
@@ -192,5 +196,11 @@ public class Library {
             System.out.println("The entered book name or author name is not registered in the system." +
                     " (Such a book does not exist in the list of registered books)");
         }
+    }
+
+     public void dataRetriever(){
+        DataBaseMethods.bookDataRetrieve(book_repository);
+        DataBaseMethods.adminDataRetrieve(admins);
+        DataBaseMethods.normalUserDataRetrieve(normalUsers);
     }
 }
