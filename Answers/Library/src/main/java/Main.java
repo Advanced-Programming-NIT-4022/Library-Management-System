@@ -3,7 +3,74 @@ import java.util.Scanner;
 public class Main {
     static Library library = new Library();
     static Scanner scanner = new Scanner(System.in);
-    public static void CLI(){
+
+
+    public static void ROLE(){
+        System.out.println("Please write your role:");
+        System.out.println("Admin / User");
+        String role;
+        while (true){
+            role =scanner.nextLine();
+            if (role.equalsIgnoreCase("Admin")){
+                System.out.println("enter your fullName:");
+                String fullName = scanner.nextLine();
+                System.out.println("enter your ID:");
+                String ID = scanner.nextLine();
+                System.out.println("enter your password:");
+                String password = scanner.nextLine();
+            if (library.checkAdmin(fullName,ID,password)){
+                MainMenu();
+                break;
+            }
+            } else if (role.equalsIgnoreCase("User")){
+                System.out.println("enter your fullName:");
+                String fullName = scanner.nextLine();
+                System.out.println("enter your ID:");
+                String ID = scanner.nextLine();
+                if (library.checkUser(fullName,ID)){
+                    MainMenu();
+                    break;
+                }
+
+            }else {
+                System.out.println("invalid entry please try again.");
+                continue;
+            }
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static void MainMenu(){
             System.out.println("welcome to" + library.getLibName());
             System.out.println("Please write your choice:");
             System.out.println("lib::addBook::<Name>::<Author>::<subtitle>");

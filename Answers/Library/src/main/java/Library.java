@@ -149,6 +149,14 @@ public class Library {
                System.out.println("Error removing user!");
           }
      }
+     public boolean checkUser(String fullName,String ID){
+          boolean found = false;
+          for (int i = 0; i < users.size(); i++) {
+               if (users.get(i).getFullName().equalsIgnoreCase(fullName) && users.get(i).getID().equalsIgnoreCase(ID))
+                    found = true;
+          }
+          return found;
+     }
      private void saveUsers(){
           try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(User_FILE_NAME))){
                oos.writeObject(users);
@@ -192,6 +200,14 @@ public class Library {
           if (!found){
                System.out.println("Error removing admin!");
           }
+     }
+     public boolean checkAdmin(String fullName,String ID,String Password){
+          boolean found = false;
+          for (int i = 0; i < admins.size(); i++) {
+               if (admins.get(i).getFullName().equalsIgnoreCase(fullName) && admins.get(i).getID().equalsIgnoreCase(ID) && admins.get(i).getPassword().equalsIgnoreCase(Password))
+               found = true;
+          }
+          return found;
      }
 
      private void saveAdmins(){
