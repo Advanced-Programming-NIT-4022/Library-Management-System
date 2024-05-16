@@ -13,12 +13,12 @@ class Book {
     private boolean isAvailable;
 
     // Constructor
-    public Book(long bookID_a, String title_a, String author_a, String description_a, boolean isAvailable_a) {
+    public Book(long bookID_a, String title_a, String author_a, String description_a) {
         bookID = bookID_a;
         title = title_a;
         author = author_a;
         description = description_a;
-        isAvailable = isAvailable_a;
+        isAvailable = true;
     }
 
     // Getter/Setter(s)
@@ -58,66 +58,7 @@ class Book {
         isAvailable = !isAvailable;
     }
 
-    // Private Utilities
-    private List<String> stringWrap(String string, int maxChar) {
-        List<String> subLines = new ArrayList<String>();
-        int length = string.length();
-        int start = 0;
-        int end = maxChar;
-        if (length > maxChar) {
-            int noOfLines = (length / maxChar) + 1;
-            int endOfStr[] = new int[noOfLines];
-            for (int f = 0; f < noOfLines - 1; f++) {
-                int end1 = maxChar;
-                endOfStr[f] = end;
-                if (string.charAt(end - 1) != ' ') {
-                    if (string.charAt(end - 2) == ' ') {
-                        subLines.add(string.substring(start, end - 1));
-                        start = end - 1;
-                        end = end - 1 + end1;
-                    } else if (string.charAt(end - 2) != ' '
-                            && string.charAt(end) == ' ') {
-                        subLines.add(string.substring(start, end));
-                        start = end;
-                        end = end + end1;
-                    } else if (string.charAt(end - 2) != ' ') {
-                        subLines.add(string.substring(start, end) + "-");
-                        start = end;
-                        end = end + end1;
-                    } else if (string.charAt(end + 2) == ' ') {
-                        int lastSpaceIndex = string.substring(start, end)
-                                .lastIndexOf("");
-                        subLines.add(string.substring(start, lastSpaceIndex));
-
-                        start = lastSpaceIndex;
-                        end = lastSpaceIndex + end1;
-                    }
-                } else {
-                    subLines.add(string.substring(start, end));
-                    start = end;
-                    end = end + end1;
-                }
-            }
-            subLines.add(string.substring(endOfStr[noOfLines - 2], length));
-        }
-        if (subLines.size() == 0) subLines.add(string);
-        return subLines;
-    }
-
-    private static String toHex(int decimal){
-        int rem;  
-        String hex="";   
-        char hexchars[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};  
-        while(decimal>0)  
-        {  
-            rem=decimal%16;   
-            hex=hexchars[rem]+hex;   
-            decimal=decimal/16;  
-        }  
-        return hex;  
-    }
-    
-    // Public Utilities
+    // Print info for the book
     public void showBook() {
         final String ANSI_RESET = "\u001B[0m";
         final String ANSI_GREEN = "\u001B[32m";
@@ -128,7 +69,7 @@ class Book {
         else
             System.out.print(ANSI_RED);
 
-        String strID = toHex((int) bookID);
+        String strID = Util.toHex((int) bookID);
         System.out.print("+");
         for (int i = 0; i < PRINT_WIDTH / 2 - 1 - strID.length() / 2; i++) System.out.print("-");
         System.out.print("~" + strID + "~");
@@ -139,7 +80,7 @@ class Book {
         for (int i = 0; i < PRINT_WIDTH - 9; i++) System.out.print(" ");
         System.out.println("|");
 
-        List<String> formattedTitle = stringWrap(title, PRINT_WIDTH - 8);
+        List<String> formattedTitle = Util.stringWrap(title, PRINT_WIDTH - 8);
         for (String s : formattedTitle) {
             System.out.print("|    " + s);
             for (int i = 0; i < PRINT_WIDTH - s.length() - 4; i++) System.out.print(" ");
@@ -150,7 +91,7 @@ class Book {
         for (int i = 0; i < PRINT_WIDTH - 15; i++) System.out.print(" ");
         System.out.println("|");
 
-        List<String> formattedDescription = stringWrap(description, PRINT_WIDTH - 8);
+        List<String> formattedDescription = Util.stringWrap(description, PRINT_WIDTH - 8);
         for (String s : formattedDescription) {
             System.out.print("|    " + s);
             for (int i = 0; i < PRINT_WIDTH - s.length() - 4; i++) System.out.print(" ");
@@ -161,7 +102,7 @@ class Book {
         for (int i = 0; i < PRINT_WIDTH - 6; i++) System.out.print(" ");
         System.out.println("|");
 
-        List<String> formattedAuthor = stringWrap(author, PRINT_WIDTH - 8);
+        List<String> formattedAuthor = Util.stringWrap(author, PRINT_WIDTH - 8);
         for (String s : formattedAuthor) {
             System.out.print("|    " + s);
             for (int i = 0; i < PRINT_WIDTH - s.length() - 4; i++) System.out.print(" ");
