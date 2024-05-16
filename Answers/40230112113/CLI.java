@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CLI
@@ -46,19 +45,17 @@ public class CLI
             case 3:
                 System.out.println(GREEN+"Have a nice day!"+RESET);
                 break;
+            default:
+                System.out.println("wrong entry. please try again.");
+                Run();
         }
-        sc.close();
     }
 
 
     Boolean First_time_ad=true;
     public void AdminPanel()
     {
-        if(First_time_ad)
-        {
-            System.out.println(BLUE+"WELCOME TO ADMIN PANEL"+RESET);
-            First_time_ad=false;
-        }
+        System.out.println(BLUE+"WELCOME TO ADMIN PANEL"+RESET);
         System.out.println("please enter your name and password");
         System.out.print("Name: ");
         String AdminName = sc.nextLine();
@@ -67,20 +64,33 @@ public class CLI
         {
             Run();
         }
-        else if(library.CheckName(AdminName))
+        if(First_time_ad)
         {
-            System.out.print("password: ");
-            if(library.CheckPassword(AdminName, null))
-            {
-                System.out.println("welcome "+AdminName);
-                IsAdmin=true;
-                AllCommands();
-            }
+            First_time_ad=false;
+            IsAdmin=true;
+            library.First_admin();
+            AllCommands();
         }
-        else
+        else if(First_time_ad==false)
         {
-            System.out.println("no match found. please try again.");
-            AdminPanel();
+            Admin admin = null;
+            if(library.CheckName(AdminName)==AdminName)
+            {
+                
+                System.out.print("password: ");
+                String password=sc.nextLine();
+                if(library.CheckPassword(password,AdminName))
+                {
+                    System.out.println("welcome "+AdminName);
+                    IsAdmin=true;
+                    AllCommands();
+                }
+            }
+            else
+            {
+                System.out.println("no match found. please try again.");
+                AdminPanel();
+            }
         }
     }
 
@@ -117,9 +127,9 @@ public class CLI
         String command = sc.nextLine();
         command.replaceAll("[^a-zA-Z0-9]", "");
         String[] splitted = command.split(" ");
-        boolean isCorrect=true;
-        while(isCorrect)
-        {
+        //boolean isCorrect=true;
+        //while(isCorrect)
+        //{
             if(splitted[0].equals("lib"))
             {
                 switch(splitted[1].toLowerCase())
@@ -130,12 +140,16 @@ public class CLI
                         {
                             if(splitted[2].equalsIgnoreCase("book"))
                             {
-                                String s[]={};
-                                for(int i=5 ;i<=20 ;i++)
+                                String s="";
+                                int i=5;
+                                for(;;)
                                 {
-                                    s[i-5]+=splitted[i];
+                                    s+=splitted[i].toString();
+                                    i++;
+                                    if(splitted[i]==null)
+                                        break;
                                 }
-                                library.addbook(splitted[3],splitted[4],s.toString());
+                                library.addbook(splitted[3],splitted[4],s);
                                 AllCommands();
                             }
                             else if(splitted[2].equalsIgnoreCase("admin"))
@@ -167,7 +181,7 @@ public class CLI
                         }
                         else if((splitted[2].equalsIgnoreCase("hrs"))||(splitted[2].equalsIgnoreCase("hours"))||(splitted[2].equalsIgnoreCase("hour")))
                         {
-                            library.getWorkinghours();
+                            System.out.println(library.getWorkinghours());
                             AllCommands();
                         }
                         else
@@ -223,7 +237,7 @@ public class CLI
                 System.out.println("wrong entry. please try again.");
                 AllCommands();
             }
-        }
+        //}
     }
     public void HelpCommand()
     {

@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Library
 {
@@ -14,7 +12,6 @@ public class Library
     public static final String PURPLE = "\u001B[35m";
     public static final String BLUE = "\u001B[34m";
 
-    static Pattern pattern = Pattern.compile("exit", Pattern.CASE_INSENSITIVE);
 
     private String LibName;
     private int capacity;
@@ -26,8 +23,8 @@ public class Library
 
     public Library(String LibName , int capacity , String Workinghours)
     {
-        this.LibName=LibName;
-        this.capacity=capacity;
+        this.setname(LibName);
+        this.setcapacity(capacity);
         this.Workinghours=Workinghours;
         this.books=new ArrayList<Book>();
         this.users=new ArrayList<User>();
@@ -37,9 +34,44 @@ public class Library
     int UserID=1;
     int RentID=1;
 
+    public String getLibName()
+    {
+        return LibName;
+    }
+    public void setname(String LibName)
+    {
+        this.LibName=LibName;
+    }
+    public int getCapacity()
+    {
+        return capacity;
+    }
+    public void setcapacity(int capacity)
+    {
+        this.capacity=capacity;
+    }
     public String getWorkinghours()
     {
         return Workinghours;
+    }
+
+    public void First_admin()
+    {
+        System.out.print("please enter your name: ");
+        String name = sc.nextLine();
+        System.out.print("please enter your password: ");
+        String password = sc.nextLine();
+        System.out.print("please enter your number: ");
+        boolean check_it = false;
+        String number="";
+        while(!check_it)
+        {
+            number = sc.nextLine();
+            check_it=Checknumber(number);
+        }
+        Admin admin = new Admin(name, UserID, number, password);
+        UserID++;
+        users.add(admin);
     }
 
     public void addAdmin(String name , String password)
@@ -55,6 +87,7 @@ public class Library
         Admin admin = new Admin(name, UserID, number, password);
         UserID++;
         users.add(admin);
+        System.out.println(name+" "+password);
     }
 
     public void RemoveAdmin(String ID)
@@ -69,6 +102,7 @@ public class Library
             }
         }
     }
+
 
     public void addbook(String title , String author , String description)
     {
@@ -107,9 +141,8 @@ public class Library
         NormalUser u = null;
         Book b = null;
         Integer id = Integer.valueOf(ID);
-        if(CheckName(name))
+        if(CheckName(name)==name)
         {
-            boolean isitright=true;
             for(User i : users)
             {
                 
@@ -169,36 +202,41 @@ public class Library
 
 
     //***************** checking system******************//
-    public Boolean CheckPassword(String password, Admin admin)
+    public Boolean CheckPassword(String password, String name)
     {
         boolean hm=false;
         for (User i : users)
         {
-            if (password.equals(admin.getPassword()))
+            if (CheckName(i.getName())==name)
             {
-                hm=true;
-                break;
+                //Admin admin=null;
+                //int admin_id=i.getID();
+                if(users.indexOf(password)==users.indexOf(name))
+                {
+                    hm=true;
+                    break;
+                }
+                else
+                {
+                    hm=false;
+                    break;
+                }
             }
         }
         return hm;
     }
 
-    public Boolean CheckName(String name)
+    public String CheckName(String name)
     {
-        boolean hm=false;
         for (User i : users)
         {
-            if (name.equalsIgnoreCase(i.getName()))
+            if (i.getName().equalsIgnoreCase(name))
             {
-                hm=true;
-                break;
+                return name;
             }
         }
-        if(users==null)
-        {
-            hm=true;
-        }
-        return hm;
+        System.out.println("no match found.");
+        return "false";
     }
 
     public Boolean Checknumber(String num)
@@ -229,7 +267,6 @@ public class Library
         }
         else
         {
-            System.out.println("Wrong entry. Try again.");
             haha=false;
         }
         if(!haha)
