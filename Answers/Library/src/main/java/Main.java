@@ -1,88 +1,103 @@
 import java.util.Scanner;
-
 public class Main {
     static Library library = new Library();
     static Scanner scanner = new Scanner(System.in);
+    public static void start(){
+        getROLE();
+    }
 
-
-    public static void ROLE(){
+    public static void getROLE(){
         System.out.println("Please write your role:");
-        System.out.println("Admin / User");
+        System.out.println("lib::Admin::<fullName>::<ID>::<password>");
+        System.out.println("lib::User::<fullName>::<ID>");
+        System.out.println("Exit");
         String role;
         while (true){
             role =scanner.nextLine();
-            if (role.equalsIgnoreCase("Admin")){
-                System.out.println("enter your fullName:");
-                String fullName = scanner.nextLine();
-                System.out.println("enter your ID:");
-                String ID = scanner.nextLine();
-                System.out.println("enter your password:");
-                String password = scanner.nextLine();
-            if (library.checkAdmin(fullName,ID,password)){
-                MainMenu();
+            if (role.equalsIgnoreCase("exit")){
+                System.out.println("exiting program...");
                 break;
             }
-            } else if (role.equalsIgnoreCase("User")){
-                System.out.println("enter your fullName:");
-                String fullName = scanner.nextLine();
-                System.out.println("enter your ID:");
-                String ID = scanner.nextLine();
-                if (library.checkUser(fullName,ID)){
-                    MainMenu();
-                    break;
+            roleCommand(role);
+        }
+    }
+    public static void roleCommand(String command){
+        String[] parts = command.split("::");
+        String operation = parts[1];
+        switch (operation.toLowerCase()){
+            case "admin" :
+                if (library.checkAdmin(parts[2],parts[3],parts[4])){
+                    AdminsMainMenu();
+                }else {
+                    System.out.println("wrong information!");
                 }
-
-            }else {
-                System.out.println("invalid entry please try again.");
-                continue;
+                break;
+            case "user" :
+                if (library.checkUser(parts[2],parts[3])) {
+                    UsersMainMenu();
+                }else {
+                    System.out.println("wrong information!");
+                }
+                break;
+            default:
+                System.out.println("invalid input! please try again.");
+        }
+    }
+    public static void UsersMainMenu(){
+            System.out.println("Welcome to" + library.getLibName());
+            System.out.println("Please write your choice:");
+            System.out.println("lib::getHour");
+            System.out.println("lib::rent::<BookName>");
+            System.out.println("lib::specificRent::<bookName>::<memberName>::<memberID>");
+            System.out.println("lib::getAvailableBooks");
+            System.out.println("lib::return::<bookName>");
+            System.out.println("back");
+        String input;
+        while (true) {
+            input = scanner.nextLine();
+            if ("back".equalsIgnoreCase(input)) {
+                System.out.println("Good bye :(");
+                break;
             }
+            UserprocessCommand(input);
+        }
+    }
+    public static void UserprocessCommand(String command){
+        String[] parts = command.split("::");
+        String operation = parts[1];
+        switch (operation.toLowerCase()){
+            case "gethour":
+                System.out.println(library.getOperatinghours());
+                break;
+            case "rent":
+                library.rentBook(parts[2]);
+                break;
+            case "specificrent":
+                library.rentSpecificBook(parts[2],parts[3],parts[4]);
+                break;
+            case "getavailablebooks":
+                library.getAvailableBooks();
+                break;
+            case "return":
+                library.returnBook(parts[2]);
+                break;
+            default:
+                System.out.println("Invalid input! Please try again.");
 
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public static void MainMenu(){
-            System.out.println("welcome to" + library.getLibName());
-            System.out.println("Please write your choice:");
-            System.out.println("lib::addBook::<Name>::<Author>::<subtitle>");
-            System.out.println("lib::getHour");
-            System.out.println("lib::rent::<BookName>");
-            System.out.println("lib::addMember::<studentID>::<password>");
-            System.out.println("lib::specificRent::<bookName>::<memberName>::<memberID>");
-            System.out.println("lib::getAvailableBooks");
-            System.out.println("lib::removeMember::<memberID>");
-            System.out.println("lib::return::<bookName>");
-            System.out.println("lib::addAdmin::<fullName>::<phoneNumber>::<newAdminPassword>");
-            System.out.println("exit");
+    public static void AdminsMainMenu(){
+        System.out.println("Welcome to" + library.getLibName());
+        System.out.println("Please write your choice:");
+        System.out.println("lib::addBook::<Name>::<Author>::<subtitle>");
+        System.out.println("lib::getHour");
+        System.out.println("lib::rent::<BookName>");
+        System.out.println("lib::addMember::<fullName>::<phoneNumber>");
+        System.out.println("lib::specificRent::<bookName>::<memberName>::<memberID>");
+        System.out.println("lib::getAvailableBooks");
+        System.out.println("lib::removeMember::<memberID>");
+        System.out.println("lib::return::<bookName>");
+        System.out.println("exit");
         String input;
         while (true) {
             input = scanner.nextLine();
@@ -90,68 +105,36 @@ public class Main {
                 System.out.println("Good bye :(");
                 break;
             }
-            processCommand(input);
+            AdminprocessCommand(input);
         }
     }
-    public static void processCommand(String command){
+    public static void AdminprocessCommand(String command){
         String[] parts = command.split("::");
         String operation = parts[1];
         switch (operation.toLowerCase()){
             case "addbook":
-                String name,author,description;
-                System.out.println("enter name of book:");
-                name = scanner.nextLine();
-                System.out.println("enter name of author:");
-                author = scanner.nextLine();
-                System.out.println("write some description:");
-                description = scanner.nextLine();
-                library.addBook(name,author,description);
+                library.addBook(parts[2],parts[3],parts[4]);
                 break;
             case "gethour":
                 System.out.println(library.getOperatinghours());
                 break;
             case "rent":
-                String bookname = scanner.nextLine();
-                System.out.println("enter book name:");
-                library.rentBook(bookname);
+                library.rentBook(parts[2]);
                 break;
             case "addmember":
-                System.out.println("enter users fullName: ");
-                String fullName = scanner.nextLine();
-                System.out.println("enter users phoneNumber: ");
-                String phoneNumber = scanner.nextLine();
-                library.addUser(fullName,phoneNumber);
-                break;
-            case "addadmin":
-                System.out.println("enter admins fullName: ");
-                String adminFullName = scanner.nextLine();
-                System.out.println("enter admins phoneNumber: ");
-                String adminPhoneNumber = scanner.nextLine();
-                System.out.println("enter new admins password: ");
-                String adminsPassword = scanner.nextLine();
-                library.addAdmin(adminFullName,adminPhoneNumber,adminsPassword);
+                library.addUser(parts[2],parts[3]);
                 break;
             case "specificrent":
-                System.out.println("enter bookName:");
-                String bookName =scanner.nextLine();
-                System.out.println("enter members fullName:");
-                String fullMemberName = scanner.nextLine();
-                System.out.println("enter members ID:");
-                String ID = scanner.nextLine();
-                library.rentSpecificBook(bookName,fullMemberName,ID);
+                library.rentSpecificBook(parts[2],parts[3],parts[4]);
                 break;
             case "getavailablebooks":
                 library.getAvailableBooks();
                 break;
             case "removemember":
-                System.out.println("please enter member id:");
-                String memberId = scanner.nextLine();
-                library.removeUser(memberId);
+                library.removeUser(parts[2]);
                 break;
             case "return":
-                System.out.println("enter book name:");
-                String BookName = scanner.nextLine();
-                library.returnBook(BookName);
+                library.returnBook(parts[2]);
                 break;
             default:
                 System.out.println("Invalid input! Please try again.");
