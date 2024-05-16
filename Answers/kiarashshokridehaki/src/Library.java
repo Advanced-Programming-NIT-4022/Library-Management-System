@@ -20,7 +20,7 @@ public class Library {
     static int capacity;
     static String fileName = "name.txt";
     static String filecapa = "capa.txt";
-    static int adminpass =1234;
+    static String adminpass ="1234";
     ArrayList<String> fruits = new ArrayList<String>();
     static Scanner lib = new Scanner(System.in);
 
@@ -33,14 +33,14 @@ public class Library {
             String line = reader.readLine();
 
         } catch (IOException x) {
-            System.out.println("خطایی در خواندن فایل رخ داده است.");
+            System.out.println("fail");
 
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filecapa))) {
             String line1 = reader.readLine();
         } catch (IOException x) {
-            System.out.println("خطایی در خواندن فایل رخ داده است.");
+            System.out.println("fail");
 
         }
 
@@ -70,9 +70,9 @@ public class Library {
             libName = lib.nextLine();
             try (FileWriter writer = new FileWriter(fileName)) {
                 writer.write(libName);
-                System.out.println("اسم در فایل ذخیره شد.");
+                System.out.println(" ok ");
             } catch (IOException x) {
-                System.out.println("خطایی در نوشتن فایل رخ داده است.");
+                System.out.println("fail");
 
             }
 
@@ -84,9 +84,9 @@ public class Library {
             libbook.put(libName, capacity);
             try (FileWriter writer = new FileWriter(filecapa)) {
                 writer.write(capacity);
-                System.out.println("اسم در فایل ذخیره شد.");
+                System.out.println(" ok ");
             } catch (IOException x) {
-                System.out.println("خطایی در نوشتن فایل رخ داده است.");
+                System.out.println("fail");
 
 
             }
@@ -112,14 +112,16 @@ public class Library {
     }
     public static void addmember(String username){
 
-userName.add(username);
+userName.add(User.name1);
         System.out.println("register is sucssfully");
         CLI.job(Main.c1, Main.userId);
 
     }
     public static void remmember(){
+
         System.out.println("pleas username : ");
         String name = lib.nextLine();
+        User.uname.remove(name);
 
 
 

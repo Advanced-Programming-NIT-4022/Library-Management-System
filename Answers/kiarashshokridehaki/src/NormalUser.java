@@ -3,11 +3,11 @@ import java.util.HashMap;
 
 public class NormalUser {
   static  HashMap<String, LocalDateTime> Normal = new HashMap<String, LocalDateTime >();
-    public static void date(String username){
+    public static void date(String name1){
 
         LocalDateTime myObj = LocalDateTime.now();
 
-        Normal.put(username,myObj);
+        Normal.put(name1,myObj);
 
 
 

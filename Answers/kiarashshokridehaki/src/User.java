@@ -7,17 +7,21 @@
 
 
  public class User {
+     static ArrayList<String> uname = new ArrayList<String>();
+
      static ArrayList<String> uphone = new ArrayList<String>();
       static Scanner phone = new Scanner(System.in);
       static Scanner name = new Scanner(System.in);
-      static String username = name.nextLine();
-      static HashMap<String, Integer> User = new HashMap<String, Integer>();
+
+      static HashMap<String, Long> User = new HashMap<String, Long>();
      static HashMap<String, String> User_ph_name = new HashMap<String, String>();
-      static HashMap<Integer, String> informbook = new HashMap<Integer,String >();
+      static HashMap<Long, String> informbook = new HashMap<Long,String >();
     static  LocalDateTime user = LocalDateTime.now();
      static HashMap<String,  LocalDateTime> userdate = new HashMap<String, LocalDateTime >();
-     static String usphone;
+     static HashMap<String, Long> User_name_id = new HashMap<String, Long>();
 
+     static String usphone;
+     static String name1;
 
 
 
@@ -26,21 +30,24 @@
 
     {
 
-
-        int userId = 50;
+        long userId = 10000;
         System.out.println("name :");
-String name1 = name.nextLine();
-        User.put(username , userId);
+      name1 = name.nextLine();
+        User.put(name1 , userId);
+        uname.add(name1);
+        User_name_id.put(name1,userId);
 
         userId++;
 
 
-        NormalUser.date(username);
+        NormalUser.date(name1);
 
         System.out.println("phone :");
 
         String userphone = name.nextLine();
-        User_ph_name.put(name1,userphone );
+
+
+
         Pattern pattern = Pattern.compile("09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}");
         Matcher matcher = pattern.matcher(userphone);
 
@@ -51,10 +58,12 @@ String name1 = name.nextLine();
         if (matchFound) {
             //send in array list phone and send hash map
 
-            usphone = phone.nextLine().toLowerCase();
+            User_ph_name.put(name1,userphone );
             uphone.add(usphone);
             informbook.put(userId,usphone );
 
+            userdate.put(usphone,user);
+            Library.addmember(name1);
 
 
 
@@ -68,17 +77,18 @@ String name1 = name.nextLine();
                 Pattern patteern = Pattern.compile("09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}");
                 Matcher matcheer = pattern.matcher(userrphone);
 
-                boolean matchFoundw = matcher.matches();
+                boolean matchFoundw = matcheer.matches();
 
                 if(matchFoundw)
 
                   {
 
 
-                      usphone = phone.nextLine().toLowerCase();
+
                       uphone.add(usphone);
                       informbook.put(userId,usphone );
-break;
+                      Library.addmember(name1);
+                            break;
 
 
 
@@ -87,7 +97,9 @@ break;
                 else
 
                     {
-i++;
+                        System.out.println("phon is false try again");
+
+                        i++;
                 }
 
 
@@ -96,10 +108,11 @@ i++;
             }
         }
 
+
         userdate.put(usphone,user);
+        Library.addmember(name1);
 
 
-Library.addmember(username);
         //enter date sabtnam with hash map
 
      }

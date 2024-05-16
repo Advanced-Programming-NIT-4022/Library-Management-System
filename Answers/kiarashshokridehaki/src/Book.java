@@ -10,18 +10,20 @@
       static HashMap<String, Integer> people1 = new HashMap<String, Integer>();
       static HashMap<Integer, String> informauthor = new HashMap<Integer, String>();
       static HashMap<String, String> informdecri = new HashMap<String, String>();
+      static int chek;
+      static int bookId = 999;
 
       //for add book
-      static void informationBook(int i12, int i13, int i14, int c1, int userId) {
+      static void informationBook(int c1, int userId) {
 
-          int bookId = 9 - 999;
+
           Scanner namBook = new Scanner(System.in);
           Scanner autho = new Scanner(System.in);
           Scanner decri = new Scanner(System.in);
           String ab;
 
 
-          if (i12 == 0) {
+          if (CLI.add.equals(CLI.job1)) {
 
 
               System.out.println("whhat is your name book ? pleas write: ");
@@ -40,129 +42,101 @@
               informdecri.put(author, decrii);
 
               System.out.println("add is sucecfully bookID : " + bookId);
-              i12 = 1;
+
               bookId--;
               CLI.job(c1, userId);
 
           }
+          else if (CLI.Rent1.equals(CLI.job1)) {
 
-
-          if (i13 == 0) {
               System.out.println("pleas write name of the book you want");
 
-              String nameavail = namBook.nextLine().toLowerCase();
-
-              int chek = 0;
+              String nameavaill = namBook.nextLine().toLowerCase();
 
 
               for (int i = 0; i < book.size(); i++) {
+                  chek = 0;
+                  int o12 = book.get(i).toLowerCase().compareTo(nameavaill.toLowerCase());
+                  if (o12 == 0) {
 
-                  int o = book.get(i).toLowerCase().compareTo(nameavail.toLowerCase());
-                  if (o == 0) {
+
+
                       chek = 1;
+                      break;
                   }
               }
 
               if (chek == 1) {
 
                   System.out.println("is available");
-                  if (c1 == 0) {
-                      people1.put(nameavail.toLowerCase(), Rent.rentId);
-                      System.out.println("rent is sucecfully");
 
-                      for (int i = 0; i < book.size(); i++) {
+                  System.out.println("rent is sucecfully");
+                  Rent.rentBook(userId, nameavaill);
 
-                          int o = book.get(i).toLowerCase().compareTo(nameavail.toLowerCase());
+                  for (int i = 0; i < book.size(); i++) {
 
-                          if (o == 0) {
+                      int o = book.get(i).toLowerCase().compareTo(nameavaill.toLowerCase());
 
-                              book.remove(book.get(i));
+                      if (o == 0) {
 
-                          }
+                          book.remove(book.get(i));
 
+                          break;
                       }
-                      i13 = 1;
-                      c1 = 1;
-                  }
-
-
-              } else {
-                  System.out.println("not available");
-
-                  if (c1 == 0) {
-                      System.out.println("rent is not sucecfully");
-
 
                   }
-
+                  book.remove(nameavaill);
+                  c1 = 1;
                   CLI.job(c1, userId);
 
 
-                  i13 = 1;
-                  c1 = 1;
+              } else {
+                  System.out.println("not available");
+
+                  if (c1 == 0) {
+                      System.out.println("rent is not sucecfully");
+                      CLI.job(c1, userId);
+
+                  }
+
 
               }
               CLI.job(c1, userId);
 
           }
-
-
-          if (i14 == 0) {
-
+          else if (CLI.avail.equals(CLI.job1)) {
               System.out.println("pleas write name of the book you want");
 
               String nameavail = namBook.nextLine().toLowerCase();
 
-              int chek = 0;
-
 
               for (int i = 0; i < book.size(); i++) {
-
-                  int o = book.get(i).toLowerCase().compareTo(nameavail.toLowerCase());
-                  if (o == 0) {
+                  chek = 0;
+                  int o13 = book.get(i).toLowerCase().compareTo(nameavail.toLowerCase());
+                  if (o13 == 0) {
                       chek = 1;
+                      break;
                   }
               }
 
               if (chek == 1) {
 
                   System.out.println("is available");
-                  if (c1 == 0) {
-                      people1.put(nameavail.toLowerCase(), Rent.rentId);
-                      System.out.println("rent is sucecfully");
-
-                      for (int i = 0; i < book.size(); i++) {
-
-                          int o = book.get(i).toLowerCase().compareTo(nameavail.toLowerCase());
-
-                          if (o == 0) {
-
-                              book.remove(book.get(i));
-
-                          }
-
-                      }
-                      i13 = 1;
-                      c1 = 1;
-
-                  }
 
 
               } else {
                   System.out.println("not available");
 
-                  if (c1 == 0) {
-                      System.out.println("rent is not sucecfully");
 
-
-                  }
-
-
+                  CLI.job(c1, userId);
               }
+
+
               CLI.job(c1, userId);
+
           }
+
       }
   }
-
 
 
