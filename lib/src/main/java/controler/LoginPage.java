@@ -42,8 +42,27 @@ public class LoginPage {
             Library lib=new Library();
             Stage stage=(Stage) btnSign.getScene().getWindow();
             stage.close();
-           System.out.println(lib.checkUserexistence("1"));
-           lib.rmUser("1");
+            if(btnAdmin.isSelected()){
+                if( lib.checkUserexistence(txtUsername.getText(),txtPassword.getText())){
+                    System.out.println("khosh amadid");
+
+                }
+                else{
+                    System.out.println("user not found");
+                }
+            }
+            else if(btnNormal.isSelected()){
+                if( lib.checkUserexistence(txtUsername.getText(),txtPassword.getText())){
+                    System.out.println("khosh amadid");
+
+                }
+                else{
+                    System.out.println("user not found");
+                }
+            }
+            else{
+                System.out.println("yeki ra entekhab konid");
+            }
         }
 
     public void pressRadioNormal(ActionEvent event) {
