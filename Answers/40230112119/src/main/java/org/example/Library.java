@@ -194,6 +194,7 @@ public class Library {
 //        }
 
         User u = new User();
+        Book b = new Book();
         boolean flag = true;
         outerLoop:
         do {
@@ -224,7 +225,19 @@ public class Library {
                             }
                         }
                     } else if (cm[++i].equalsIgnoreCase("member")) {
+                        if (cm.length == 5) {
 
+                        }
+                        else {
+                            System.out.println("Invalid command. What do you want to do?" +
+                                    "\n1- Try another command\t\t\t2- Exit");
+                            choice = sc.nextInt();
+                            if (choice == 1) {
+                                flag = false;
+                            } else {
+                                break outerLoop;
+                            }
+                        }
                     } else {
                         System.out.println("Invalid command. What do you want to do?" +
                                 "\n1- Try another command\t\t\t2- Exit");
@@ -236,6 +249,37 @@ public class Library {
                             break outerLoop;
                         }
                     }
+                }
+                else if (cm[i].equalsIgnoreCase("get")) {
+                    if (cm[++i].equalsIgnoreCase("hrs")) {
+                        System.out.println(operatingHours);
+                    }
+                    else if (cm[2].equalsIgnoreCase("available")) {
+                        if (cm[3].equalsIgnoreCase("books")) {
+                            for (Book l : getBooksList()) {
+                                for (int k = 0; k < booksList.size(); k++) {
+                                    System.out.println("bookID\t\ttitle\t\tauthor");
+                                    System.out.println(getBooksList().get(k).getBookID() + "\t\t\t" + getBooksList().get(k).getTitle() + "\t\t\t" + getBooksList().get(k).getAuthor());
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        System.out.println("Invalid command. What do you want to do?" +
+                                "\n1- Try another command\t\t\t2- Exit");
+                        choice = sc.nextInt();
+                        if (choice == 1) {
+                            flag = false;
+                        } else {
+                            break outerLoop;
+                        }
+                    }
+                }
+                else if (cm[i].equalsIgnoreCase("rent")) {
+
+                }
+                else if (cm[1].equalsIgnoreCase("remove")) {
+
                 }
         } while(!flag);
     }

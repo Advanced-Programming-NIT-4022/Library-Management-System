@@ -13,6 +13,8 @@ public class MyApp {
 //            System.out.println(lib.getUserList().get(i).getName());
 //            System.out.println(lib.getUserList().get(i).getPhone());
 //        }
+        lib.addBookElement(mine);
+        System.out.println(lib.getBooksList().get(0).getTitle());
         lib.homePage();
     }
 }

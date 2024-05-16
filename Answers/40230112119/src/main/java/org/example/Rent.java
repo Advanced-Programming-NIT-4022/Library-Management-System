@@ -11,7 +11,7 @@ public class Rent {
         int index = lib.getBooksList().indexOf(title);
         Book wanted = lib.getBooksList().get(index);
         if (wanted.getStatus()) {
-            /////SQL
+
             wanted.setStatus(false);
         }
     }
