@@ -152,7 +152,11 @@ public class Library {
         preparedStatement = connection.prepareStatement("DELETE FROM Users WHERE id = " + id);
         return preparedStatement.executeUpdate() != 0;
     }
-
+    boolean removeUser(String username) throws SQLException {
+        preparedStatement = connection.prepareStatement("DELETE FROM Users WHERE id = ?");
+        preparedStatement.setString(1,username);
+        return preparedStatement.executeUpdate() != 0;
+    }
     void rentBook(int userId, int bookId) throws SQLException {
         preparedStatement = connection.prepareStatement("INSERT INTO Rents (userId,bookId,rentDate) VALUES (?,?,?)");
         preparedStatement.setInt(1, userId);
