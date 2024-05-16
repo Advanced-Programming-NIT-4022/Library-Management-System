@@ -19,4 +19,11 @@ public class Book {
         this.description = description;
         this.isAvailable = true;
     }
+
+    @Override
+    public String toString() {
+        return "Id: " + id + " Title: " + title + ", Author: " + author + ", Description: " + description + ", Is available: " + isAvailable;
+    }
+
+
 }
