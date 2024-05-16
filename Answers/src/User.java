@@ -19,6 +19,33 @@ public class User implements Updatable {
         this.phoneNumber = phoneNumber;
     }
 
+    protected User(int uniqueID, String name) throws Exception {
+        final String SQL_COMMAND = "SELECT Name, PhoneNumber FROM users WHERE UserID = ?;";
+
+        try (Connection connection = DriverManager.getConnection(MyApp.DB_URL, MyApp.DB_USERNAME,
+                MyApp.DB_PASSWORD);
+             PreparedStatement selectUser = connection.prepareStatement(SQL_COMMAND)) {
+
+            selectUser.setInt(1, uniqueID);
+            ResultSet resultSet = selectUser.executeQuery();
+
+            if (resultSet.next()) {
+                if (name.equals(resultSet.getString("Name")))
+                    this.name = name;
+                else
+                    throw new Exception("The username does not match the ID");
+                this.uniqueID = uniqueID;
+                this.phoneNumber = resultSet.getString("PhoneNumber");
+            } else
+                throw new Exception("User with ID = " + uniqueID + "not found.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.print("Connection to database failed! Terminating...");
+            System.exit(1);
+        }
+    }
+
+    @Override
     public void update() {
         final String SQL_COMMAND = "SELECT UserID FROM users WHERE PhoneNumber = ?";
 
