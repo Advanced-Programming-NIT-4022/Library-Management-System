@@ -97,4 +97,13 @@ public class Library {
         return null;
 
     }
+
+    void addAdminUser(AdminUser adminUser) throws SQLException {
+        preparedStatement = connection.prepareStatement("INSERT INTO Users (username,fullName,phoneNumber,password,isAdmin) VALUES (?,?,?,?,true)");
+        preparedStatement.setString(1, adminUser.username);
+        preparedStatement.setString(2, adminUser.fullName);
+        preparedStatement.setString(3, adminUser.phoneNumber);
+        preparedStatement.setString(4, adminUser.password.getHashedPassword());
+        preparedStatement.executeUpdate();
+    }
 }
