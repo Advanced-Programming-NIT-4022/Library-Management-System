@@ -45,7 +45,7 @@ public class Rent {
         System.out.println("eror rented book not found");
         return false;
     }
-    
+
     public static void returnAllBooks(int userID){
         int rentbooks = NormalUsers.normalUsersArray.get(userID).rentBooks.split("#").length;
         int rentedbooks = Book.booksArray.size();
