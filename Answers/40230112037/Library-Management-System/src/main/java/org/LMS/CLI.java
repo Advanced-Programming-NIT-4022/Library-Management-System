@@ -148,6 +148,7 @@ public class CLI {
                 "lib book rent <bookID> : Rents a book.\n" +
                 "lib book return <bookID> : Returns a book.\n" +
                 "lib get-hrs : Retrieve library operating hours.\n" +
+                "\n" +
                 "exit : Logout from library.\n" +
                 "help : Show this help."));
     }
@@ -207,7 +208,7 @@ public class CLI {
                     break;
                 case 1:
                     try {
-                        if (!library.removeUser(Integer.parseInt(arguments[0]))) System.out.println("User not found!");
+                        if (!library.removeUser(arguments[0])) System.out.println("User not found!");
                     } catch (SQLException e) {
                         System.out.println("Couldn't remove book!");
                     } catch (NumberFormatException e) {
@@ -398,6 +399,25 @@ public class CLI {
         adminUserMainOptions.add("lib", libraryOptions::select);
         adminUserMainOptions.add("exit", arguments -> loggedIn = false);
         adminUserMainOptions.add("help", arguments -> {
+            System.out.println("lib user remove : Remove your user.\n" +
+                    "lib book list <search word>(optional) : Show all book or search through them.\n" +
+                    "lib book show-available : Show all available books.\n" +
+                    "lib book show-rented : Show all books rented by you.\n" +
+                    "lib book rent <bookID> <userId>(optional): Rents a book (for a specific user).\n" +
+                    "lib book return <bookID> : Returns a book.\n" +
+                    "lib book add <Title> <Author> <Description> : Add a book to library.\n" +
+                    "lib book remove <bookID> : Remove a book from library.  \n" +
+                    "\n" +
+                    "lib user add-user <UserName> <FullName> <PhoneNumber> : Add a normal user.\n" +
+                    "lib user add-admin <UserName> <FullName> <PhoneNumber> <password>: Add an admin.\n" +
+                    "lib user remove <UserName> : Remove a user.\n" +
+                    "lib user list : List all users.\n" +
+                    "\n" +
+                    "lib get-hrs : Retrieve library operating hours.\n" +
+                    "lib set-hrs <Hours> : Set library operating hours.\n" +
+                    "\n" +
+                    "exit : Logout from library.\n" +
+                    "help : Show this help.");
         });
     }
 
