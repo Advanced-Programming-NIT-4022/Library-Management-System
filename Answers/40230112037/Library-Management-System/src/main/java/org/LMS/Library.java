@@ -11,7 +11,17 @@ public class Library {
     private final Statement statement;
     protected User currentUser;
     private String name;
-    private Integer capacity, operatingHours;
+    private String hours="8 A.M to 18 P.M";
+
+    public String getHours() {
+        return hours;
+    }
+
+    public void setHours(String hours) {
+        this.hours = hours;
+    }
+
+    private Integer capacity;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
