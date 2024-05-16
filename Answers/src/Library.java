@@ -170,7 +170,7 @@ public class Library {
     // login to library
     public User login(String userID) {
         User user = null;
-            final String SQL_COMMAND = "SELECT * FROM users WHERE UserID = ?";
+        final String SQL_COMMAND = "SELECT * FROM users WHERE UserID = ?";
 
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL,
                 MyApp.DB_USERNAME, MyApp.DB_PASSWORD);
@@ -277,26 +277,28 @@ public class Library {
         }
     }
 
-    // add rent to library
-    public int addRent(Rent rent) {
-        final String SQL_COMMAND = "INSERT INTO rents (UserID, BookID, RentalDate) VALUES (?, ?, ?);";
+    public void returnBook(int bookID) {
+        // set rental date in database
+        final String SQL_COMMAND1 = "UPDATE rents SET ReturnDate = ? WHERE BookID = ?;";
+
+        // change availability status of the book
+        final String SQL_COMMAND2 = "UPDATE books SET AvailabilityStatus = 1 WHERE BookID = ?;";
 
         try (Connection connection = DriverManager.getConnection(MyApp.DB_URL, MyApp.DB_USERNAME,
                 MyApp.DB_PASSWORD);
-             PreparedStatement addRentCommand = connection.prepareStatement(SQL_COMMAND)){
+             PreparedStatement returnCommand = connection.prepareStatement(SQL_COMMAND1);
+             PreparedStatement changeStatus = connection.prepareStatement(SQL_COMMAND2)) {
+            // set rental date
+            returnCommand.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+            returnCommand.setInt(2, bookID);
+            returnCommand.executeUpdate();
 
-            addRentCommand.setInt(1, rent.getPerson().getUniqueID());
-            addRentCommand.setInt(2, rent.getBook().getUniqueID());
-            addRentCommand.setTimestamp(3, rent.getRentalTimestamp());
-            addRentCommand.executeUpdate();
-
-            rent.update();
-            rent.getBook().getStatus(false);
-            return rent.getRentalID();
+            // change availability status of the book
+            changeStatus.setInt(1, bookID);
+            changeStatus.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.print("Connection to database failed!");
-            return 0;
         }
     }
 }
