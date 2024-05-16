@@ -34,7 +34,7 @@ public class Library {
     ArrayList<Book> resultSetToBookArrayList(ResultSet resultSet) throws SQLException {
         ArrayList<Book> result = new ArrayList<>();
         while (resultSet.next()) {
-            result.add(new Book(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getBoolean(5)));
+            result.add(new Book(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4)));
         }
         return result;
     }
@@ -74,11 +74,10 @@ public class Library {
     }
 
     void addBook(Book book) throws SQLException {
-        preparedStatement = connection.prepareStatement("INSERT INTO Books (title,author,isAvailable,description) VALUES (?, ?, ?, ?)");
+        preparedStatement = connection.prepareStatement("INSERT INTO Books (title,author,description) VALUES (?, ?, ?)");
         preparedStatement.setString(1, book.title);
         preparedStatement.setString(2, book.author);
-        preparedStatement.setBoolean(3, book.isAvailable);
-        preparedStatement.setString(4, book.description);
+        preparedStatement.setString(3, book.description);
         preparedStatement.executeUpdate();
     }
 
