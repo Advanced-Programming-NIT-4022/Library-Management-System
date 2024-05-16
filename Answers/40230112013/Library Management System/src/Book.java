@@ -1,7 +1,9 @@
+import java.util.List;
+import java.util.Scanner;
 import java.util.UUID;
 
 public class Book {
-    private final String bookID;
+    private String bookID;
     private String title;
     private String author;
     private boolean isAvailable;
@@ -50,9 +52,7 @@ public class Book {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    @Override
-    public String toString() {
+    public String toString1() {
         return "Book{" +
                 "bookID='" + bookID + '\'' +
                 ", title='" + title + '\'' +
@@ -60,5 +60,17 @@ public class Book {
                 ", isAvailable=" + isAvailable +
                 ", description='" + description + '\'' +
                 '}';
+    }
+    public static Book bookfinder(String n, String p ) {
+        
+        List<Book> me = Library.getrepo();
+        for (Book u : me) {
+            if (u.getTitle().equals(n) && u.getAuthor().equals(p)) {
+                System.out.println("book found");
+                return u;
+            }
+        }
+        System.out.println("book not found");
+        return null;
     }
 }

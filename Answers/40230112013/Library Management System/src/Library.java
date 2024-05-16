@@ -1,12 +1,12 @@
 import java.util.*;
 
 public class Library {
-    private Map<User, Rent> rentRecords;
+    private static Map<User, Rent> rentRecords;
     static String LibraryName;
     int Capacity;
     String Operating_hours;
-    private static List<Book> repository = new ArrayList<>();
-    private static List<User> users = new ArrayList<>();
+    private static List<Book> repository = new ArrayList<Book>();
+    private static List<User> users = new ArrayList<User>();
 
     public Library() {
         @SuppressWarnings({ "rawtypes", "unused" })
@@ -19,6 +19,7 @@ public class Library {
 
     public static void removeBook(Book book) {
         repository.remove(book);
+
     }
 
     public static void addUser(User user) {
@@ -37,7 +38,7 @@ public class Library {
         return users;
     }
 
-    public void rentBook(Book book, User user, int rentDays) {
+    public static void rentBook(Book book, User user, int rentDays) {
         if (repository.contains(book)) {
             Rent rent = new Rent(book, user, rentDays);
             rentRecords.put(user, rent);
@@ -56,6 +57,24 @@ public class Library {
             System.out.println("The book" + rent.getBook().getTitle() + "ّFrom" + user.getName() + "taken back.");
         } else {
             System.out.println("********************\nreturn book is faild");
+        }
+    }
+
+    public static void showBook() {
+        for (Book x : repository) {
+            int i = 1;
+            String p = x.toString1();
+            System.out.println(i + "-" + p);
+            i++;
+        }
+    }
+
+    public static void showUser() {
+        for (User x : users) {
+            int i = 1;
+            String p = x.toString2();
+            System.out.println(i + "-" + p);
+            i++;
         }
     }
 }

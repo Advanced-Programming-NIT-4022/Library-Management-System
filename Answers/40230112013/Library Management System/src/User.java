@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class User {
@@ -13,6 +14,7 @@ public class User {
         this.PhoneNumber = phoneNumber;
         this.password = password;
     }
+
     public String getName() {
         return Name;
     }
@@ -33,7 +35,7 @@ public class User {
         return password;
     }
 
-    public void setInformation(){
+    public String[] setInformation() {
         try (Scanner scanner = new Scanner(System.in)) {
             this.Name = scanner.nextLine();
             this.FamilyName = scanner.nextLine();
@@ -41,5 +43,47 @@ public class User {
             this.password = scanner.nextLine();
             this.PhoneNumber = scanner.nextLine();
         }
+        String[] values ={Name, FamilyName, Id, password, PhoneNumber};
+        return values;
+    }
+
+   /*  @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        User user = (User) obj;
+        return Name.equals(user.Name) &&
+                FamilyName.equals(user.FamilyName) &&
+                PhoneNumber.equals(user.PhoneNumber) &&
+                password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Name, FamilyName, PhoneNumber, password);
+    }*/
+
+    public static User userfinder(String n, String p , String j) {
+        
+        List<User> me = Library.getuser();
+        for (User u : me) {
+            if (u.getName().equals(n) && u.getPassword().equals(p) && u.getPhoneNumber().equals(j)) {
+                System.out.println("User found");
+                return u;
+            }
+        }
+        System.out.println("User not found");
+        return null;
+    }
+    public String toString2() {
+        return "User{" +
+                "ID='" + Id + '\'' +
+                ", name='" + Name + '\'' +
+                ", FamilyName='" + FamilyName + '\'' +
+                ", PhoneNumber=" + PhoneNumber +'\'' +
+                '}';
     }
 }
+
