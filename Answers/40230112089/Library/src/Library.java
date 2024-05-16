@@ -109,9 +109,20 @@ public class Library {
     }
 
     public void showAllUser() {
-        if (!checkLibraryPassword()) {
-            System.out.println("Wrong Password ");
-            return;
+        System.out.println("enter admin or owner:");
+        Scanner input = new Scanner(System.in);
+        String type = input.nextLine();
+        if (type.equals("owner")){
+            if (!checkLibraryPassword()) {
+                System.out.println("Wrong Password");
+                return;
+            }
+        }
+        if (type.equals("admin")){
+            if (!checkAdminIdPas()) {
+                System.out.println("Wrong information");
+                return;
+            }
         }
         if (this.userArray.isEmpty()) {
             System.out.println("User list is empty");
@@ -132,7 +143,7 @@ public class Library {
 
     public void showAllAdmin() {
         if (!checkLibraryPassword()) {
-            System.out.println("Wrong Password ");
+            System.out.println("Wrong Password");
             return;
         }
         if (this.adminArray.isEmpty()) {
@@ -142,11 +153,11 @@ public class Library {
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         for (int i = 0; i < this.adminArray.size(); i++) {
             System.out.println((i + 1) + "-");
-            System.out.println("User name          : " + this.adminArray.get(i).userName);
-            System.out.println("User id            : " + this.adminArray.get(i).userId);
-            System.out.println("User password      : " + this.adminArray.get(i).password);
-            System.out.println("User phone number  : " + this.adminArray.get(i).phoneNumber);
-            System.out.println("User register date : " + this.adminArray.get(i).registerDate);
+            System.out.println("Admin name          : " + this.adminArray.get(i).userName);
+            System.out.println("Admin id            : " + this.adminArray.get(i).userId);
+            System.out.println("Admin password      : " + this.adminArray.get(i).password);
+            System.out.println("Admin phone number  : " + this.adminArray.get(i).phoneNumber);
+            System.out.println("Admin register date : " + this.adminArray.get(i).registerDate);
             System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         }
     }
@@ -172,9 +183,20 @@ public class Library {
             System.out.println("Rent list is empty ");
             return;
         }
-        if (!checkLibraryPassword()) {
-            System.out.println("Wrong Password");
-            return;
+        System.out.println("enter admin or owner:");
+        Scanner input = new Scanner(System.in);
+        String type = input.nextLine();
+        if (type.equals("owner")){
+            if (!checkLibraryPassword()) {
+                System.out.println("Wrong Password");
+                return;
+            }
+        }
+        if (type.equals("admin")){
+            if (!checkAdminIdPas()) {
+                System.out.println("Wrong information");
+                return;
+            }
         }
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         for (int i = 0; i < this.rentArray.size(); i++) {
@@ -238,11 +260,37 @@ public class Library {
         }
         return result;
     }
+    public boolean  checkAdminIdPas(){
+        boolean result =false;
+        System.out.println("enter admin Id :");
+        Scanner input = new Scanner(System.in);
+        Scanner input2 = new Scanner(System.in);
+        int adminId = input.nextInt();
+        System.out.println("enter admin password :");
+        String adminPass = input2.nextLine();
+        for (int i = 0; i <adminArray.size() ; i++) {
+            if (this.adminArray.get(i).userId ==adminId && this.adminArray.get(i).password.equals(adminPass)) {
+                result=true;
+            }
+        }
+        return result ;
+    }
 
     public void addBook(String bookName, String bookAuthor) {
-        if (!checkLibraryPassword()) {
-            System.out.println("Wrong Password");
-            return;
+        System.out.println("enter admin or owner:");
+        Scanner input = new Scanner(System.in);
+        String type = input.nextLine();
+        if (type.equals("owner")){
+            if (!checkLibraryPassword()) {
+                System.out.println("Wrong Password");
+                return;
+            }
+        }
+        if (type.equals("admin")){
+            if (!checkAdminIdPas()) {
+                System.out.println("Wrong information");
+                return;
+            }
         }
         Book book = new Book(bookName, bookAuthor, this.booksId, true);
         this.booksId++;
@@ -257,9 +305,20 @@ public class Library {
             System.out.println("Wrong Book");
             return;
         }
-        if (!checkLibraryPassword()) {
-            System.out.println("Wrong Password");
-            return;
+        System.out.println("enter admin or owner:");
+        Scanner input = new Scanner(System.in);
+        String type = input.nextLine();
+        if (type.equals("owner")){
+            if (!checkLibraryPassword()) {
+                System.out.println("Wrong Password");
+                return;
+            }
+        }
+        if (type.equals("admin")){
+            if (!checkAdminIdPas()) {
+                System.out.println("Wrong information");
+                return;
+            }
         }
         for (int i = 0; i < this.bookArray.size(); i++) {
             if (this.bookArray.get(i).bookId == bookId) {
@@ -272,9 +331,20 @@ public class Library {
     }
 
     public void addUser(String userName, String phoneNumber, String password) {
-        if (!checkLibraryPassword()) {
-            System.out.println("Wrong Password");
-            return;
+        System.out.println("enter admin or owner:");
+        Scanner input = new Scanner(System.in);
+        String type = input.nextLine();
+        if (type.equals("owner")){
+            if (!checkLibraryPassword()) {
+                System.out.println("Wrong Password");
+                return;
+            }
+        }
+        if (type.equals("admin")){
+            if (!checkAdminIdPas()) {
+                System.out.println("Wrong information");
+                return;
+            }
         }
         User user = new User(userName, phoneNumber, this.usersId, new Date().toString(), password);
         this.userArray.add(user);
@@ -291,9 +361,20 @@ public class Library {
             System.out.println("Wrong User");
             return;
         }
-        if (!checkLibraryPassword()) {
-            System.out.println("Wrong Password ");
-            return;
+        System.out.println("enter admin or owner:");
+        Scanner input = new Scanner(System.in);
+        String type = input.nextLine();
+        if (type.equals("owner")){
+            if (!checkLibraryPassword()) {
+                System.out.println("Wrong Password");
+                return;
+            }
+        }
+        if (type.equals("admin")){
+            if (!checkAdminIdPas()) {
+                System.out.println("Wrong information");
+                return;
+            }
         }
         for (int i = 0; i < this.userArray.size(); i++) {
             if (this.userArray.get(i).userId == userId) {
@@ -446,6 +527,10 @@ public class Library {
 
     }
 
+
+    public void getHours(){
+        System.out.println("We are open from " + openHour+ " to " + closeHour);
+    }
     public void showAllCommand() {
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         System.out.println("Book options : ");
@@ -471,6 +556,7 @@ public class Library {
         System.out.println("lib return book <userID> <bookID>");
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         System.out.println("lib delete account <userID> <password>");
+        System.out.println("lib get hrs");
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     }
 
@@ -487,6 +573,9 @@ public class Library {
             if (commandSegs[0].equals("lib")) {
                 if (commandSegs[1].equals("-h") && commandSegs.length == 2) {
                     showAllCommand();
+                }
+                else if (commandSegs.length == 3 && commandSegs[1].equals("get") && commandSegs[2].equals("hrs")){
+                    getHours();
                 }
                 else if( commandSegs.length == 5 && commandSegs[1].equals("delete") && commandSegs[2].equals("account") && commandSegs[3].matches("[0-9]+") && commandSegs[4].matches("\\S+"))  {
                     deleteAccount(Integer.parseInt(commandSegs[3]),commandSegs[4]);
