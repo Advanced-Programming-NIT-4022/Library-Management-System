@@ -49,7 +49,7 @@ public class Library {
     }
 
     ArrayList<Book> listBooks(Boolean available, int userId) throws SQLException {
-        resultSet = statement.executeQuery(((available) ? "SELECT a.* FROM Books a JOIN Rents b ON a.id = b.bookId" : "SELECT a.* FROM Books a LEFT OUTER JOIN Rents b ON a.id = b.bookId WHERE b.id IS NULL") + ((userId != 0) ? " AND b.userId = " + userId : ""));
+        resultSet = statement.executeQuery(((!available) ? "SELECT a.* FROM Books a JOIN Rents b ON a.id = b.bookId" : "SELECT a.* FROM Books a LEFT OUTER JOIN Rents b ON a.id = b.bookId WHERE b.id IS NULL") + ((userId != 0) ? " AND b.userId = " + userId : ""));
         return resultSetToBookArrayList(resultSet);
     }
 
