@@ -192,7 +192,15 @@ public class CLI {
 
         normalUserMainOptions.add("lib", libraryOptions::select);
         normalUserMainOptions.add("exit", arguments -> loggedIn = false);
-        normalUserMainOptions.add("help", arguments -> System.out.println());
+        normalUserMainOptions.add("help", arguments -> System.out.println("lib user remove : Remove your user.\n" +
+                "lib book list <search word>(optional) : Show all book or search through them.\n" +
+                "lib book show-available : Show all available books.\n" +
+                "lib book show-rented : Show all books rented by you.\n" +
+                "lib book rent <bookID> : Rents a book.\n" +
+                "lib book return <bookID> : Returns a book.\n" +
+                "lib get-hrs : Retrieve library operating hours.\n" +
+                "exit : Logout from library.\n" +
+                "help : Show this help."));
     }
 
     {
