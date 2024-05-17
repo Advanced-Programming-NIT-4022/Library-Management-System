@@ -108,11 +108,9 @@ public class Library {
         WriteFileNormalUser("Normaluser.txt");
     }
     public void DeleteNormalUser(String number) {
-        ReadFileNormalUser("NormalUser.txt");
         for (int i = 0; i < normalUser.getPeople().size(); i++)
         {
-            String line1 = normalUser.getPeople().get(i);
-            String[] list = line1.split("/");
+            String[] list = normalUser.getPeople().get(i).split("/");
             if (Objects.equals(list[0], number))
             {
                 System.out.println("The deletion was successful");
@@ -120,7 +118,6 @@ public class Library {
                 break;
             }
         }
-        normalUser.setPeople(normalUser.getPeople());
     }
     public void ChapFileUser() {
         for (int i = 0; i < normalUser.getPeople().size(); i++)
@@ -130,9 +127,10 @@ public class Library {
         }
     }
     public void CLIComment() {
+        boolean flag = true;
         user.ReadFileBook("Book.txt");
         ReadFileNormalUser("Normaluser.txt");
-        while (true) {
+        while (flag) {
             System.out.println(getLibraryName() +  "       How can I help you???!!!");
             System.out.println("lib add book <name> <author> <subtitle>");
             System.out.println("lib get hrs");
@@ -140,139 +138,79 @@ public class Library {
             System.out.println("lib add member <studentID> <password>");
             System.out.println("lib get available books");
             System.out.println("lib get available users <password>");
-            System.out.println("7.lib remove member");
-            System.out.println("8.lib add member");
+            System.out.println("lib remove member <studentID> <password>");
+            System.out.println("lib return <bookName>");
             System.out.println("lib exit");
-            System.out.println("Enter your comment:");
+            System.out.println("Enter your comment --->");
             Scanner scanner = new Scanner(System.in);
             String comment = scanner.nextLine();
+            if (Objects.equals(comment, "") || Objects.equals(comment, " "))
+            {
+                flag = true;
+                continue;
+            }
             String[] list = comment.split(" ");
-            if (Objects.equals(list[1], "add") && Objects.equals(list[2], "book"))
-            {
-                user.AddBook(list[3] , list[4] , list[5]);
+            if (!(Objects.equals(list[0], "lib")) || list.length < 2) {
+                System.out.println("Invalid input. Please try again.");
+                flag = true;
+                continue;
             }
-            else if (Objects.equals(list[1], "get") && Objects.equals(list[2], "hrs"))
+            else
             {
-                System.out.println("**************************");
-                System.out.println(getOperatingHours());
-                System.out.println("**************************");
-            }
-            else if (Objects.equals(list[1], "exit")) {
-//                System.exit(0);
-                break;
-            }
-            else if (Objects.equals(list[1], "rent") && list.length <= 3)
-            {
-                Rent rent = new Rent();
-                rent.RentBook(list[2]);
-            }
-            else if (Objects.equals(list[1], "add") && Objects.equals(list[2], "member"))
-            {
-                if (Objects.equals(list[4], admin.getPassword()))
+                if (Objects.equals(list[1], "add") && Objects.equals(list[2], "book"))
                 {
-                    AddNormalUser(list[3]);
+                    user.AddBook(list[3] , list[4] , list[5]);
+                }
+                else if (Objects.equals(list[1], "get") && Objects.equals(list[2], "hrs"))
+                {
+                    System.out.println("**************************");
+                    System.out.println(getOperatingHours());
+                    System.out.println("**************************");
+                }
+                else if (Objects.equals(list[1], "exit")) {
+//                    System.exit(0);
+                    System.out.println("\nBye Bye");
+                    flag = false;
+                    break;
+                }
+                else if (Objects.equals(list[1], "rent") && list.length <= 3)
+                {
+                    Rent rent = new Rent();
+                    rent.RentBook(list[2]);
+                }
+                else if (Objects.equals(list[1], "add") && Objects.equals(list[2], "member"))
+                {
+                    if (Objects.equals(list[4], admin.getPassword()))
+                    {
+                        AddNormalUser(list[3]);
+                    }
+                }
+                else if (Objects.equals(list[1], "get") && Objects.equals(list[2], "available") && Objects.equals(list[3], "books"))
+                {
+                    System.out.println("**************************");
+                    user.ChapFileBook();
+                    System.out.println("**************************");
+                }
+                else if (Objects.equals(list[1], "get") && Objects.equals(list[2], "available") && Objects.equals(list[4], admin.getPassword()) && Objects.equals(list[3], "users"))
+                {
+
+                    System.out.println("**************************");
+                    ChapFileUser();
+                    System.out.println("**************************");
+                }
+                else if (Objects.equals(list[1], "remove") && Objects.equals(list[2], "member"))
+                {
+                    if (Objects.equals(list[4], admin.getPassword()))
+                    {
+                        DeleteNormalUser(list[3]);
+                    }
+                }
+                else if (Objects.equals(list[1], "return"))
+                {
+                    Rent rent = new Rent();
+                    rent.ReturnBook(list[2]);
                 }
             }
-            else if (Objects.equals(list[1], "get") && Objects.equals(list[2], "available") && list.length == 3)
-            {
-                System.out.println("**************************");
-                user.ChapFileBook();
-                System.out.println("**************************");
-            }
-            else if (Objects.equals(list[1], "get") && Objects.equals(list[2], "available") && Objects.equals(list[4], admin.getPassword()))
-            {
-
-                System.out.println("**************************");
-                ChapFileUser();
-                System.out.println("**************************");
-            }
-//            switch (comment)
-//            {
-//                case "lib add book":
-//                    if (BookCapacity <= getCapacityBook())
-//                    {
-//                        BookCapacity++;
-//                        user.AddBook();
-//                    }
-//                    else
-//                    {
-//                        System.out.println("Sorry, we don't have room for books.");
-//                        System.out.println("Try something else.");
-//                    }
-//                    CLIComment();
-//                    break;
-//                case 2:
-//                    System.out.println(getOperatingHours());
-//                    CLIComment();
-//                    break;
-//                case 3:
-//                    Rent rent = new Rent();
-//                    ChapFileBook();
-//                    System.out.println("Enter your ID you want to rent: ");
-//                    String testId =  scanner.nextLine();
-//                    rent.RentBook(testId);
-//                    CLIComment();
-//                    break;
-//                case 4:
-//                    boolean bb = getBookRepository();
-//                    if (!bb)
-//                    {
-//                        System.out.println("we do not have any books");
-//                    }
-//                    CLIComment();
-//                    break;
-//                case 5:
-//
-//                    CLIComment();
-//                    break;
-//                case 6:
-//                    ChapFileUser();
-//                    CLIComment();
-//                    break;
-//                case 7:
-//                    String temp1 = scanner.nextLine();
-//                    if (Objects.equals(temp1, admin.getPassword()))
-//                    {
-//                        ChapFileUser();
-//                        System.out.println("Enter your ID you want delete : ");
-//                        String testid = scanner.nextLine();
-//                        DeleteNormalUser(testid);
-//                    }
-//                    else
-//                    {
-//                        System.out.println("Sorry,Try something else.");
-//                    }
-//                    CLIComment();
-//                    break;
-//                case 8:
-//                    if (UserCapacity < getCapacityUser())
-//                    {
-//                        UserCapacity++;
-//                        String temp = scanner.nextLine();
-//                        if (Objects.equals(temp, admin.getPassword()))
-//                        {
-//                            AddNormalUser();
-//                        }
-//                        else
-//                        {
-//                            System.out.println("Sorry,Try something else.");
-//                        }
-//                    }
-//                    else
-//                    {
-//                        System.out.println("Sorry, we don't have room for User");
-//                        System.out.println("Try something else.");
-//                    }
-//                    CLIComment();
-//                    break;
-//                case 9:
-//                    System.out.println("Bye Bye");
-//                    System.exit(0);
-//                    break;
-//                default:
-//                    System.out.println("Try again");
-//                    break;
-//            };
         }
         user.WriteFileBook("Book.txt");
         WriteFileNormalUser("Normaluser.txt");

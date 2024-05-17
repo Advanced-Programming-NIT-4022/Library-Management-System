@@ -31,4 +31,18 @@ public class Rent extends UniqueID{
             }
         }
     }
+    public void ReturnBook(String name) {
+        for (int i = 0; i < book.getTotal().size(); i++)
+        {
+            String[] list = book.getTotal().get(i).split("/");
+            if (Objects.equals(list[1],name))
+            {
+                book.getTotal().remove(i);
+                System.out.println("Thank you for returning the book");
+                String temp = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + "true" ;
+                book.getTotal().add(temp);
+                break;
+            }
+        }
+    }
 }
