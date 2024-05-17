@@ -11,15 +11,8 @@ public class User extends UniqueID {
     private String IDUser;
     private String PhoneNumber;
     private ArrayList<String> people = new ArrayList<>();
-    public User(String name , String phoneNumber )
-    {
-        this.Name = name;
-        this.PhoneNumber = phoneNumber;
-        this.IDUser = getUniqueIDString();
-    }
     public ArrayList<String> getPeople() { return people; }
     public void setPeople(ArrayList<String> people) { this.people = people; }
-    public User() {}
     public String getPhoneNumber() {
         return PhoneNumber;
     }
@@ -95,10 +88,20 @@ public class User extends UniqueID {
             }
         }
         if (book.getTotal().isEmpty()) {
-            setUniqueID(1);
+            setUniqueID(0);
             book.getTotal().add(book.getIDBook() + "/" + book.getTitle() + "/" + book.getAuthor() + "/" + book.getDescription() + "/" + book.getAvailabilityStatus());
             System.out.println("The book has been successfully added");
             System.out.println("Your Unique ID is : " + book.getIDBook());
+        }
+    }
+    public void ChapFileBook() {
+        for (int i = 0; i < book.getTotal().size(); i++)
+        {
+            String[] list = book.getTotal().get(i).split("/");
+            if (Objects.equals(list[4], "true"))
+            {
+                System.out.println("ID: " + list[0] + "  _ Name: " + list[1] + "  _ Author: " + list[2] + "  _ AvailabilityStatus: " + list[4]);
+            }
         }
     }
     public void SearchBook(String sentence)
@@ -202,23 +205,17 @@ class NormalUser extends User {
 
     LocalDateTime currentDateTime = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private String UserDate;
-    public NormalUser(String name, String phoneNumber) {
-        super(name, phoneNumber);
-        UserDate = currentDateTime.format(formatter);
-    }
+    private final String UserDate;
     public NormalUser() {
+        UserDate = currentDateTime.format(formatter);
     }
     public String getFormattedDateTime() { return UserDate; }
 }
 class Admin extends User {
-    private String Password;
-    public Admin(String name, String phonenumber)
+    private final String Password;
+    public Admin()
     {
-        super(name, phonenumber);
         this.Password = "8488";
-    }
-    public Admin() {
     }
     public String getPassword() {return Password;}
 }

@@ -17,16 +17,16 @@ public class Rent extends UniqueID{
         RentalDate = currentDateTime.format(formatter);
     }
     public void RentBook(String name) {
-        for (int i = 0; i < user.book.getTotal().size(); i++)
+        for (int i = 0; i < book.getTotal().size(); i++)
         {
-            String[] list = user.book.getTotal().get(i).split("/");
+            String[] list = book.getTotal().get(i).split("/");
             if (Objects.equals(list[1],name) || Objects.equals(list[4],"true"))
             {
-                user.book.getTotal().remove(i);
+                book.getTotal().remove(i);
                 System.out.println("The book has been successfully rented.");
                 System.out.println("enjoy , Bye.");
                 String temp = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + RentalDate ;
-                user.book.getTotal().add(temp);
+                book.getTotal().add(temp);
                 break;
             }
         }
