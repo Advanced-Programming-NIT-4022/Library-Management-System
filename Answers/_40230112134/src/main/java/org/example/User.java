@@ -7,6 +7,7 @@ import java.util.*;
 
 public class User extends UniqueID {
     Book book = new Book();
+    Rent rent = new Rent();
     private String Name;
     private String IDUser;
     private String PhoneNumber;
@@ -94,7 +95,8 @@ public class User extends UniqueID {
             System.out.println("Your Unique ID is : " + book.getIDBook());
         }
     }
-    public void ChapFileBook() {
+    public void ChapFileBook()
+    {
         for (int i = 0; i < book.getTotal().size(); i++)
         {
             String[] list = book.getTotal().get(i).split("/");
@@ -106,98 +108,86 @@ public class User extends UniqueID {
     }
     public void SearchBook(String sentence)
     {
-        boolean flag = false;
-        ReadFileBook("Book.txt");
-        char[] word = sentence.toCharArray();
-        for (int i = 0; i < book.getTotal().size(); i++)
-        {
-            char[] jomle = book.getTotal().get(i).toCharArray();
-            for (int j = 0; j < jomle.length; j++)
-            {
-                for (int k = 0; k < word.length; k++)
-                {
-                    if (word[k] == jomle[j])
-                    {
-                        flag = true;
-                    }
-                }
-            }
-            if (flag)
-            {
-                flag = false;
-                String[] list = book.getTotal().get(i).split("/");
-                System.out.println("Your ID book: " + list[0]);
-                System.out.println("Your Title: " + list[1]);
-                System.out.println("Your Author: " + list[2]);
-                System.out.println("Your Description: " + list[3]);
-                System.out.println("Your Availability Status: " + list[4]);
-            }
-        }
-        WriteFileBook("Book.txt");
+//        boolean flag = false;
+//        ReadFileBook("Book.txt");
+//        char[] word = sentence.toCharArray();
+//        for (int i = 0; i < book.getTotal().size(); i++)
+//        {
+//            char[] jomle = book.getTotal().get(i).toCharArray();
+//            for (int j = 0; j < jomle.length; j++)
+//            {
+//                for (int k = 0; k < word.length; k++)
+//                {
+//                    if (word[k] == jomle[j])
+//                    {
+//                        flag = true;
+//                    }
+//                }
+//            }
+//            if (flag)
+//            {
+//                flag = false;
+//                String[] list = book.getTotal().get(i).split("/");
+//                System.out.println("Your ID book: " + list[0]);
+//                System.out.println("Your Title: " + list[1]);
+//                System.out.println("Your Author: " + list[2]);
+//                System.out.println("Your Description: " + list[3]);
+//                System.out.println("Your Availability Status: " + list[4]);
+//            }
+//        }
+//        WriteFileBook("Book.txt");
     }
     public void Delete(String number)
     {
-        ReadFileBook("Book.txt");
+//        for (int i = 0; i < book.getTotal().size(); i++)
+//        {
+//            String line1 = book.getTotal().get(i);
+//            String[] list = line1.split("/");
+//            if (Objects.equals(list[0], number))
+//            {
+//                System.out.println("The deletion was successful");
+//                book.getTotal().remove(i);
+//                break;
+//            }
+//        }
+//        book.setTotal(book.getTotal());
+    }
+    public void Rent(String name)
+    {
         for (int i = 0; i < book.getTotal().size(); i++)
-        {
-            String line1 = book.getTotal().get(i);
-            String[] list = line1.split("/");
-            if (Objects.equals(list[0], number))
-            {
-                System.out.println("The deletion was successful");
-                book.getTotal().remove(i);
-                Rewind(i);
-                break;
-            }
-        }
-        book.setTotal(book.getTotal());
-        WriteFileBook("Book.txt");
-    }
-    public int FindBigID(ArrayList<String> total)
-    {
-        int bigerid = 0;
-        for (int i = 0; i < total.size(); i++)
-        {
-            String[] list = total.get(i).split("/");
-            char[] id = list[0].toCharArray();
-            int[] numbersArray = new int[id.length];
-            int[] numbers = new int[id.length];
-            int x=0;
-            for (int j = 0; j < id.length; j++)
-            {
-                numbersArray[j] = ((int) id[j])-48;
-            }
-            int c=1;
-            for (int j = 0; j < id.length; j++)
-            {
-                 x += (numbersArray[j]*c);
-                 c *= 10;
-            }
-            if (x > bigerid)
-            {
-                bigerid = x;
-            }
-        }
-        return bigerid;
-    }
-    public void Rewind(int num)
-    {
-        ArrayList<String> test = new ArrayList<>();
-        for (int i = num; i < book.getTotal().size() ; i++)
         {
             String[] list = book.getTotal().get(i).split("/");
-            int number = Integer.parseInt(list[0]) -1;
-            list[0] = Integer.toString(number);
-            String temp = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + list[4];
-            test.add(temp);
+            if (Objects.equals(list[1],name))
+            {
+                if (Objects.equals(list[4],"true"))
+                {
+                    book.getTotal().remove(i);
+                    System.out.println("The book has been successfully rented.");
+                    System.out.println("enjoy , Bye.");
+                    String test = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + rent.getRentalDate() ;
+                    book.getTotal().add(test);
+                    break;
+                }
+                else
+                {
+                    System.out.println("you can not rent this book because the book rented");
+                }
+            }
         }
+    }
+    public void ReturnBook(String name)
+    {
         for (int i = 0; i < book.getTotal().size(); i++)
         {
-            book.getTotal().remove(num);
-        }
-        for (String s : test)
-        {
-            book.getTotal().add(s);
+            String[] list = book.getTotal().get(i).split("/");
+            if (Objects.equals(list[1],name))
+            {
+                book.getTotal().remove(i);
+                System.out.println("Thank you for returning the book");
+                String test = list[0] + "/" + list[1] + "/" + list[2] + "/" + list[3] + "/" + "true" ;
+                book.getTotal().add(test);
+                break;
+            }
         }
     }
 }

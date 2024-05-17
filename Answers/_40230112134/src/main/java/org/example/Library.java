@@ -175,8 +175,7 @@ public class Library {
                 }
                 else if (Objects.equals(list[1], "rent") && list.length <= 3)
                 {
-                    Rent rent = new Rent();
-                    rent.RentBook(list[2]);
+                    user.Rent(list[2]);
                 }
                 else if (Objects.equals(list[1], "add") && Objects.equals(list[2], "member"))
                 {
@@ -207,8 +206,7 @@ public class Library {
                 }
                 else if (Objects.equals(list[1], "return"))
                 {
-                    Rent rent = new Rent();
-                    rent.ReturnBook(list[2]);
+                    user.ReturnBook(list[2]);
                 }
             }
         }
