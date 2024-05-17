@@ -1,12 +1,15 @@
 package org.example;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Admin extends User{
     private String password;
-    public Admin(String name, int uniqueID, char[] phone, String password) {
+    public Admin(String name, int uniqueID, String phone, String password) {
         super(name, uniqueID, phone);
         this.password = password;
     }
@@ -48,28 +51,26 @@ public class Admin extends User{
 
         System.out.println("Enter their name: ");
         String name = sc.nextLine();
+        String phone = null;
         flag = true;
-        char[] phone = null;
         do {
-            System.out.println("Enter their phone number: ");
-            String input = sc.nextLine();
-            char[] tmp = input.toCharArray();
-            for (char i : tmp) {
-                int ascii = (int) i;
-                if (ascii < 48 || ascii > 57) {
-                    System.out.println("Invalid number. Try again.");
-                    flag = false;
-                    break;
-                }
-                else {
-                    flag = true;
-                    phone = tmp;
-                }
+            System.out.println("Enter your phone: ");
+            phone = sc.nextLine();
+            String regex = "^(\\+98|0)?9\\d{9}$";
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(phone);
+
+            if (m.matches()) {
+                flag = true;
+            } else {
+                flag = false;
+                System.out.println("Invalid phone number. Try again.");
             }
+
         } while (!flag);
 
-        int date = 2;
-        NormalUser newUser = new NormalUser(name, Integer.valueOf(cm[3]), phone, date);
+        String timeStamp = new SimpleDateFormat("yyyy.MM.dd  HH:mm").format(new java.util.Date());
+        NormalUser newUser = new NormalUser(name, Integer.valueOf(cm[3]), phone, timeStamp);
         lib.getUserList().add(newUser);
     }
     public boolean removeMember(int id) {

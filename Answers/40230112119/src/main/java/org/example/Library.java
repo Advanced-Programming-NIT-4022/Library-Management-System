@@ -1,8 +1,11 @@
 package org.example;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Library {
     private final String operatingHours = "From 8 A.M. to 6 P.M.";
@@ -17,12 +20,6 @@ public class Library {
         userList.add(obj);
     }
     public void addAdminElement(Admin obj) { adminList.add(obj); }
-
-    public Library() {
-        Admin owner = new Admin("Mahta", 1234, "09036339284".toCharArray(), "1234");
-        adminList.add(owner);
-    }
-
     public String getOperatingHours() {
         return operatingHours;
     }
@@ -43,24 +40,22 @@ public class Library {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter your name: ");
         String name = sc.nextLine();
+        String phone = null;
         boolean flag = true;
-        char[] phone = null;
         do {
             System.out.println("Enter your phone: ");
-            String input = sc.nextLine();
-            char[] tmp = input.toCharArray();
-            for (char i : tmp) {
-                int ascii = (int) i;
-                if (ascii < 48 || ascii > 57) {
-                    System.out.println("Invalid number. Try again.");
-                    flag = false;
-                    break;
-                }
-                else {
-                    flag = true;
-                    phone = tmp;
-                }
+            phone = sc.nextLine();
+            String regex = "^(\\+98|0)?9\\d{9}$";
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(phone);
+
+            if (m.matches()) {
+                flag = true;
+            } else {
+                flag = false;
+                System.out.println("Invalid phone number. Try again.");
             }
+
         } while (!flag);
 
         flag = true;
@@ -82,12 +77,15 @@ public class Library {
                 uniqueID = tmpID; // Update uniqueID only if ID is unique
             }
         } while(!flag);
-        System.out.println("\n\n\t\tWelcome " + name + "! Here is your unique ID: " + uniqueID);
-        System.out.println("\n\nThank you for choosing our Library Management System." +
+
+        String timeStamp = new SimpleDateFormat("yyyy.MM.dd  HH:mm").format(new java.util.Date());
+
+        System.out.println("\n\n\t\tWelcome " + name + "! Here is your unique ID: " + uniqueID +
+                            "\t\t[Date of registration: " + timeStamp + "]");
+        System.out.println("\nThank you for choosing our Library Management System." +
                 "\nWe're excited to provide you with an efficient and user-friendly platform for all your library needs." +
                 "\nHappy reading!");
-        int date = 1;
-        NormalUser newUser = new NormalUser(name, uniqueID, phone, date);
+        NormalUser newUser = new NormalUser(name, uniqueID, phone, timeStamp);
         userList.add(newUser);
     }
     public String login(boolean isUser) {
@@ -160,7 +158,7 @@ public class Library {
     }
 
     public void homePage() {
-        System.out.println("Welcome to our library! Please sign up or log in.");
+        System.out.println("\nWelcome to our library! Please sign up or log in.");
         System.out.println("1- Sign Up\t\t\t2- Log In");
         Scanner sc = new Scanner(System.in);
         int choice = sc.nextInt();
@@ -203,8 +201,16 @@ public class Library {
                             boolean retry = u.addBook(cm);
                             if (retry) {
                                 flag = false;
-                            } else
-                                break outerLoop;
+                            } else {
+                                System.out.println("Book added successfully. What do you want to do next?" +
+                                        "\n1- Try another command\t\t\t2- Exit");
+                                choice = sc.nextInt();
+                                if (choice == 1) {
+                                    flag = false;
+                                } else {
+                                    break outerLoop;
+                                }
+                            }
                         } else {
                             System.out.println("Invalid command. What do you want to do?" +
                                     "\n1- Try another command\t\t\t2- Exit");
@@ -219,7 +225,7 @@ public class Library {
                         if (!isUser) {
                             if (cm.length == 5) {
                                 a.addNewUser(cm);
-                                System.out.println("Member successfully added. What do you want to do next?" +
+                                System.out.println("Member added successfully. What do you want to do next?" +
                                         "\n1- Try another command\t\t\t2- Exit");
                                 choice = sc.nextInt();
                                 if (choice == 1) {

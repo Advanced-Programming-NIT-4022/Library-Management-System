@@ -6,8 +6,8 @@ import java.util.Scanner;
 public class User {
     private String name;
     private int uniqueID;
-    private char[] phone;
-    public User(String name, int uniqueID, char[] phone) {
+    private String phone;
+    public User(String name, int uniqueID, String phone) {
         this.name = name;
         this.uniqueID = uniqueID;
         this.phone = phone;
@@ -15,7 +15,7 @@ public class User {
     public User() {
         this.name = "";
         this.uniqueID = -1;
-        this.phone = "0".toCharArray();
+        this.phone = "0";
     }
     public void setName(String name) {
         this.name = name;
@@ -23,13 +23,13 @@ public class User {
     public void setUniqueID(int uniqueID) {
         this.uniqueID = uniqueID;
     }
-    public void setPhone(char[] phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
     public String getName() { return name; }
     public int getUniqueID() { return uniqueID; }
-    public char[] getPhone() { return phone; }
+    public String getPhone() { return phone; }
 
     public boolean addBook(String[] cm) {
         Library lib = new Library();
