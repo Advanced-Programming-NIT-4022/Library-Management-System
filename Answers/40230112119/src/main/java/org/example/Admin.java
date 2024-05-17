@@ -10,6 +10,10 @@ public class Admin extends User{
         super(name, uniqueID, phone);
         this.password = password;
     }
+    public Admin() {
+        super();
+        this.password = null;
+    }
     public void setPassword(String password) {
         this.password = password;
     }
@@ -23,15 +27,28 @@ public class Admin extends User{
             }
         }
     }
-    public void addNewUser() {
-        System.out.println("Enter the name of the user: ");
+    public void addNewUser(String[] cm) {
         Scanner sc = new Scanner(System.in);
-        String name = sc.nextLine();
-
-        Random id = new Random();
-        int uniqueID = id.nextInt(9000) + 1000;
-
+        Library lib = new Library();
         boolean flag = true;
+        do {
+            flag = true;
+            for (int i = 0; i < lib.getUserList().size(); i++) {
+                if (cm[3].equalsIgnoreCase(Integer.toString(lib.getUserList().get(i).getUniqueID()))) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (!flag) {
+                System.out.println("This ID already exists. Enter another one. ");
+                cm[3] = sc.nextLine();
+            }
+        } while(!flag);
+
+        System.out.println("Enter their name: ");
+        String name = sc.nextLine();
+        flag = true;
         char[] phone = null;
         do {
             System.out.println("Enter their phone number: ");
@@ -51,12 +68,22 @@ public class Admin extends User{
             }
         } while (!flag);
 
-        Library lib = new Library();
         int date = 2;
-        NormalUser newUser = new NormalUser(name, uniqueID, phone, date);
+        NormalUser newUser = new NormalUser(name, Integer.valueOf(cm[3]), phone, date);
         lib.getUserList().add(newUser);
     }
-
+    public boolean removeMember(int id) {
+        Library lib = new Library();
+        boolean result = false;
+        for (int i = 0; i < lib.getUserList().size(); i++) {
+            if (id == lib.getUserList().get(i).getUniqueID()) {
+                lib.getUserList().remove(i);
+                result = true;
+                return result;
+            }
+        }
+        return result;
+    }
     public void addNewAdmin(){
         Library lib = new Library();
         Scanner sc = new Scanner(System.in);
