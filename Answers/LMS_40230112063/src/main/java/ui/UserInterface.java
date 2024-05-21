@@ -31,8 +31,10 @@ public class UserInterface {
     public void printPortalPassSupportedCommand() {
         System.out.println("sign in as normal user <name> <phone-number>");
         System.out.println("sign in as admin <name> <phone-number> <password>");
+        System.out.println("show all registered normal user accounts full information");//admin access required
+        System.out.println("show all registered super doer accounts full information");//admin access required
         System.out.println("creating new normal user account <name> <phone-number>");
-        System.out.println("add new super doer ( admin ) <name> <phone-number> <password> " +
+        System.out.println("add new super doer <name> <phone-number> <password> " +
                 "(attention :the password must have at least 8 characters)"); //admin access required
         System.out.println("*** Be sure to use the <> operator to send arguments in the command line ***");
     }
@@ -47,11 +49,14 @@ public class UserInterface {
         String admin_password;
 
         while (true) {
-            System.out.print("Enter your desired command : ");
-            System.out.println("notice : To see list of supported command use the following instruction :");
-            System.out.println("PortalPass --help");
-            System.out.print(">>");
+            System.out.println("Enter your desired command: ");
+            System.out.println("------------------------------------------------");
+            System.out.println("Notice: To see the list of supported commands, use the following instruction:");
+            System.out.println("    PortalPass --help");
+            System.out.println("------------------------------------------------");
+            System.out.print(">> ");
             operation = input.nextLine();
+
 
             final Pattern portalpass_sign_in_user_pattern = Pattern.compile("^sign\\s+in\\s+as\\s+normal\\s+user\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<((9[0-9]{9})|(09[0-9]{9}))>$", Pattern.CASE_INSENSITIVE);
             final Matcher portalpass_sign_in_user_matcher = portalpass_sign_in_user_pattern.matcher(operation);
@@ -68,12 +73,19 @@ public class UserInterface {
             final Pattern portalpass_help_pattern = Pattern.compile("^PortalPass\\s+--help$", Pattern.CASE_INSENSITIVE);
             final Matcher portalpass_help_matcher = portalpass_help_pattern.matcher(operation);
 
+            final Pattern portalpass_all_registered_members_pattern = Pattern.compile("^show\\s+all\\s+registered\\s+normal\\s+user\\s+accounts\\s+full\\s+information$", Pattern.CASE_INSENSITIVE);
+            final Matcher portalpass_all_registered_members_matcher = portalpass_all_registered_members_pattern.matcher(operation);
+
+            final Pattern portalpass_all_registered_admins_pattern = Pattern.compile("^show\\s+all\\s+registered\\s+super\\s+doer\\s+accounts\\s+full\\s+information$", Pattern.CASE_INSENSITIVE);
+            final Matcher portalpass_all_registered_admins_matcher = portalpass_all_registered_admins_pattern.matcher(operation);
+
             if (portalpass_help_matcher.find()) {
                 printPortalPassSupportedCommand();
                 System.out.println("--------------------------------------------------------------");
             } else if (portalpass_sign_in_user_matcher.find()) {
                 signed_in_name = portalpass_sign_in_user_matcher.group(1);
                 signed_in_phone_number = portalpass_sign_in_user_matcher.group(2);
+                signed_in_phone_number = signed_in_phone_number.startsWith("0") ? signed_in_phone_number : ("0").concat(signed_in_phone_number);
                 if (library.memberExistenceChecker(signed_in_name, signed_in_phone_number) != null) {
                     System.out.println("You signed in successfully as normal user with name and phone number :  " + signed_in_name + "," + signed_in_phone_number);
                     System.out.println("--------------------------------------------------------------");
@@ -85,6 +97,7 @@ public class UserInterface {
             } else if (portalpass_sign_in_admin_matcher.find()) {
                 signed_in_name = portalpass_sign_in_admin_matcher.group(1);
                 signed_in_phone_number = portalpass_sign_in_admin_matcher.group(2);
+                signed_in_phone_number = signed_in_phone_number.startsWith("0") ? signed_in_phone_number : ("0").concat(signed_in_phone_number);
                 admin_password = portalpass_sign_in_admin_matcher.group(3);
                 if (library.adminExistenceChecker(signed_in_name, signed_in_phone_number, admin_password) != null) {
                     System.out.println("You signed in successfully as admin with name and phone number : " + signed_in_name + "," + signed_in_phone_number);
@@ -98,15 +111,24 @@ public class UserInterface {
             } else if (portalpass_new_user_account_matcher.find()) {
                 signed_in_name = portalpass_new_user_account_matcher.group(1);
                 signed_in_phone_number = portalpass_new_user_account_matcher.group(2);
+                signed_in_phone_number = signed_in_phone_number.startsWith("0") ? signed_in_phone_number : ("0").concat(signed_in_phone_number);
                 library.addMember(signed_in_name, signed_in_phone_number);
                 System.out.println("A new normal user account has been created and you have successfully logged in with name and phone number : " + signed_in_name + "," + signed_in_phone_number);
                 System.out.println("--------------------------------------------------------------");
                 break;
             } else if (portalpass_add_admin_matcher.find()) {
-                System.out.println("adding new admin for library management require  admin password . enter password : \n>>");
-                if (library.passwordExistenceChecker(input.nextLine())) {
+                System.out.println("adding new admin for library management require admin access . enter your name , phone number and password respectively : ");
+                System.out.print(">>");
+                String name, phone_number, password;
+                name = input.nextLine();
+                System.out.print(">>");
+                phone_number = input.nextLine();
+                System.out.print(">>");
+                password = input.nextLine();
+                if (library.adminExistenceChecker(name, phone_number, password) != null) {
                     signed_in_name = portalpass_add_admin_matcher.group(1);
                     signed_in_phone_number = portalpass_add_admin_matcher.group(2);
+                    signed_in_phone_number = signed_in_phone_number.startsWith("0") ? signed_in_phone_number : ("0").concat(signed_in_phone_number);
                     admin_password = portalpass_add_admin_matcher.group(3);
                     library.addAmin(signed_in_name, signed_in_phone_number, admin_password);
                     System.out.println("A new super doer account has been created and you have successfully logged in with name and phone number : " + signed_in_name + "," + signed_in_phone_number);
@@ -114,6 +136,42 @@ public class UserInterface {
                     break;
                 } else {
                     System.out.println("Access denied , Wrong admin password");
+                }
+
+            } else if (portalpass_all_registered_members_matcher.find()) {
+                System.out.println("Showing all registered normal user accounts full information require admin access . enter your name , phone number and password respectively :");
+                System.out.print(">>");
+                String name, phone_number, password;
+                name = input.nextLine();
+                System.out.print(">>");
+                phone_number = input.nextLine();
+                phone_number = phone_number.startsWith("0") ? phone_number : ("0").concat(phone_number);
+                System.out.print(">>");
+                password = input.nextLine();
+                if (library.adminExistenceChecker(name, phone_number, password) != null) {
+                    library.printAllMembers();
+                    System.out.println("--------------------------------------------------------------");
+                } else {
+                    System.out.println("Access denied , Wrong admin password");
+                    System.out.println("--------------------------------------------------------------");
+                }
+
+            } else if (portalpass_all_registered_admins_matcher.find()) {
+                System.out.println("Showing all registered super doer user accounts full information require admin access . enter your name , phone number and password respectively :");
+                System.out.print(">>");
+                String name, phone_number, password;
+                name = input.nextLine();
+                System.out.print(">>");
+                phone_number = input.nextLine();
+                phone_number = phone_number.startsWith("0") ? phone_number : ("0").concat(phone_number);
+                System.out.print(">>");
+                password = input.nextLine();
+                if (library.adminExistenceChecker(name, phone_number, password) != null) {
+                    library.printAllAdmins();
+                    System.out.println("--------------------------------------------------------------");
+                } else {
+                    System.out.println("Access denied , Wrong admin password");
+                    System.out.println("--------------------------------------------------------------");
                 }
 
             } else {
@@ -197,8 +255,15 @@ public class UserInterface {
             } else if (lms_remove_member_matcher.find()) {
                 String user_name = lms_remove_member_matcher.group(1);
                 String phone_number = lms_remove_member_matcher.group(2);
-                System.out.println("Removing users from the library require admin password . enter password : \n>>");
-                if (library.passwordExistenceChecker(input.nextLine())) {
+                phone_number = phone_number.startsWith("0") ? phone_number : ("0").concat(phone_number);
+                System.out.println("Removing users from the library require admin access . enter your name , phone number and password respectively :");
+                System.out.print(">>");
+                String name, phone_number_2, password;
+                name = input.nextLine();
+                phone_number_2 = input.nextLine();
+                phone_number_2 = phone_number_2.startsWith("0") ? phone_number_2 : ("0").concat(phone_number_2);
+                password = input.nextLine();
+                if (library.adminExistenceChecker(name, phone_number_2, password) != null) {
                     library.rmMember(user_name, phone_number);
                     System.out.println("--------------------------------------------------------------");
                 } else {
@@ -213,8 +278,16 @@ public class UserInterface {
             } else if (lms_remove_book_matcher.find()) {
                 String title = lms_remove_book_matcher.group(1);
                 String author = lms_remove_book_matcher.group(2);
-                System.out.println("Removing books from the book repository require admin password . enter password : \n>>");
-                if (library.passwordExistenceChecker(input.nextLine())) {
+                System.out.println("Removing books from the book repository require admin access . enter your name , phone number and password respectively :");
+                System.out.print(">>");
+                String name, phone_number, password;
+                name = input.nextLine();
+                System.out.print(">>");
+                phone_number = input.nextLine();
+                phone_number = phone_number.startsWith("0") ? phone_number : ("0").concat(phone_number);
+                System.out.print(">>");
+                password = input.nextLine();
+                if (library.adminExistenceChecker(name, phone_number, password) != null) {
                     library.rmBook(title, author);
                     System.out.println("--------------------------------------------------------------");
                 } else {
