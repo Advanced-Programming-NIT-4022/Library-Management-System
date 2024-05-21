@@ -31,10 +31,11 @@ public class Library {
         this.library_name = library_name;
         this.capacity = capacity;
         this.operating_hours = operating_hours;
+        admins.add(new Admin("AmirHossein Zakeri", "40520", "09114430698", "zakeri_1383@@"));
     }
 
 
-    static ArrayList<NormalUser> normalUsers = new ArrayList<>();
+    ArrayList<NormalUser> normalUsers = new ArrayList<>();
     protected NormalUser normalUser;
 
     public NormalUser memberExistenceChecker(String name, String phone_number) {
@@ -65,6 +66,20 @@ public class Library {
         }
     }
 
+    public void printAllMembers() {
+        if (normalUsers.isEmpty()) {
+            System.out.println("There is no registered normal user in the library");
+        } else {
+            for (NormalUser iterator : normalUsers) {
+                System.out.println("********");
+                System.out.println("name : " + iterator.name);
+                System.out.println("id : " + iterator.id);
+                System.out.println("phone number : " + iterator.phone_number);
+                System.out.println("registration date : " + iterator.registration_date);
+            }
+        }
+    }
+
 
     ArrayList<Admin> admins = new ArrayList<>();
     protected Admin admin;
@@ -84,12 +99,17 @@ public class Library {
         DataBaseMethods.adminDataInsert(admins);
     }
 
-    public boolean passwordExistenceChecker(String password) {
-        for (Admin iterator : admins) {
-            if (Objects.equals(iterator.getPassword(), password))
-                return true;
+    public void printAllAdmins() {
+        if (admins.isEmpty()) {
+            System.out.println("There is no registered admin in the library");
+        } else {
+            for (Admin iterator : admins) {
+                System.out.println("********");
+                System.out.println("name : " + iterator.name);
+                System.out.println("id : " + iterator.id);
+                System.out.println("phone number : " + iterator.phone_number);
+            }
         }
-        return false;
     }
 
 
@@ -198,7 +218,7 @@ public class Library {
         }
     }
 
-     public void dataRetriever(){
+    public void dataRetriever() {
         DataBaseMethods.bookDataRetrieve(book_repository);
         DataBaseMethods.adminDataRetrieve(admins);
         DataBaseMethods.normalUserDataRetrieve(normalUsers);
