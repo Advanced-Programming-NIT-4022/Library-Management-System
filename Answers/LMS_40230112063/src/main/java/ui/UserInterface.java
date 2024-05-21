@@ -15,27 +15,34 @@ public class UserInterface {
 
 
     public void printLibrarySupportedCommand() {
-        System.out.println("lib add book <title> <author> <description>"); //add a new book to the library
-        System.out.println("lib get hrs");//retrieve library operating hours
-        System.out.println("lib rent <bookName> <author>");//rent a book for a specific member
-        System.out.println("lib get available books");//view available books for rental
-        System.out.println("lib remove member <user-name> <phone_number>");//remove a member from the library(admin privilege required)
-        System.out.println("lib return <bookName> <author>");//return a rented book to the library
-        System.out.println("lib remove book <title> <author>"); //remove a book from the library(admin privilege required)
-        System.out.println("lib PortalPass");
-        System.out.println("Exit");
+        System.out.println("╔════════════════════════════════════════════════════════════╗");
+        System.out.println("║                  Library Supported Commands                ║");
+        System.out.println("╠════════════════════════════════════════════════════════════╣");
+        System.out.println("║ lib add book <title> <author> <description>                ║");
+        System.out.println("║ lib get hrs                                                ║");
+        System.out.println("║ lib rent <bookName> <author>                               ║");
+        System.out.println("║ lib get available books                                    ║");
+        System.out.println("║ lib remove member <user-name> <phone_number>               ║");
+        System.out.println("║ lib return <bookName> <author>                             ║");
+        System.out.println("║ lib remove book <title> <author>                           ║");
+        System.out.println("║ lib PortalPass                                             ║");
+        System.out.println("║ Exit                                                       ║");
+        System.out.println("╚════════════════════════════════════════════════════════════╝");
         System.out.println("*** Be sure to use the <> operator to send arguments in the command line ***");
     }
 
 
     public void printPortalPassSupportedCommand() {
-        System.out.println("sign in as normal user <name> <phone-number>");
-        System.out.println("sign in as admin <name> <phone-number> <password>");
-        System.out.println("show all registered normal user accounts full information");//admin access required
-        System.out.println("show all registered super doer accounts full information");//admin access required
-        System.out.println("creating new normal user account <name> <phone-number>");
-        System.out.println("add new super doer <name> <phone-number> <password> " +
-                "(attention :the password must have at least 8 characters)"); //admin access required
+        System.out.println("╔════════════════════════════════════════════════════════════╗");
+        System.out.println("║                PortalPass Supported Commands               ║");
+        System.out.println("╠════════════════════════════════════════════════════════════╣");
+        System.out.println("║ sign in as normal user <name> <phone-number>               ║");
+        System.out.println("║ sign in as admin <name> <phone-number> <password>          ║");
+        System.out.println("║ show all registered normal user accounts full information  ║");
+        System.out.println("║ show all registered super doer accounts full information   ║");
+        System.out.println("║ creating new normal user account <name> <phone-number>     ║");
+        System.out.println("║ add new super doer <name> <phone-number> <password>        ║");
+        System.out.println("╚════════════════════════════════════════════════════════════╝");
         System.out.println("*** Be sure to use the <> operator to send arguments in the command line ***");
     }
 
@@ -44,16 +51,22 @@ public class UserInterface {
         // PortalPass
         // Sign in : logging in with existing account, Sign up : creating new account
 
-        System.out.println("Welcome to library PortalPass");
-
+        System.out.println("\n\n");
+        System.out.println("═══════════════════════════════════════════════════════════════════");
+        System.out.println("════════════"+"Welcome to library PortalPass"+"═══════════════");
+        System.out.println("\n\n");
         String admin_password;
 
         while (true) {
+            System.out.println("═ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══");
+
             System.out.println("Enter your desired command: ");
-            System.out.println("------------------------------------------------");
-            System.out.println("Notice: To see the list of supported commands, use the following instruction:");
-            System.out.println("    PortalPass --help");
-            System.out.println("------------------------------------------------");
+            System.out.println("╔══════════════════════════════════════════════════════════════╗");
+            System.out.println("║ Notice: To see the list of supported commands, use the       ║");
+            System.out.println("║ following instruction:                                       ║");
+            System.out.println("║                                                              ║");
+            System.out.println("║     PortalPass --help                                        ║");
+            System.out.println("╚══════════════════════════════════════════════════════════════╝");
             System.out.print(">> ");
             operation = input.nextLine();
 
@@ -81,18 +94,20 @@ public class UserInterface {
 
             if (portalpass_help_matcher.find()) {
                 printPortalPassSupportedCommand();
-                System.out.println("--------------------------------------------------------------");
+                System.out.println("═ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══");
             } else if (portalpass_sign_in_user_matcher.find()) {
                 signed_in_name = portalpass_sign_in_user_matcher.group(1);
                 signed_in_phone_number = portalpass_sign_in_user_matcher.group(2);
                 signed_in_phone_number = signed_in_phone_number.startsWith("0") ? signed_in_phone_number : ("0").concat(signed_in_phone_number);
                 if (library.memberExistenceChecker(signed_in_name, signed_in_phone_number) != null) {
                     System.out.println("You signed in successfully as normal user with name and phone number :  " + signed_in_name + "," + signed_in_phone_number);
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("═ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══");
                     break;
                 } else {
-                    System.out.println("There is no user with the given information in registered user list .");
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("╔════════════════════════════════════════════════════════════╗");
+                    System.out.println("║ There is no user with the given information in registered  ║");
+                    System.out.println("║ user list .                                                ║");
+                    System.out.println("╚════════════════════════════════════════════════════════════╝");
                 }
             } else if (portalpass_sign_in_admin_matcher.find()) {
                 signed_in_name = portalpass_sign_in_admin_matcher.group(1);
@@ -100,12 +115,17 @@ public class UserInterface {
                 signed_in_phone_number = signed_in_phone_number.startsWith("0") ? signed_in_phone_number : ("0").concat(signed_in_phone_number);
                 admin_password = portalpass_sign_in_admin_matcher.group(3);
                 if (library.adminExistenceChecker(signed_in_name, signed_in_phone_number, admin_password) != null) {
-                    System.out.println("You signed in successfully as admin with name and phone number : " + signed_in_name + "," + signed_in_phone_number);
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("╔════════════════════════════════════════════════════════════╗");
+                    System.out.println("║ You signed in successfully as admin with name and phone    ║");
+                    System.out.println("║ number : " + signed_in_name + "," + signed_in_phone_number + "               ║");
+                    System.out.println("╚════════════════════════════════════════════════════════════╝");
+                    System.out.println("═ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══");
                     break;
                 } else {
-                    System.out.println("There is no admin with the given information in registered admin list .");
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("╔════════════════════════════════════════════════════════════╗");
+                    System.out.println("║ There is no admin with the given information in registered ║");
+                    System.out.println("║ admin list .                                               ║");
+                    System.out.println("╚════════════════════════════════════════════════════════════╝");
                 }
 
             } else if (portalpass_new_user_account_matcher.find()) {
@@ -113,8 +133,11 @@ public class UserInterface {
                 signed_in_phone_number = portalpass_new_user_account_matcher.group(2);
                 signed_in_phone_number = signed_in_phone_number.startsWith("0") ? signed_in_phone_number : ("0").concat(signed_in_phone_number);
                 library.addMember(signed_in_name, signed_in_phone_number);
-                System.out.println("A new normal user account has been created and you have successfully logged in with name and phone number : " + signed_in_name + "," + signed_in_phone_number);
-                System.out.println("--------------------------------------------------------------");
+                System.out.println("╔════════════════════════════════════════════════════════════╗");
+                System.out.println("║ A new normal user account has been created and you have    ║");
+                System.out.println("║ successfully logged in with name and phone number :        ║");
+                System.out.println("║ " + signed_in_name + "," + signed_in_phone_number + "                           ║");
+                System.out.println("╚════════════════════════════════════════════════════════════╝");
                 break;
             } else if (portalpass_add_admin_matcher.find()) {
                 System.out.println("adding new admin for library management require admin access . enter your name , phone number and password respectively : ");
@@ -131,11 +154,16 @@ public class UserInterface {
                     signed_in_phone_number = signed_in_phone_number.startsWith("0") ? signed_in_phone_number : ("0").concat(signed_in_phone_number);
                     admin_password = portalpass_add_admin_matcher.group(3);
                     library.addAmin(signed_in_name, signed_in_phone_number, admin_password);
-                    System.out.println("A new super doer account has been created and you have successfully logged in with name and phone number : " + signed_in_name + "," + signed_in_phone_number);
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("╔════════════════════════════════════════════════════════════╗");
+                    System.out.println("║ A new super doer account has been created and you have     ║");
+                    System.out.println("║ successfully logged in with name and phone number :        ║");
+                    System.out.println("║ " + signed_in_name + "," + signed_in_phone_number + "                           ║");
+                    System.out.println("╚════════════════════════════════════════════════════════════╝");
                     break;
                 } else {
-                    System.out.println("Access denied , Wrong admin password");
+                    System.out.println("╔════════════════════════════════════════════════════════════╗");
+                    System.out.println("║ Access denied, Wrong admin password                        ║");
+                    System.out.println("╚════════════════════════════════════════════════════════════╝");
                 }
 
             } else if (portalpass_all_registered_members_matcher.find()) {
@@ -150,10 +178,11 @@ public class UserInterface {
                 password = input.nextLine();
                 if (library.adminExistenceChecker(name, phone_number, password) != null) {
                     library.printAllMembers();
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("═ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══");
                 } else {
-                    System.out.println("Access denied , Wrong admin password");
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("╔════════════════════════════════════════════════════════════╗");
+                    System.out.println("║ Access denied, Wrong admin password                        ║");
+                    System.out.println("╚════════════════════════════════════════════════════════════╝");
                 }
 
             } else if (portalpass_all_registered_admins_matcher.find()) {
@@ -168,17 +197,18 @@ public class UserInterface {
                 password = input.nextLine();
                 if (library.adminExistenceChecker(name, phone_number, password) != null) {
                     library.printAllAdmins();
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("═ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══");
                 } else {
-                    System.out.println("Access denied , Wrong admin password");
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("╔════════════════════════════════════════════════════════════╗");
+                    System.out.println("║ Access denied, Wrong admin password                        ║");
+                    System.out.println("╚════════════════════════════════════════════════════════════╝");
                 }
 
             } else {
                 System.out.println("invalid command . . . try again");
                 System.out.println("Keep in mind that this error may be caused by entering the wrong command or entering the name," +
                         " mobile number or password in the wrong form.");
-                System.out.println("--------------------------------------------------------------");
+                System.out.println("═ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══ ══");
             }
         }
     }
@@ -191,14 +221,20 @@ public class UserInterface {
         libraryPortalPass();
 
         // Library System
-        System.out.println("Welcome to " + library.getLibraryName() + " Library Management System");
+        System.out.println("╔══════════════════════════════════════════════╗");
+        System.out.println("║ Welcome to " + library.getLibraryName() + " Library Management System  ║");
+        System.out.println("╚══════════════════════════════════════════════╝");
+
 
 
         while (true) {
-            System.out.print("Enter your desired command : ");
-            System.out.println("notice : To see list of supported command use the following instruction :");
-            System.out.println("Library System --help");
+            System.out.println("Enter your desired command:");
+            System.out.println("╔════════════════════════════════════════════════════════════════════════════════╗");
+            System.out.println("║ (Notice) To see the list of supported commands, use the  following instruction:║");
+            System.out.println("║ Library System --help                                                          ║");
+            System.out.println("╚════════════════════════════════════════════════════════════════════════════════╝");
             System.out.print(">>");
+
             operation = input.nextLine();
 
             final Pattern lms_add_book_pattern = Pattern.compile("^lib\\s+add\\s+book\\s+<([0-9]*\\s*[a-zA-Z]+(?:[0-9]*\\s*[a-zA-Z]*)*)>\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<([0-9]*\\s*[a-zA-Z]+(?:[0-9]*\\s*[a-zA-Z]*)*)>$", Pattern.CASE_INSENSITIVE);
@@ -234,24 +270,24 @@ public class UserInterface {
 
             if (lms_help_matcher.find()) {
                 printLibrarySupportedCommand();
-                System.out.println("--------------------------------------------------------------");
+                System.out.println("*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+");
             } else if (lms_add_book_matcher.find()) {
                 String title = lms_add_book_matcher.group(1);
                 String author = lms_add_book_matcher.group(2);
                 String description = lms_add_book_matcher.group(3);
                 library.addBook(title, author, description);
-                System.out.println("--------------------------------------------------------------");
+                System.out.println("*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+");
             } else if (lms_get_operating_hours_matcher.find()) {
                 System.out.println(library.getOperating_hours());
-                System.out.println("--------------------------------------------------------------");
+                System.out.println("*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+");
             } else if (lms_rent_book_matcher.find()) {
                 String book_name = lms_rent_book_matcher.group(1);
                 String author = lms_rent_book_matcher.group(2);
                 library.rentBook(book_name, author, signed_in_name, signed_in_phone_number);
-                System.out.println("--------------------------------------------------------------");
+                System.out.println("*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+");
             } else if (lms_available_book_matcher.find()) {
                 library.printAvailableBooks();
-                System.out.println("--------------------------------------------------------------");
+                System.out.println("*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+");
             } else if (lms_remove_member_matcher.find()) {
                 String user_name = lms_remove_member_matcher.group(1);
                 String phone_number = lms_remove_member_matcher.group(2);
@@ -265,16 +301,17 @@ public class UserInterface {
                 password = input.nextLine();
                 if (library.adminExistenceChecker(name, phone_number_2, password) != null) {
                     library.rmMember(user_name, phone_number);
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+");
                 } else {
-                    System.out.println("Access denied , Wrong admin password");
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("╔════════════════════════════════════════════════════════════╗");
+                    System.out.println("║ Access denied, Wrong admin password                        ║");
+                    System.out.println("╚════════════════════════════════════════════════════════════╝");
                 }
             } else if (lms_return_book_matcher.find()) {
                 String book_name = lms_return_book_matcher.group(1);
                 String author = lms_return_book_matcher.group(2);
                 library.returnBook(book_name, author, signed_in_name, signed_in_phone_number);
-                System.out.println("--------------------------------------------------------------");
+                System.out.println("*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+");
             } else if (lms_remove_book_matcher.find()) {
                 String title = lms_remove_book_matcher.group(1);
                 String author = lms_remove_book_matcher.group(2);
@@ -289,25 +326,34 @@ public class UserInterface {
                 password = input.nextLine();
                 if (library.adminExistenceChecker(name, phone_number, password) != null) {
                     library.rmBook(title, author);
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+");
                 } else {
-                    System.out.println("Access denied , Wrong admin password");
-                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("╔════════════════════════════════════════════════════════════╗");
+                    System.out.println("║ Access denied, Wrong admin password                        ║");
+                    System.out.println("╚════════════════════════════════════════════════════════════╝");
                 }
             } else if (lms_goPortalPass_matcher.find()) {
-                System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+                System.out.println("════ ════ ════ ════ ════ ════ ════ ════ ════ ════ ═════ ════ ═════ ════ ════");
                 libraryPortalPass();
                 libraryLobby();
             } else if (lms_exit_matcher.find()) {
                 System.out.println("\n\n\n");
-                System.out.println("Good luck ");
-                System.out.println("Hope to see you again \n\r Bye :D");
+                System.out.println("╔══════════════════════════════════════════════════════════════╗");
+                System.out.println("║ Good luck!                                                      ║");
+                System.out.println("║ Hope to see you again.                                          ║");
+                System.out.println("║ Bye :D                                                          ║");
+                System.out.println("╚══════════════════════════════════════════════════════════════╝");
+
                 System.exit(0);
             } else {
-                System.out.println("invalid command . . . try again");
-                System.out.println("Keep in mind that this error may be caused by entering the wrong command or entering the name," +
-                        " mobile number or password in the wrong form.");
-                System.out.println("--------------------------------------------------------------");
+                System.out.println("╔══════════════════════════════════════════════════════════════╗");
+                System.out.println("║ Invalid command... Try again.                                   ║");
+                System.out.println("║ Keep in mind that this error may be caused by entering the     ║");
+                System.out.println("║ wrong command or entering the name, mobile number, or password ║");
+                System.out.println("║ in the wrong form.                                              ║");
+                System.out.println("╚══════════════════════════════════════════════════════════════╝");
+
+                System.out.println("*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+");
             }
         }
 
