@@ -52,7 +52,6 @@ public class UserInterface {
         // Sign in : logging in with existing account, Sign up : creating new account
 
         System.out.println("\n\n");
-        System.out.println("═══════════════════════════════════════════════════════════════════");
         System.out.println("════════════"+"Welcome to library PortalPass"+"═══════════════");
         System.out.println("\n\n");
         String admin_password;
@@ -71,16 +70,16 @@ public class UserInterface {
             operation = input.nextLine();
 
 
-            final Pattern portalpass_sign_in_user_pattern = Pattern.compile("^sign\\s+in\\s+as\\s+normal\\s+user\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<((9[0-9]{9})|(09[0-9]{9}))>$", Pattern.CASE_INSENSITIVE);
+            final Pattern portalpass_sign_in_user_pattern = Pattern.compile("^sign\\s+in\\s+as\\s+normal\\s+user\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<(9[0-9]{9}|09[0-9]{9})>$", Pattern.CASE_INSENSITIVE);
             final Matcher portalpass_sign_in_user_matcher = portalpass_sign_in_user_pattern.matcher(operation);
 
-            final Pattern portalpass_sign_in_admin_pattern = Pattern.compile("^sign\\s+in\\s+as\\s+admin\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<((9[0-9]{9})|(09[0-9]{9}))>\\s+<([^ ]{8,})>$", Pattern.CASE_INSENSITIVE);
+            final Pattern portalpass_sign_in_admin_pattern = Pattern.compile("^sign\\s+in\\s+as\\s+admin\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<(9[0-9]{9}|09[0-9]{9})>\\s+<([^ ]{8,})>$", Pattern.CASE_INSENSITIVE);
             final Matcher portalpass_sign_in_admin_matcher = portalpass_sign_in_admin_pattern.matcher(operation);
 
-            final Pattern portalpass_new_user_account_pattern = Pattern.compile("^creating\\s+new\\s+normal\\s+user\\s+account\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<((9[0-9]{9})|(09[0-9]{9}))>$", Pattern.CASE_INSENSITIVE);
+            final Pattern portalpass_new_user_account_pattern = Pattern.compile("^creating\\s+new\\s+normal\\s+user\\s+account\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<(9[0-9]{9}|09[0-9]{9})>$", Pattern.CASE_INSENSITIVE);
             final Matcher portalpass_new_user_account_matcher = portalpass_new_user_account_pattern.matcher(operation);
 
-            final Pattern portalpass_add_admin_pattern = Pattern.compile("^add\\s+new\\s+super\\s+doer\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<((9[0-9]{9})|(09[0-9]{9}))>\\s+<([^ ]{8,})>$", Pattern.CASE_INSENSITIVE);
+            final Pattern portalpass_add_admin_pattern = Pattern.compile("^add\\s+new\\s+super\\s+doer\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<(9[0-9]{9}|09[0-9]{9})>\\s+<([^ ]{8,})>$", Pattern.CASE_INSENSITIVE);
             final Matcher portalpass_add_admin_matcher = portalpass_add_admin_pattern.matcher(operation);
 
             final Pattern portalpass_help_pattern = Pattern.compile("^PortalPass\\s+--help$", Pattern.CASE_INSENSITIVE);
@@ -133,11 +132,11 @@ public class UserInterface {
                 signed_in_phone_number = portalpass_new_user_account_matcher.group(2);
                 signed_in_phone_number = signed_in_phone_number.startsWith("0") ? signed_in_phone_number : ("0").concat(signed_in_phone_number);
                 library.addMember(signed_in_name, signed_in_phone_number);
-                System.out.println("╔════════════════════════════════════════════════════════════╗");
-                System.out.println("║ A new normal user account has been created and you have    ║");
-                System.out.println("║ successfully logged in with name and phone number :        ║");
-                System.out.println("║ " + signed_in_name + "," + signed_in_phone_number + "                           ║");
-                System.out.println("╚════════════════════════════════════════════════════════════╝");
+                System.out.println("╔════════════════════════════════════════════════════════════════╗");
+                System.out.println("║ A new normal user account has been created and you have        ║");
+                System.out.println("║ successfully logged in with name and phone number :            ║");
+                System.out.println("║ " + signed_in_name + "," + signed_in_phone_number + "                                ║");
+                System.out.println("╚════════════════════════════════════════════════════════════════╝");
                 break;
             } else if (portalpass_add_admin_matcher.find()) {
                 System.out.println("adding new admin for library management require admin access . enter your name , phone number and password respectively : ");
@@ -146,6 +145,7 @@ public class UserInterface {
                 name = input.nextLine();
                 System.out.print(">>");
                 phone_number = input.nextLine();
+                phone_number = phone_number.startsWith("0") ? phone_number : ("0").concat(phone_number);
                 System.out.print(">>");
                 password = input.nextLine();
                 if (library.adminExistenceChecker(name, phone_number, password) != null) {
@@ -157,7 +157,7 @@ public class UserInterface {
                     System.out.println("╔════════════════════════════════════════════════════════════╗");
                     System.out.println("║ A new super doer account has been created and you have     ║");
                     System.out.println("║ successfully logged in with name and phone number :        ║");
-                    System.out.println("║ " + signed_in_name + "," + signed_in_phone_number + "                           ║");
+                    System.out.println("║ " + signed_in_name + "," + signed_in_phone_number + "                                      ║");
                     System.out.println("╚════════════════════════════════════════════════════════════╝");
                     break;
                 } else {
@@ -249,7 +249,7 @@ public class UserInterface {
             final Pattern lms_available_book_pattern = Pattern.compile("^lib\\s+get\\s+available\\s+books$", Pattern.CASE_INSENSITIVE);
             final Matcher lms_available_book_matcher = lms_available_book_pattern.matcher(operation);
 
-            final Pattern lms_remove_member_pattern = Pattern.compile("^lib\\s+remove\\s+member\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<((9[0-9]{9})|(09[0-9]{9}))>$", Pattern.CASE_INSENSITIVE);
+            final Pattern lms_remove_member_pattern = Pattern.compile("^lib\\s+remove\\s+member\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>\\s+<(9[0-9]{9}|09[0-9]{9})>$", Pattern.CASE_INSENSITIVE);
             final Matcher lms_remove_member_matcher = lms_remove_member_pattern.matcher(operation);
 
             final Pattern lms_return_book_pattern = Pattern.compile("^lib\\s+return\\s+<([0-9]*\\s*[a-zA-Z]+(?:[0-9]*\\s*[a-zA-Z]*)*)>\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>$", Pattern.CASE_INSENSITIVE);
@@ -258,7 +258,7 @@ public class UserInterface {
             final Pattern lms_remove_book_pattern = Pattern.compile("^lib\\s+remove\\s+book\\s+<([0-9]*\\s*[a-zA-Z]+(?:[0-9]*\\s*[a-zA-Z]*)*)>\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>$", Pattern.CASE_INSENSITIVE);
             final Matcher lms_remove_book_matcher = lms_remove_book_pattern.matcher(operation);
 
-            final Pattern lms_goPortalPass_pattern = Pattern.compile("^lib\\s+remove\\s+book\\s+<([0-9]*\\s*[a-zA-Z]+(?:[0-9]*\\s*[a-zA-Z]*)*)>\\s+<([a-zA-Z]+(?:\\s[a-zA-Z]+)*)>$", Pattern.CASE_INSENSITIVE);
+            final Pattern lms_goPortalPass_pattern = Pattern.compile("^lib\\s+PortalPass$", Pattern.CASE_INSENSITIVE);
             final Matcher lms_goPortalPass_matcher = lms_goPortalPass_pattern.matcher(operation);
 
             final Pattern lms_help_pattern = Pattern.compile("^Library\\s+System\\s+--help$", Pattern.CASE_INSENSITIVE);
@@ -346,12 +346,12 @@ public class UserInterface {
 
                 System.exit(0);
             } else {
-                System.out.println("╔══════════════════════════════════════════════════════════════╗");
+                System.out.println("╔═════════════════════════════════════════════════════════════════╗");
                 System.out.println("║ Invalid command... Try again.                                   ║");
-                System.out.println("║ Keep in mind that this error may be caused by entering the     ║");
-                System.out.println("║ wrong command or entering the name, mobile number, or password ║");
+                System.out.println("║ Keep in mind that this error may be caused by entering the      ║");
+                System.out.println("║ wrong command or entering the name, mobile number, or password  ║");
                 System.out.println("║ in the wrong form.                                              ║");
-                System.out.println("╚══════════════════════════════════════════════════════════════╝");
+                System.out.println("╚═════════════════════════════════════════════════════════════════╝");
 
                 System.out.println("*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+");
             }

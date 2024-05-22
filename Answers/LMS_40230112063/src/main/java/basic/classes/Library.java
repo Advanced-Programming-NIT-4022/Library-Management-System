@@ -32,6 +32,7 @@ public class Library {
         this.capacity = capacity;
         this.operating_hours = operating_hours;
         admins.add(new Admin("AmirHossein Zakeri", "40520", "09114430698", "zakeri_1383@@"));
+        DataBaseMethods.adminDataInsert(admins);
     }
 
 

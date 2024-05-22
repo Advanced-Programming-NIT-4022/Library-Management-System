@@ -23,9 +23,6 @@ public class DataBaseMethods {
                 // Execute the insert statement
                 pstmt.executeUpdate();
             }
-
-            System.out.println("Data inserted successfully!");
-
         } catch (SQLException ignored) {
         }
     }
@@ -117,9 +114,6 @@ public class DataBaseMethods {
                 // Execute the insert statement
                 pstmt.executeUpdate();
             }
-
-            System.out.println("Data inserted successfully!");
-
         } catch (SQLException ignored) {
         }
 
@@ -164,9 +158,6 @@ public class DataBaseMethods {
                 // Execute the insert statement
                 pstmt.executeUpdate();
             }
-
-            System.out.println("Data inserted successfully!");
-
         } catch (SQLException ignored) {
         }
 
