@@ -22,6 +22,14 @@ public class Book {
         Title = title;
     }
 
+    public String getAuthor() {
+        return Author;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
     public boolean getAvailability_status() {
         return Availability_status;
     }
