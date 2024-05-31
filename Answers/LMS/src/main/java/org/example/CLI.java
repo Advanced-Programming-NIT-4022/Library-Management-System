@@ -1,8 +1,12 @@
 package org.example;
+import java.util.InputMismatchException;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static javax.print.attribute.standard.MediaSizeName.B;
+import static javax.swing.text.html.HTML.Attribute.N;
 
 public class CLI {
 
@@ -24,7 +28,7 @@ public class CLI {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_NILI = "\u001B[36m";
     public static final String ANSI_YELLOW = "\u001B[33m";
-
+    public static final String ANSI_GRAY = "\u001B[37m";
     public static void print() {
         System.out.println("""
                 if you want to add a new book to the library..........ENTER lib add book <name> <author> <subtitle>: .
@@ -57,7 +61,10 @@ public class CLI {
                 ANSI_YELLOW + " lib remove member\n"+
                 ANSI_NILI+ "or Return a rented book to the library................ENTER" +
                 ANSI_PURPLE + " lib return <bookName>\n" +
+                ANSI_NILI + "or View members ......................................ENTER" +
+                ANSI_PURPLE + " List\n" +
                 ANSI_YELLOW + "Yellow ones are for admins only");
+
         blue();
     }
 
@@ -79,60 +86,257 @@ public class CLI {
         Book b = new Book(ID, title, author, availability, description);
         return b;
     }
-    public static void rent(Library L, String name) {
-        boolean check=false;
+    public static boolean duplication(Library L, String title){
+        for (Book Book : L._Book_repository){
+            if(Objects.equals(Book.get_Title(), title)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static void rent(Library L , String name  ){
+        System.out.println("Please enter your name ");
         Scanner scanner = new Scanner(System.in);
-        for (Book Book : L._Book_repository) {
-            if (Book.get_Title().equals(name)) {
-                if (Book.get_Availability()) {
-                    Book.set_Availability(false);
-                    System.out.println("Please enter your name ");
-                    String n =scanner.next();
-                    System.out.println("Please enter your id ");
-                    long id =scanner.nextInt();
-                    for (Normal N : L._Trustee) {
-                        if(n == N.getName()){
-                            if (id == N.getId()){
-                                Rent rent = new Rent(Book, N, id);
-                                L._rental_registries.add(rent);
-                                yellow();
-                                System.out.println("The book has been successfully rented");
-                                blue();
-                                check=true;
-                                break;
-                            }
-                        }
-
-                    }
-                    if(check==false){
-                        System.out.println("We don't have a member with this name in our list. If you want to rent a book, you have to be a member first.\n" +
-                                "enter lib add member\" otherwise press any key");
+        String membername = scanner.next();
+        System.out.println("Please enter your id ");
+        long id = scanner.nextInt();
+        boolean khastam=false;
+        outerloop:
+        while (true){
+            Normal member = null;
+            for (Normal N : L._Trustee) {
+                if (Objects.equals(N.getName(), membername) && N.getId() == id) {
+                    member=N;
+                    khastam=true;
+                    break ;
+                }
+                else if (Objects.equals(N.getName(), membername) && N.getId() != id) {
+                    yellow();
+                    System.out.println("Sorry we can't give this book because your name doesn't match with your id.");
+                    blue();
+                    khastam=true;
+                    break outerloop;
+                }
+            }
+            if(!khastam){
+                yellow();
+                System.out.println("Sorry we don't have you as a member in our list so we can't give you the book .if you're really interested, sign in first");
+                blue();
+                break ;
+            }
+            int count =0;
+            boolean avail=false;
+            Book bookToRent = null;
+            for (Book B : L._Book_repository) {
+                if (Objects.equals(B.get_Title(), name)) {
+                    count++;
+                    if(B.get_Availability()){
+                        avail=true;
+                        bookToRent = B;
                         break;
                     }
-                    if (check){break;}
-
-                } else {
-                    System.out.println("It seems that this book have been rented, check it out later");
-                    break;
                 }
-            } else {
-                System.out.println("This book is not available at the moment, We would appreciate if you add it to our library.");
-                break;
+            }
+            if(count==0){
+                yellow();
+                System.out.println("Sorry it seems like we don't have this book. You can add it to our library.");
+                blue();
+                break ;
+            }
+            else if(count==1 && avail){
+                bookToRent.set_Availability(false);
+                Rent rent = new Rent(bookToRent, member, id);
+                L._rental_registries.add(rent);
+                yellow();
+                System.out.println("Here is your book. please take care of it");
+                blue();
+                break ;
+            }
+            else if(!avail){
+                System.out.println("Sorry it seems like someone else has already rented this book. check it out later");
+                break ;
             }
         }
     }
+    public static void rents(Library L, String name) {
+        boolean check=false;
+        boolean off=false;
+        if (L._Book_repository.isEmpty()) {
+            System.out.println("You have not registered a book yet.");}
+        else{
+            Scanner scanner = new Scanner(System.in);
+            for (Book Book : L._Book_repository) {
+                if (Book.get_Title().equals(name)) {
+                    off = true;
+                    if (Book.get_Availability()) {
+                        System.out.println("Please enter your name ");
+                        String n = scanner.next();
+                        System.out.println("Please enter your id ");
+                        long id = scanner.nextInt();
+                        for (Normal N : L._Trustee) {
+                            if (Objects.equals(n, N.getName())) {
+                                if (id == N.getId()) {
+                                    Rent rent = new Rent(Book, N, id);
+                                    L._rental_registries.add(rent);
+                                    yellow();
+                                    System.out.println("The book has been successfully rented");
+                                    blue();
+                                    check = true;
+                                    Book.set_Availability(false);
+                                    break;
+                                }
+                            }
+                        }
+                        if (!check) {
+                            System.out.println("We don't have a member with this name in our list. If you want to rent a book, you have to be a member first.\n");
+                            break;
+                        }
+                    } else {
+                        System.out.println("It seems that this book have been rented, check it out later");
+                        break;
+                    }
+                }
+            }
+        }
+        if(!check && !off){
+            System.out.println("This book is not available at the moment, We would appreciate if you add it to our library.");}
+    }
+    public static void renttt(Library L, String name) {
+        boolean bookFound = false;
+        boolean bookRented = false;
+
+        if (L._Book_repository.isEmpty()) {
+            System.out.println("You have not registered a book yet.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+        for (Book book : L._Book_repository) {
+            if (book.get_Title().equals(name)) {
+                bookFound = true;
+                if (book.get_Availability()) {
+                    System.out.println("Please enter your name: ");
+                    String memberName = scanner.next();
+                    System.out.println("Please enter your ID: ");
+                    long memberId = scanner.nextLong();
+
+                    for (Normal member : L._Trustee) {
+                        if (Objects.equals(memberName, member.getName()) && memberId == member.getId()) {
+                            Rent rent = new Rent(book, member, memberId);
+                            L._rental_registries.add(rent);
+                            System.out.println("\033[1;33mThe book has been successfully rented\033[0m"); // yellow text
+                            book.set_Availability(false);
+                            bookRented = true;
+                            break;
+                        }
+                    }
+
+                    if (!bookRented) {
+                        System.out.println("We don't have a member with this name in our list. If you want to rent a book, you have to be a member first.");
+                    }
+                } else {
+                    System.out.println("It seems that this book has already been rented, check it out later.");
+                }
+                break; // Exit the loop once the book is found and processed
+            }
+        }
+
+        if (!bookFound) {
+            System.out.println("This book is not available at the moment. We would appreciate it if you added it to our library.");
+        }
+
+        scanner.close();
+    }
+    public static void rentttt(Library L, String name) {
+        boolean bookFound = false;
+        boolean bookRented = false;
+        if (L._Book_repository.isEmpty()) {
+            System.out.println("You have not registered a book yet.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        for (Book book : L._Book_repository) {
+            if (book.get_Title().equals(name)) {
+                bookFound = true;
+                if (book.get_Availability()) {
+                    System.out.print("Please enter your name: ");
+                    String memberName = "";
+                    long memberId = -1;
+
+                    if (scanner.hasNext()) {
+                        memberName = scanner.next();
+                    } else {
+                        System.out.println("No input received for member name.");
+                        break;
+                    }
+
+                    System.out.print("Please enter your ID: ");
+                    try {
+                        if (scanner.hasNextLong()) {
+                            memberId = scanner.nextLong();
+                        } else {
+                            System.out.println("Invalid input for ID. Please enter a numeric value.");
+                            scanner.next(); // Clear the invalid input
+                            break;
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid input for ID. Please enter a numeric value.");
+                        scanner.next(); // Clear the invalid input
+                        break;
+                    }
+
+                    for (Normal member : L._Trustee) {
+                        if (Objects.equals(memberName, member.getName()) && memberId == member.getId()) {
+                            Rent rent = new Rent(book, member, memberId);
+                            L._rental_registries.add(rent);
+                            System.out.println("\033[1;33mThe book has been successfully rented\033[0m"); // yellow text
+                            book.set_Availability(false);
+                            bookRented = true;
+                            break;
+                        }
+                    }
+
+                    if (!bookRented) {
+                        System.out.println("We don't have a member with this name in our list. If you want to rent a book, you have to be a member first.");
+                    }
+                } else {
+                    System.out.println("It seems that this book has already been rented, check it out later.");
+                }
+                break; // Exit the loop once the book is found and processed
+            }
+        }
+
+        if (!bookFound) {
+            System.out.println("This book is not available at the moment. We would appreciate it if you added it to our library.");
+        }
+
+        scanner.close();
+    }
+
     public static void returnbook(Library L, String name) {
+        boolean match = true;
         for (Book Book : L._Book_repository) {
             if (Book.get_Title().equals(name)) {
                 if (Book.get_Availability()) {
+                    yellow();
                     System.out.println("It seems that we already have this book, give it to someone else");
+                    blue();
+                    match = false;
+                    break;
                 } else {
+                    yellow();
                     Book.set_Availability(true);
                     System.out.println("Thanks for bringing our book back, hope you enjoyed it!");
+                    blue();
+                    match =false;
+                    break;
                 }
-            } else {
-                System.out.println("It seems that this book doesn't belong to our library ");
             }
+        }
+         if(match) {
+            System.out.println("It seems that this book doesn't belong to our library ");
         }
     }
     static String phonenumber(String number) {
@@ -147,16 +351,6 @@ public class CLI {
             return "wrong";
         }
         return '0' + number;
-    }
-    static String id(String id) {
-        if (id.length() > 13 || id.length() < 4) {
-            return "wrong";
-        }
-        if (!id.matches("[0-9]+")) {
-            return "wrong";
-        } else {
-            return id;
-        }
     }
     public static void membership(Library L) {
         Scanner scanner4 = new Scanner(System.in);
@@ -349,21 +543,27 @@ public class CLI {
         System.out.println(" Sorry! You are not at admin position so you can't do this command.");
         blue();
     }
+
     public static void showbooks(Library L) {
         if (L._Book_repository.isEmpty()) {
-            System.out.println("You have not registered a book yet.");}
-        else {
+            System.out.println("You have not registered a book yet.");
+        } else {
             for (Book B : L._Book_repository) {
+                yellow();
+                System.out.println("------------------------------");
                 if (B.get_Availability()) {
-                    yellow();
-                    System.out.println("----------------------------");
                     blue();
-                    System.out.println(B.get_Title());
+                    System.out.println(B.get_Title() + "                 available");
                     yellow();
-                    System.out.println("----------------------------");
+                } else {
                     blue();
+                    System.out.println(B.get_Title() + ANSI_GRAY + "                 rented");
+                    yellow();
                 }
+                System.out.println("------------------------------");
+                blue();
             }
+
         }
     }
     public static void changehrs() {
@@ -400,40 +600,189 @@ public class CLI {
         }
 
     }
+//    public static void rentspeceficc( String name ,String membername , long id, Library L  ){
+//        System.out.println("sher o ver aval");
+//        if (L._Book_repository.isEmpty()) {
+//            System.out.println("You have not registered a book yet.");}
+//        else{
+//            System.out.println("sher o ver dovom");
+//            boolean match = false;
+//            boolean available = true;
+//            while (true) {
+//                for (Book B : L._Book_repository) {
+//                    if (B.get_Title().equals(name)) {
+//                        System.out.println("sher o ver sevom");
+//                        match = true;
+//                        if (B.get_Availability()) {
+//                            for (Normal N : L._Trustee) {
+//                                if (Objects.equals(N.getName(), membername)) {
+//                                    System.out.println("fcfcfgcgcfgccfgc");
+//                                    if (N.getId() == id) {
+//                                        available = false;
+//                                        Rent rent = new Rent(B, N, id);
+//                                        L._rental_registries.add(rent);
+//                                        yellow();
+//                                        System.out.println("Here is your book. please take care of it");
+//                                        blue();
+//                                    } else {
+//                                        System.out.println("Sorry we can't give this book because your name doesn't match with your id.");
+//                                    }
+//                                } else {
+//                                    System.out.println("Sorry we don't have you as a member in our list so we can't give it to you.if you're really interested, sign in first");
+//                                }
+//                            }
+//                        } else if(available) {
+//                            System.out.println("Sorry it seems like someone else has already rented this book. check it out later");
+//                        }
+//                        break;
+//                    }
+//                }
+//                break;
+//            }
+//            if (match == false) {
+//            }
+//        }
+//    }
+//    public static void rentspecefic1(String name, String membername, long id, Library L) {
+//        System.out.println("Initial check");
+//        if (L._Book_repository.isEmpty()) {
+//            System.out.println("You have not registered a book yet.");
+//            return;
+//        }
+//        boolean bookFound = false;
+//        boolean bookAvailable = false;
+//        for (Book B : L._Book_repository) {
+//            if (B.get_Title().equals(name)) {
+//                bookFound = true;
+//                if (B.get_Availability()) {
+//                    for (Normal N : L._Trustee) {
+//                        if (Objects.equals(N.getName(), membername)) {
+//                            if (N.getId() == id) {
+//                                Rent rent = new Rent(B, N, id);
+//                                L._rental_registries.add(rent);
+//                                System.out.println("Here is your book. Please take care of it.");
+//                                return;
+//                            } else {
+//                                System.out.println("Sorry we can't give this book because your name doesn't match with your ID.");
+//                                return;
+//                            }
+//                        }
+//                    }
+//                    System.out.println("Sorry we don't have you as a member in our list, so we can't give it to you. If you're really interested, sign in first.");
+//                    return;
+//                } else {
+//                    bookAvailable = false;
+//                }
+//                break;
+//            }
+//        }
+//
+//        if (!bookFound) {
+//            System.out.println("Sorry it seems like we don't have this book. You can add it to our library.");
+//        } else {
+//            System.out.println("Sorry it seems like someone else has already rented this book. Check it out later.");
+//        }
+//    }
     public static void rentspecefic( String name ,String membername , long id, Library L  ){
-        boolean match =false;
-        boolean available=true;
-        while (true) {
-            for (Book B : L._Book_repository) {
-                if (B.get_Title().equals(name)) {
-                    match = true;
-                    if (B.get_Availability()) {
-                        available = false;
-                        for (Normal N : L._Trustee) {
-                            if (Objects.equals(N.getName(), membername)) {
-                                if (N.getId() == id) {
-                                     Rent rent = new Rent(B, N, id);
-                                     L._rental_registries.add(rent);
-                                }
-                                else {
-                                    System.out.println("Sorry we can't give this book because your name doesn't match with your id.");}
-                                break;
-                            }
-                            else {
-                                System.out.println("Sorry we don't have you as a member in our list so we can't give it to you.if you're really interested, sign in first");
-                            }
-                        }
-                    }
-                    else {
-                        System.out.println("Sorry it seems like someone else has already rented this book. check it out later");
-                    }
-                    break;
+        boolean khastam=false;
+        outerloop:
+        while (true){
+            Normal member = null;
+            for (Normal N : L._Trustee) {
+                if (Objects.equals(N.getName(), membername) && N.getId() == id) {
+                    member=N;
+                    khastam=true;
+                    break ;
+                }
+                else if (Objects.equals(N.getName(), membername) && N.getId() != id) {
+                    yellow();
+                    System.out.println("Sorry we can't give this book because your name doesn't match with your id.");
+                    blue();
+                    khastam=true;
+                    break outerloop;
                 }
             }
-            break;
+            if(!khastam){
+                yellow();
+                System.out.println("Sorry we don't have you as a member in our list so we can't give you the book .if you're really interested, sign in first");
+                blue();
+                break ;
+            }
+            int count =0;
+            boolean avail=false;
+            Book bookToRent = null;
+            for (Book B : L._Book_repository) {
+                if (Objects.equals(B.get_Title(), name)) {
+                    count++;
+                    if(B.get_Availability()){
+                        avail=true;
+                        bookToRent = B;
+                        break;
+                    }
+                }
+            }
+            if(count==0){
+                yellow();
+                System.out.println("Sorry it seems like we don't have this book. You can add it to our library.");
+                blue();
+                break ;
+            }
+            else if(count==1 && avail){
+                bookToRent.set_Availability(false);
+                Rent rent = new Rent(bookToRent, member, id);
+                L._rental_registries.add(rent);
+                yellow();
+                System.out.println("Here is your book. please take care of it");
+                blue();
+                break ;
+            }
+            else if(!avail){
+                System.out.println("Sorry it seems like someone else has already rented this book. check it out later");
+                break ;
+            }
         }
-        if (match==false) {
-            System.out.println("Sorry it seems like we don't have this book. You can add it to our library.");
+    }
+//    public static void rentttt(String name, String membername, long id, Library L) {
+//        Normal member = null;
+//        for (Normal N : L._Trustee) {
+//            if (Objects.equals(N.getName(), membername)) {
+//                if (N.getId() == id) {
+//                    member = N;
+//                    break;
+//                } else {
+//                    System.out.println("Sorry we can't give this book because your name doesn't match with your id.");
+//                    return;
+//                }
+//            }
+//        }
+//        if (member == null) {
+//            System.out.println("Sorry we don't have you as a member in our list so we can't give you the book. If you're really interested, sign in first.");
+//            return;
+//        }
+//        Book bookToRent = null;
+//        int count = 0;
+//        for (Book B : L._Book_repository) {
+//            if (Objects.equals(B.get_Title(), name)) {
+//                bookToRent = B;
+//                count++;
+//            }
+//        }
+//        if (count == 0) {
+//            System.out.println("Sorry it seems like we don't have this book. You can add it to our library.");
+//            return;
+//        }
+//        if (count == 1) {
+//            Rent rent = new Rent(bookToRent, member, id);
+//            L._rental_registries.add(rent);
+//            System.out.println("Book rented successfully.");
+//        } else {
+//            System.out.println("Sorry, there are multiple copies of the book. Please specify which one.");
+//        }
+//    }
+
+    public static void list(Library L){
+        for (Normal N : L._Trustee) {
+            System.out.println( N.getName() + "--->" + N.getId());
         }
     }
     public static boolean checking(String c, Library L, boolean position) {
@@ -469,8 +818,17 @@ public class CLI {
         Pattern pr8 = Pattern.compile("^lib\\s+return\\s+<([a-zA-Z0-9]+(?:\\s+[a-zA-Z0-9]*)*)>\\s*");
         Matcher m8 = pr8.matcher(c);
 
+        Pattern pr10 = Pattern.compile("^List");
+        Matcher m10 = pr10.matcher(c);
+
+
         if (m1.find()) {
-            addbook(L, buildingbook(idgeneratormember(), m1.group(1), m1.group(2), true, m1.group(3)));
+            if(!duplication(L, m1.group(1))) {
+                addbook(L, buildingbook(idgeneratormember(), m1.group(1), m1.group(2), true, m1.group(3)));
+            }
+            else{
+                System.out.println("We already own a book with this title. If you want to add it choose another name or put numbers in it's title");
+            }
             return true;
         }
         else if (m2.find()) {
@@ -496,6 +854,7 @@ public class CLI {
         else if(m5.find()){
             long id = Long.parseLong(m5.group(3));
             rentspecefic(m5.group(1) , m5.group(2) , id , L);
+            return true;
         }
         else if (m6.find()) {
             showbooks(L);
@@ -521,9 +880,14 @@ public class CLI {
             }
             return true;
         }
+        if (m10.find()) {
+            list(L);
+            return true;
+        }
         else
         { return false;}
     }
+
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -591,10 +955,10 @@ public class CLI {
                     red();
                     System.out.println("Wrong command! Please try again.");
                     blue();
-                    continue;
                 }
             }
-            System.out.println("if you have no other commands, enter YES otherwise press any key");
+
+            System.out.println(ANSI_PURPLE + "if you have no other commands, enter YES otherwise press any key" + ANSI_NILI);
             String answer1 = scanner1.next();
             if (Objects.equals(answer1, "YES")) {
                 break;
@@ -603,7 +967,8 @@ public class CLI {
             printColoredText();
         }
 
-        System.out.println("Thank you for choosing our Library Management System." +
-                " We're excited to provide you with an efficient and user-friendly platform for all your library needs. Happy reading!");
+        yellow();
+        System.out.println("Thank you for choosing our Library Management System.\n" +
+                "We're excited to provide you with an efficient and user-friendly platform for all your library needs. Happy reading!");
     }
 }
